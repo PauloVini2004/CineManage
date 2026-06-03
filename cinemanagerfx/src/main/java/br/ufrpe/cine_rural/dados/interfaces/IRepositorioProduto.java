@@ -3,7 +3,7 @@ package br.ufrpe.cine_rural.dados.interfaces;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import java.util.ArrayList;
 
-public interface iRepositorioProduto {
+public interface IRepositorioProduto {
 
     void cadastrar(Produto produto);
 

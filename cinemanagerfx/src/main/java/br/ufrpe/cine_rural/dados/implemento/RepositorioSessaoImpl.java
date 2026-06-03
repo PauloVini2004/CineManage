@@ -1,13 +1,13 @@
 package br.ufrpe.cine_rural.dados.implemento;
 
-import br.ufrpe.cine_rural.dados.interfaces.iRepositorioSessao;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSessao;
 import br.ufrpe.cine_rural.model.Sessao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
-public class RepositorioSessaoImpl implements iRepositorioSessao {
+public class RepositorioSessaoImpl implements IRepositorioSessao {
 
     private ArrayList<Sessao> sessoes;
 
