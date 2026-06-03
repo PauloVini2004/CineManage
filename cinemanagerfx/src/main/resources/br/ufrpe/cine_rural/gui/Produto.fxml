@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.scene.*?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.image.*?>
+        <?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.ProdutoController"
+            prefHeight="680.0"
+            prefWidth="774.0"
+            stylesheets="@EstiloProduto.css"
+            styleClass="root">
+
+<children>
+
+    <!-- TÍTULO -->
+    <Label layoutX="55.0"
+           layoutY="50.0"
+           styleClass="titulo"
+           text="Selecione o produto"/>
+
+    <!-- ÁREA SUPERIOR -->
+    <Button layoutX="55.0"
+            layoutY="145.0"
+            styleClass="btn-voltar"
+            text="Voltar"/>
+
+    <Button layoutX="285.0"
+            layoutY="145.0"
+            styleClass="btn-subtotal"
+            text="0 itens | Subtotal R$0,00"/>
+
+    <Button layoutX="475.0"
+            layoutY="145.0"
+            styleClass="btn-avancar"
+            text="Avançar"/>
+
+    <!-- PRODUTOS -->
+    <HBox layoutX="70.0"
+          layoutY="235.0"
+          spacing="35">
+
+        <!-- Produto 1 -->
+        <VBox spacing="4"
+              styleClass="card-produto">
+
+            <Label styleClass="nome-produto"
+                   text="Pipoca"/>
+
+            <StackPane styleClass="imagem-produto">
+                <ImageView fitHeight="130"
+                           fitWidth="90"/>
+            </StackPane>
+
+            <Label styleClass="contador"
+                   text="0 | 10 itens"/>
+
+            <HBox spacing="8">
+                <Label styleClass="preco"
+                       text="R$14,90"/>
+
+                <Button styleClass="btn-mais"
+                        text="+"/>
+
+                <Button styleClass="btn-menos"
+                        text="-"/>
+            </HBox>
+
+        </VBox>
+
+        <!-- Produto 2 -->
+        <VBox spacing="4"
+              styleClass="card-produto">
+
+            <Label styleClass="nome-produto"
+                   text="Pipoca"/>
+
+            <StackPane styleClass="imagem-produto">
+                <ImageView fitHeight="130"
+                           fitWidth="90"/>
+            </StackPane>
+
+            <Label styleClass="contador"
+                   text="0 | 10 itens"/>
+
+            <HBox spacing="8">
+                <Label styleClass="preco"
+                       text="R$14,90"/>
+
+                <Button styleClass="btn-mais"
+                        text="+"/>
+
+                <Button styleClass="btn-menos"
+                        text="-"/>
+            </HBox>
+
+        </VBox>
+
+        <!-- Produto 3 -->
+        <VBox spacing="4"
+              styleClass="card-produto">
+
+            <Label styleClass="nome-produto"
+                   text="Pipoca"/>
+
+            <StackPane styleClass="imagem-produto">
+                <ImageView fitHeight="130"
+                           fitWidth="90"/>
+            </StackPane>
+
+            <Label styleClass="contador"
+                   text="0 | 10 itens"/>
+
+            <HBox spacing="8">
+                <Label styleClass="preco"
+                       text="R$14,90"/>
+
+                <Button styleClass="btn-mais"
+                        text="+"/>
+
+                <Button styleClass="btn-menos"
+                        text="-"/>
+            </HBox>
+
+        </VBox>
+
+        <!-- Produto 4 -->
+        <VBox spacing="4"
+              styleClass="card-produto">
+
+            <Label styleClass="nome-produto"
+                   text="Pipoca"/>
+
+            <StackPane styleClass="imagem-produto">
+                <ImageView fitHeight="130"
+                           fitWidth="90"/>
+            </StackPane>
+
+            <Label styleClass="contador"
+                   text="0 | 10 itens"/>
+
+            <HBox spacing="8">
+                <Label styleClass="preco"
+                       text="R$14,90"/>
+
+                <Button styleClass="btn-mais"
+                        text="+"/>
+
+                <Button styleClass="btn-menos"
+                        text="-"/>
+            </HBox>
+
+        </VBox>
+
+    </HBox>
+
+</children>
+
+</AnchorPane>
