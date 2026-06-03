@@ -46,110 +46,32 @@
         <VBox spacing="4"
               styleClass="card-produto">
 
-            <Label styleClass="nome-produto"
-                   text="Pipoca"/>
+            <Label fx:id="nomeProduto1"
+                   styleClass="nome-produto"/>
 
             <StackPane styleClass="imagem-produto">
-                <ImageView fitHeight="130"
-                           fitWidth="90"/>
+
+                <ImageView fx:id="imagemProduto1"
+                           fitHeight="130"
+                           fitWidth="90"
+                           preserveRatio="true"/>
+
             </StackPane>
 
             <Label styleClass="contador"
-                   text="0 | 10 itens"/>
+                   text="0 | 0 itens"/>
 
             <HBox spacing="8">
-                <Label styleClass="preco"
-                       text="R$14,90"/>
+
+                <Label fx:id="precoProduto1"
+                       styleClass="preco"/>
 
                 <Button styleClass="btn-mais"
                         text="+"/>
 
                 <Button styleClass="btn-menos"
                         text="-"/>
-            </HBox>
 
-        </VBox>
-
-        <!-- Produto 2 -->
-        <VBox spacing="4"
-              styleClass="card-produto">
-
-            <Label styleClass="nome-produto"
-                   text="Pipoca"/>
-
-            <StackPane styleClass="imagem-produto">
-                <ImageView fitHeight="130"
-                           fitWidth="90"/>
-            </StackPane>
-
-            <Label styleClass="contador"
-                   text="0 | 10 itens"/>
-
-            <HBox spacing="8">
-                <Label styleClass="preco"
-                       text="R$14,90"/>
-
-                <Button styleClass="btn-mais"
-                        text="+"/>
-
-                <Button styleClass="btn-menos"
-                        text="-"/>
-            </HBox>
-
-        </VBox>
-
-        <!-- Produto 3 -->
-        <VBox spacing="4"
-              styleClass="card-produto">
-
-            <Label styleClass="nome-produto"
-                   text="Pipoca"/>
-
-            <StackPane styleClass="imagem-produto">
-                <ImageView fitHeight="130"
-                           fitWidth="90"/>
-            </StackPane>
-
-            <Label styleClass="contador"
-                   text="0 | 10 itens"/>
-
-            <HBox spacing="8">
-                <Label styleClass="preco"
-                       text="R$14,90"/>
-
-                <Button styleClass="btn-mais"
-                        text="+"/>
-
-                <Button styleClass="btn-menos"
-                        text="-"/>
-            </HBox>
-
-        </VBox>
-
-        <!-- Produto 4 -->
-        <VBox spacing="4"
-              styleClass="card-produto">
-
-            <Label styleClass="nome-produto"
-                   text="Pipoca"/>
-
-            <StackPane styleClass="imagem-produto">
-                <ImageView fitHeight="130"
-                           fitWidth="90"/>
-            </StackPane>
-
-            <Label styleClass="contador"
-                   text="0 | 10 itens"/>
-
-            <HBox spacing="8">
-                <Label styleClass="preco"
-                       text="R$14,90"/>
-
-                <Button styleClass="btn-mais"
-                        text="+"/>
-
-                <Button styleClass="btn-menos"
-                        text="-"/>
             </HBox>
 
         </VBox>
