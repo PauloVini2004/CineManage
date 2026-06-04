@@ -1,9 +1,9 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
-import br.ufrpe.cine_rural.dados.interfaces.IRepositorioProduto;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
 import br.ufrpe.cine_rural.model.loja.Produto;
+import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,14 +18,13 @@ import java.util.ArrayList;
 
 public class ProdutoController {
 
-    // Instância única global do repositório
-    private IRepositorioProduto repoProduto = RepositorioProdutoImpl.getInstancia();
+    private ProdutoNegocios produtoNegocios = new ProdutoNegocios(RepositorioProdutoImpl.getInstancia());
 
     @FXML private Button resumoCompra;
     @FXML private Button btnAvancar;
     @FXML private Button btnVoltar;
 
-    // Produto 1 ao 6 e suas respectivas quantidades selecionadas
+    // Produto 1 ao 6 Teste
     @FXML private Label nomeProduto1, precoProduto1, contadorProduto1;
     @FXML private ImageView imagemProduto1;
     @FXML private Button maisProduto1, menosProduto1;
@@ -64,20 +63,18 @@ public class ProdutoController {
 
     @FXML
     public void initialize() {
-        // Inicializa o estoque apenas na primeira vez que a tela abrir no sistema
-        if (repoProduto.listar().isEmpty()) {
-            inicializarEstoqueDoSistema();
-        }
 
-        // Buscar referências diretas do repositório
-        prod1 = repoProduto.buscar(1);
-        prod2 = repoProduto.buscar(2);
-        prod3 = repoProduto.buscar(3);
-        prod4 = repoProduto.buscar(4);
-        prod5 = repoProduto.buscar(5);
-        prod6 = repoProduto.buscar(6);
+        inicializarEstoqueGlobal();
 
-        // Renderizar na tela
+        // BUSCANDO PRODUTOS ATRAVÉS DA CAMADA DE NEGÓCIOS
+        prod1 = produtoNegocios.buscarProduto(1);
+        prod2 = produtoNegocios.buscarProduto(2);
+        prod3 = produtoNegocios.buscarProduto(3);
+        prod4 = produtoNegocios.buscarProduto(4);
+        prod5 = produtoNegocios.buscarProduto(5);
+        prod6 = produtoNegocios.buscarProduto(6);
+
+        // Escolha uma img png ou jpg 3x4
         configurarProdutoNaTela(prod1, nomeProduto1, precoProduto1, contadorProduto1, imagemProduto1, "/br/ufrpe/cine_rural/gui/imagens/Pipoca2.jpg");
         configurarProdutoNaTela(prod2, nomeProduto2, precoProduto2, contadorProduto2, imagemProduto2, "/br/ufrpe/cine_rural/gui/imagens/RefriCoca.jpg");
         configurarProdutoNaTela(prod3, nomeProduto3, precoProduto3, contadorProduto3, imagemProduto3, "/br/ufrpe/cine_rural/gui/imagens/RefriFanta.jpg");
@@ -85,7 +82,7 @@ public class ProdutoController {
         configurarProdutoNaTela(prod5, nomeProduto5, precoProduto5, contadorProduto5, imagemProduto5, "/br/ufrpe/cine_rural/gui/imagens/RefriSprite.jpg");
         configurarProdutoNaTela(prod6, nomeProduto6, precoProduto6, contadorProduto6, imagemProduto6, "/br/ufrpe/cine_rural/gui/imagens/Hersheys.jpg");
 
-        // Eventos de clique corrigidos (Isolando o fluxo para os métodos controlarem a lógica)
+        // cliques em + e -
         maisProduto1.setOnAction(e -> adicionarItem(prod1, contadorProduto1));
         menosProduto1.setOnAction(e -> removerItem(prod1, contadorProduto1));
 
@@ -104,17 +101,28 @@ public class ProdutoController {
         maisProduto6.setOnAction(e -> adicionarItem(prod6, contadorProduto6));
         menosProduto6.setOnAction(e -> removerItem(prod6, contadorProduto6));
 
-        // Ação para o botão voltar
+        // navegação de telas
         btnVoltar.setOnAction(e -> voltarParaAtendente());
     }
 
-    private void inicializarEstoqueDoSistema() {
-        repoProduto.cadastrar(new Produto(1, "Pipoca", 14.90, 50));
-        repoProduto.cadastrar(new Produto(2, "Coca Cola", 10.50, 30));
-        repoProduto.cadastrar(new Produto(3, "Refri Fanta", 9.50, 20));
-        repoProduto.cadastrar(new Produto(4, "Guaraná", 9.50, 15));
-        repoProduto.cadastrar(new Produto(5, "Sprite", 9.50, 40));
-        repoProduto.cadastrar(new Produto(6, "Hershey's", 13.80, 10));
+
+    private void inicializarEstoqueGlobal() {
+
+        if (produtoNegocios.isEstoqueVazio()) {
+            try {
+                // Cadastramos através das regras de negócio
+                produtoNegocios.cadastrarProduto(1, "Pipoca", 14.90, 50);
+                produtoNegocios.cadastrarProduto(2, "Coca Cola", 10.50, 30);
+                produtoNegocios.cadastrarProduto(3, "Refri Fanta", 9.50, 20);
+                produtoNegocios.cadastrarProduto(4, "Guaraná", 9.50, 15);
+                produtoNegocios.cadastrarProduto(5, "Sprite", 9.50, 40);
+                produtoNegocios.cadastrarProduto(6, "Hershey's", 13.80, 10);
+                System.out.println("[Sistema] Estoque inicializado com sucesso e sem violar a arquitetura!");
+            } catch (Exception e) {
+                System.out.println("Erro ao inicializar o estoque padrão.");
+                e.printStackTrace();
+            }
+        }
     }
 
     private void configurarProdutoNaTela(Produto p, Label nome, Label preco, Label contador, ImageView imgView, String caminhoImg) {
@@ -130,7 +138,6 @@ public class ProdutoController {
         }
     }
 
-    // Busca a variável de quantidade correta baseada no ID do produto
     private int getQtdPorId(int id) {
         if (id == 1) return qtdProduto1;
         if (id == 2) return qtdProduto2;
@@ -146,9 +153,11 @@ public class ProdutoController {
 
         int qtdAtual = getQtdPorId(p.getId());
 
-        // Impede que adicione mais itens do que o disponível no estoque
-        if (qtdAtual >= p.getQtdEstoque()) {
-            System.out.println("Estoque insuficiente para " + p.getNome());
+        // validando estoque
+        try {
+            produtoNegocios.validarEstoque(p, qtdAtual + 1);
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
             return;
         }
 
@@ -163,7 +172,6 @@ public class ProdutoController {
 
         int qtdAtual = getQtdPorId(p.getId());
 
-        // Impede que a quantidade fique negativa
         if (qtdAtual <= 0) {
             return;
         }
@@ -197,7 +205,6 @@ public class ProdutoController {
 
     private void voltarParaAtendente() {
         try {
-            // Importante: Lembre-se de importar o javafx.fxml.FXMLLoader no topo do arquivo!
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Atendente-View.fxml"));
             Parent root = loader.load();
 

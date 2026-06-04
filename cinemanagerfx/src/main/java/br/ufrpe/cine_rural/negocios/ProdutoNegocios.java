@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
- // Controller responsável pela gestão de produtos
+
 
 public class ProdutoNegocios{
 
     private final RepositorioProdutoImpl repositorioProduto;
 
-    // Limiar para alerta de estoque baixo
+
     private static final int LIMIAR_ESTOQUE_BAIXO = 5;
 
 
@@ -91,6 +91,11 @@ public class ProdutoNegocios{
                 + ", solicitado: " + quantidadeDesejada
             );
         }
+    }
+
+    // Verifica se o estoque está vazio
+    public boolean isEstoqueVazio() {
+        return this.listarProdutos().isEmpty();
     }
 
 
