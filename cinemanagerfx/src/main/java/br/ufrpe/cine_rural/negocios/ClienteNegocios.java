@@ -1,4 +1,4 @@
-package br.ufrpe.cine_rural.controllers;
+package br.ufrpe.cine_rural.negocios;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioClienteImpl;
 import br.ufrpe.cine_rural.model.Cliente;
@@ -6,11 +6,11 @@ import br.ufrpe.cine_rural.model.Ingresso;
 
 import java.util.ArrayList;
 
-public class ClienteController {
+public class ClienteNegocios {
 
     private final RepositorioClienteImpl repositorio;
 
-    public ClienteController(RepositorioClienteImpl repositorio) {
+    public ClienteNegocios(RepositorioClienteImpl repositorio) {
         this.repositorio = repositorio;
     }
 
