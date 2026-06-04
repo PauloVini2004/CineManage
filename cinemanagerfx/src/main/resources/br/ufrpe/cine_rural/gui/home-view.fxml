@@ -13,23 +13,24 @@
    <center>
       <Pane fx:id="painelCentral" prefHeight="0.0" prefWidth="600.0" style="-fx-background-color: RED;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="imageCentral" fitHeight="347.0" fitWidth="600.0" pickOnBounds="true" smooth="false">
+            <ImageView fx:id="imageCentral" fitHeight="334.0" fitWidth="600.0" pickOnBounds="true" smooth="false">
                <image>
-                  <Image url="@Logo_Vermelha_Cine.png" />
+                  <Image url="@Imagens/Logo_Final.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
    </center>
    <bottom>
-      <HBox prefHeight="84.0" prefWidth="600.0" style="-fx-background-color: #231f20;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="147.0" prefWidth="600.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER">
          <children>
+            <Region prefHeight="178.0" prefWidth="128.0" />
             <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #b90000; -fx-border-color: WHITE; -fx-border-radius: 15; -fx-background-radius: 15;" text="Atendente" textFill="WHITE">
                <HBox.margin>
                   <Insets left="12.0" top="25.0" />
                </HBox.margin>
             </Button>
-            <Region prefHeight="84.0" prefWidth="318.0" HBox.hgrow="ALWAYS" />
+            <Region layoutX="10.0" layoutY="10.0" prefHeight="159.0" prefWidth="146.0" />
             <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerente" textFill="WHITE">
                <HBox.margin>
                   <Insets right="12.0" top="25.0" />
