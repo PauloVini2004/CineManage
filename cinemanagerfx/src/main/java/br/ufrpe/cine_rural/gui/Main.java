@@ -1,5 +1,5 @@
 package br.ufrpe.cine_rural.gui;
-
+/*
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -52,8 +52,9 @@ public class Main extends Application {
         launch();
     }
 }
+*/
 
- /*
+/*
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -72,7 +73,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Teste Produto");
+        stage.setTitle("Tela Produto");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -81,7 +82,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-} */
+}
+*/
 
 
 
