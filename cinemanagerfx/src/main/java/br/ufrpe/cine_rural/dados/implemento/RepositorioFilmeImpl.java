@@ -1,11 +1,11 @@
 package br.ufrpe.cine_rural.dados.implemento;
 
-import br.ufrpe.cine_rural.dados.interfaces.iRepositorioFilme;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioFilme;
 import br.ufrpe.cine_rural.model.Filme;
 
 import java.util.ArrayList;
 
-public class RepositorioFilmeImpl implements iRepositorioFilme {
+public class RepositorioFilmeImpl implements IRepositorioFilme {
     private ArrayList<Filme> filmes;
 
     public RepositorioFilmeImpl() {

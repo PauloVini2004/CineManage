@@ -5,7 +5,7 @@ import br.ufrpe.cine_rural.model.Sessao;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public interface iRepositorioSessao {
+public interface IRepositorioSessao {
 
     void cadastrar(Sessao sessao);
 

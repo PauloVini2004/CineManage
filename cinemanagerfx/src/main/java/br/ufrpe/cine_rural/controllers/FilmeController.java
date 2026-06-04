@@ -5,7 +5,7 @@ import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Genero;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
-import br.ufrpe.cine_rural.dados.interfaces.iRepositorioFilme;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioFilme;
 import javafx.scene.image.Image;
 
 
@@ -16,13 +16,13 @@ import java.util.Map;
 import java.time.LocalTime;
 
 public class FilmeController {
-    private final iRepositorioFilme repositorioFilme;
+    private final IRepositorioFilme repositorioFilme;
     private final SessaoController sessaoController;
 
     // Limiar para considerar um filme com "baixa procura"
     private static final int LIMIAR_BAIXA_PROCURA = 10;
 
-    public FilmeController(iRepositorioFilme repositorioFilme, SessaoController sessaoController) {
+    public FilmeController(IRepositorioFilme repositorioFilme, SessaoController sessaoController) {
         this.repositorioFilme = repositorioFilme;
         this.sessaoController = sessaoController;
     }

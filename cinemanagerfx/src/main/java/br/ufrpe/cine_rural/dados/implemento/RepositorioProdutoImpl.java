@@ -1,10 +1,12 @@
 package br.ufrpe.cine_rural.dados.implemento;
-import br.ufrpe.cine_rural.dados.interfaces.iRepositorioProduto;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioProduto;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import java.util.ArrayList;
 
 
-public class RepositorioProdutoImpl implements iRepositorioProduto {
+public class RepositorioProdutoImpl implements IRepositorioProduto {
+
+
 
     private ArrayList<Produto> produtos;
 

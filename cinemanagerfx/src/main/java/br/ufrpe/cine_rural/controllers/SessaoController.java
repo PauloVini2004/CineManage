@@ -1,6 +1,6 @@
 package br.ufrpe.cine_rural.controllers;
 
-import br.ufrpe.cine_rural.dados.interfaces.iRepositorioSessao;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSessao;
 
 import br.ufrpe.cine_rural.enums.Idioma;
 import br.ufrpe.cine_rural.enums.StatusSessao;
@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SessaoController {
-    private final iRepositorioSessao repositorioSessao;
+    private final IRepositorioSessao repositorioSessao;
 
-    public SessaoController(iRepositorioSessao repositorioSessao) {
+    public SessaoController(IRepositorioSessao repositorioSessao) {
         this.repositorioSessao = repositorioSessao;
     }
 

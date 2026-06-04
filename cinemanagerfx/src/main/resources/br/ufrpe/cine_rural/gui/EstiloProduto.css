@@ -6,18 +6,20 @@
 
 .titulo {
     -fx-text-fill: #d50000;
-    -fx-font-size: 60px;
+    -fx-font-size: 50px;
     -fx-font-weight: bold;
+    -fx-translate-y: -15;
 }
 
 /* BOTÃO VOLTAR */
 
 .btn-voltar {
-    -fx-background-color: #2a2528;
+    -fx-background-color: black;
     -fx-text-fill: white;
 
     -fx-border-color: white;
-    -fx-border-width: 2;
+    -fx-border-width: 1;
+    -fx-font-weight: bold;
 
     -fx-background-radius: 20;
     -fx-border-radius: 20;
@@ -29,14 +31,18 @@
 /* SUBTOTAL */
 
 .btn-subtotal {
-    -fx-background-color: #2a2528;
+    -fx-background-color: black;
     -fx-text-fill: white;
+    -fx-border-width: 1;
+    -fx-border-color: white;
+    -fx-font-weight: bold;
 
     -fx-background-radius: 20;
     -fx-border-radius: 20;
 
     -fx-pref-width: 250;
     -fx-pref-height: 35;
+    -fx-translate-x: 130;
 
     -fx-alignment: center-left;
 
@@ -48,12 +54,15 @@
 .btn-avancar {
     -fx-background-color: #d50000;
     -fx-text-fill: white;
+    -fx-border-width: 1;
+    -fx-border-color: white;
 
     -fx-background-radius: 20;
     -fx-border-radius: 20;
 
     -fx-pref-width: 110;
     -fx-pref-height: 37;
+    -fx-translate-x: 130;
 
     -fx-font-weight: bold;
 }
@@ -61,28 +70,30 @@
 /* PRODUTOS */
 
 .nome-produto {
-    -fx-text-fill: #d50000;
-    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
+    -fx-translate-x: -10;
 }
 
 .imagem-produto {
-    -fx-border-color: white;
-    -fx-border-width: 2;
 
-    -fx-pref-width: 100;
-    -fx-pref-height: 145;
+    -fx-pref-width: 30;
+    -fx-pref-height: 40;
+    -fx-translate-x: -12;
 }
 
 .contador {
     -fx-text-fill: #d50000;
     -fx-font-size: 10px;
+    -fx-translate-x: -12;
 }
 
 .preco {
     -fx-text-fill: white;
-    -fx-font-size: 20px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
+    -fx-translate-x: -12;
 }
 
 .btn-mais,
@@ -93,6 +104,8 @@
 
     -fx-font-size: 24px;
     -fx-font-weight: bold;
+    -fx-translate-y: -10;
+    -fx-translate-x: -10;
 
     -fx-padding: 0;
 }
