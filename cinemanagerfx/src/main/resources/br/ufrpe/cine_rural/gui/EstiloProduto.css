@@ -110,6 +110,7 @@
 
     -fx-font-size: 24px;
     -fx-font-weight: bold;
+    -fx-translate-y: -10;
 
 
     -fx-padding: 0;

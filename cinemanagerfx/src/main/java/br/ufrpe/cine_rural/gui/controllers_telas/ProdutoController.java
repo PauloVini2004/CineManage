@@ -129,7 +129,7 @@ public class ProdutoController {
         if (p != null) {
             nome.setText(p.getNome());
             preco.setText(String.format("R$ %.2f", p.getPreco()));
-            contador.setText("0 itens / " + p.getQtdEstoque() + " disp.");
+            contador.setText("0 itens | " + p.getQtdEstoque() + " disp.");
             try {
                 imgView.setImage(new Image(getClass().getResourceAsStream(caminhoImg)));
             } catch (Exception e) {
