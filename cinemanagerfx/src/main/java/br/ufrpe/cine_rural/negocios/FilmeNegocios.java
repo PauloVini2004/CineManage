@@ -1,4 +1,4 @@
-package br.ufrpe.cine_rural.controllers;
+package br.ufrpe.cine_rural.negocios;
 
 
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
@@ -15,16 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalTime;
 
-public class FilmeController {
+public class FilmeNegocios {
     private final IRepositorioFilme repositorioFilme;
-    private final SessaoController sessaoController;
+    private final SessaoNegocios sessaoNegocios;
 
     // Limiar para considerar um filme com "baixa procura"
     private static final int LIMIAR_BAIXA_PROCURA = 10;
 
-    public FilmeController(IRepositorioFilme repositorioFilme, SessaoController sessaoController) {
+    public FilmeNegocios(IRepositorioFilme repositorioFilme, SessaoNegocios sessaoNegocios) {
         this.repositorioFilme = repositorioFilme;
-        this.sessaoController = sessaoController;
+        this.sessaoNegocios = sessaoNegocios;
     }
 
 
@@ -97,7 +97,7 @@ public class FilmeController {
     public Map<String, String> gerarRelatorioBilheteria() {
         Map<String, String> relatorio = new HashMap<>();
 
-        ArrayList<Sessao> todasSessoes = sessaoController.listarSessoes();
+        ArrayList<Sessao> todasSessoes = sessaoNegocios.listarSessoes();
 
 
         Map<String, int[]> dados = new HashMap<>(); // [totalIngressos, capacidadeTotal]
@@ -131,7 +131,7 @@ public class FilmeController {
         List<String> filmesAlerta = new ArrayList<>();
         Map<String, Integer> ingressosPorFilme = new HashMap<>();
 
-        for (Sessao sessao : sessaoController.listarSessoes()) {
+        for (Sessao sessao : sessaoNegocios.listarSessoes()) {
             String titulo = sessao.getFilme().getTitulo();
             ingressosPorFilme.merge(titulo, sessao.getTotalIngressos(), Integer::sum);
         }

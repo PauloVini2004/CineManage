@@ -1,4 +1,4 @@
-package br.ufrpe.cine_rural.controllers;
+package br.ufrpe.cine_rural.negocios;
 
 import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSessao;
 
@@ -12,10 +12,10 @@ import br.ufrpe.cine_rural.model.tiposala.Sala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class SessaoController {
+public class SessaoNegocios {
     private final IRepositorioSessao repositorioSessao;
 
-    public SessaoController(IRepositorioSessao repositorioSessao) {
+    public SessaoNegocios(IRepositorioSessao repositorioSessao) {
         this.repositorioSessao = repositorioSessao;
     }
 
