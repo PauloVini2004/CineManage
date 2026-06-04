@@ -2,7 +2,7 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Idioma;
-import br.ufrpe.cine_rural.gui.models_telas.SalasMapas;
+import br.ufrpe.cine_rural.gui.dto.SalasMapas;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

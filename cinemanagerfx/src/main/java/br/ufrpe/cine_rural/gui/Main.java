@@ -1,5 +1,6 @@
 package br.ufrpe.cine_rural.gui;
 
+/*
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,15 +29,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-
-
-
-
-
-
-
-
-
+*\
 
 
 
@@ -97,4 +90,5 @@ public class Main extends Application {
         launch();
     }
 }
+
 */
