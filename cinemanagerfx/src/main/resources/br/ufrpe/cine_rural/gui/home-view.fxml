@@ -31,7 +31,7 @@
                </HBox.margin>
             </Button>
             <Region layoutX="10.0" layoutY="10.0" prefHeight="159.0" prefWidth="146.0" />
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerente" textFill="WHITE">
+            <Button fx:id="btnGerente" mnemonicParsing="false" onAction="#btnGerenteAction" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerente" textFill="WHITE">
                <HBox.margin>
                   <Insets right="12.0" top="25.0" />
                </HBox.margin>
