@@ -56,7 +56,7 @@ public class Main extends Application {
 */
 
 
-// TELA DE SELECIONAR PRODUTO PARA COMPRAR
+/*TELA DE SELECIONAR PRODUTO PARA COMPRAR
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -69,7 +69,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Produto.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFormatoTelasProduto/Produto.fxml"));
             Parent root = loader.load();
 
             primaryStage.setTitle("Produto");
@@ -85,7 +85,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-
+*/
 
 
 
