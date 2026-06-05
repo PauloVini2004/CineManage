@@ -1,0 +1,113 @@
+
+.root {
+    -fx-background-color: black;
+    -fx-font-family: Arial;
+}
+
+/* SCROLL */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.tile-pane {
+    -fx-alignment: top-center;
+    -fx-padding: 30 0 50 0;
+}
+
+/* BOTÕES SUPERIORES */
+
+.btn-voltar {
+
+    -fx-background-color: transparent;
+
+    -fx-border-color: white;
+    -fx-border-width: 1;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+
+    -fx-pref-width: 95;
+    -fx-pref-height: 32;
+
+    -fx-font-size: 15;
+}
+
+.btn-adicionar {
+
+    -fx-background-color: #d50000;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 20;
+
+    -fx-pref-width: 180;
+    -fx-pref-height: 35;
+
+    -fx-font-size: 15;
+}
+
+/* CARD */
+
+.card-produto {
+    -fx-alignment: center-left;
+}
+
+.nome-produto {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 17;
+    -fx-font-weight: bold;
+}
+
+.disponivel {
+
+    -fx-text-fill: #d50000;
+
+    -fx-font-size: 10;
+}
+
+.preco {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+/* EDITAR */
+
+.btn-editar {
+
+    -fx-background-color: #d50000;
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 8;
+
+    -fx-background-radius: 30;
+
+    -fx-pref-width: 35;
+    -fx-pref-height: 20;
+
+    -fx-padding: 0;
+}
+
+/* HOVER */
+
+.btn-voltar:hover {
+    -fx-background-color: #202020;
+}
+
+.btn-adicionar:hover,
+.btn-editar:hover {
+    -fx-background-color: #ff2b2b;
+}

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
@@ -15,14 +13,13 @@
 
     <children>
 
-        <!-- TÍTULO -->
         <Label layoutX="55.0"
                layoutY="50.0"
                styleClass="titulo"
                text="SELECIONE O PRODUTO"/>
 
-        <!-- ÁREA SUPERIOR -->
-        <Button fx:id="btnVoltar" layoutX="55.0"
+        <Button fx:id="btnVoltar"
+                layoutX="55.0"
                 layoutY="145.0"
                 styleClass="btn-voltar"
                 text="Voltar"/>
@@ -33,101 +30,38 @@
                 styleClass="btn-subtotal"
                 text="0 itens | Subtotal R$0,00"/>
 
-        <Button fx:id="btnAvancar" layoutX="475.0"
+        <Button fx:id="btnAvancar"
+                layoutX="475.0"
                 layoutY="145.0"
                 styleClass="btn-avancar"
                 text="Avançar"/>
 
-        <!-- PRODUTOS -->
-        <TilePane hgap="73.0" vgap="30.0" prefColumns="5" layoutX="50.0"
-                  layoutY="200.0">
+        <Button fx:id="btnMais"
+                styleClass="btn-mais"
+                text="+"/>
+        <Button fx:id="btnMenoss"
+                styleClass="btn-menos"
+                text="-"/>
 
-            <!-- Produto 1 -->
-            <VBox spacing="4" styleClass="card-produto">
-                <Label fx:id="nomeProduto1" styleClass="nome-produto"/>
-                <StackPane styleClass="imagem-produto">
-                    <ImageView fx:id="imagemProduto1" fitHeight="150" fitWidth="100" preserveRatio="true"/>
-                </StackPane>
-                <Label fx:id="contadorProduto1" styleClass="contador" text="0 itens"/>
-                <HBox spacing="8">
-                    <Label fx:id="precoProduto1" styleClass="preco"/>
-                    <Button fx:id="maisProduto1" styleClass="btn-mais" text="+"/>
-                    <Button fx:id="menosProduto1" styleClass="btn-menos" text="-"/>
-                </HBox>
-            </VBox>
+        <ScrollPane layoutX="50"
+                    layoutY="200"
+                    prefWidth="900"
+                    prefHeight="500"
+                    fitToWidth="true"
+                    style="-fx-background:black;">
 
-            <!-- Produto 2 -->
-            <VBox spacing="4" styleClass="card-produto">
-                <Label fx:id="nomeProduto2" styleClass="nome-produto"/>
-                <StackPane styleClass="imagem-produto">
-                    <ImageView fx:id="imagemProduto2" fitHeight="150" fitWidth="100" preserveRatio="true"/>
-                </StackPane>
-                <Label fx:id="contadorProduto2" styleClass="contador" text="0 itens"/>
-                <HBox spacing="8">
-                    <Label fx:id="precoProduto2" styleClass="preco"/>
-                    <Button fx:id="maisProduto2" styleClass="btn-mais" text="+"/>
-                    <Button fx:id="menosProduto2" styleClass="btn-menos" text="-"/>
-                </HBox>
-            </VBox>
+            <content>
 
-            <!-- Produto 3 -->
-            <VBox spacing="4" styleClass="card-produto">
-                <Label fx:id="nomeProduto3" styleClass="nome-produto"/>
-                <StackPane styleClass="imagem-produto">
-                    <ImageView fx:id="imagemProduto3" fitHeight="150" fitWidth="100" preserveRatio="true"/>
-                </StackPane>
-                <Label fx:id="contadorProduto3" styleClass="contador" text="0 itens"/>
-                <HBox spacing="8">
-                    <Label fx:id="precoProduto3" styleClass="preco"/>
-                    <Button fx:id="maisProduto3" styleClass="btn-mais" text="+"/>
-                    <Button fx:id="menosProduto3" styleClass="btn-menos" text="-"/>
-                </HBox>
-            </VBox>
+                <TilePane fx:id="tileProdutos"
+                          styleClass="area-produtos"
+                          prefColumns="4"
+                          hgap="30"
+                          vgap="30"/>
 
-            <!-- Produto 4 -->
-            <VBox spacing="4" styleClass="card-produto">
-                <Label fx:id="nomeProduto4" styleClass="nome-produto"/>
-                <StackPane styleClass="imagem-produto">
-                    <ImageView fx:id="imagemProduto4" fitHeight="150" fitWidth="100" preserveRatio="true"/>
-                </StackPane>
-                <Label fx:id="contadorProduto4" styleClass="contador" text="0 itens"/>
-                <HBox spacing="8">
-                    <Label fx:id="precoProduto4" styleClass="preco"/>
-                    <Button fx:id="maisProduto4" styleClass="btn-mais" text="+"/>
-                    <Button fx:id="menosProduto4" styleClass="btn-menos" text="-"/>
-                </HBox>
-            </VBox>
+            </content>
 
-            <!-- Produto 5 -->
-            <VBox spacing="4" styleClass="card-produto">
-                <Label fx:id="nomeProduto5" styleClass="nome-produto"/>
-                <StackPane styleClass="imagem-produto">
-                    <ImageView fx:id="imagemProduto5" fitHeight="150" fitWidth="100" preserveRatio="true"/>
-                </StackPane>
-                <Label fx:id="contadorProduto5" styleClass="contador" text="0 itens"/>
-                <HBox spacing="8">
-                    <Label fx:id="precoProduto5" styleClass="preco"/>
-                    <Button fx:id="maisProduto5" styleClass="btn-mais" text="+"/>
-                    <Button fx:id="menosProduto5" styleClass="btn-menos" text="-"/>
-                </HBox>
-            </VBox>
-
-            <!-- Produto 6 -->
-            <VBox spacing="4" styleClass="card-produto">
-                <Label fx:id="nomeProduto6" styleClass="nome-produto"/>
-                <StackPane styleClass="imagem-produto">
-                    <ImageView fx:id="imagemProduto6" fitHeight="150" fitWidth="100" preserveRatio="true"/>
-                </StackPane>
-                <Label fx:id="contadorProduto6" styleClass="contador" text="0 itens"/>
-                <HBox spacing="8">
-                    <Label fx:id="precoProduto6" styleClass="preco"/>
-                    <Button fx:id="maisProduto6" styleClass="btn-mais" text="+"/>
-                    <Button fx:id="menosProduto6" styleClass="btn-menos" text="-"/>
-                </HBox>
-            </VBox>
-
-        </TilePane>
+        </ScrollPane>
 
     </children>
 
-    </AnchorPane>
+</AnchorPane>

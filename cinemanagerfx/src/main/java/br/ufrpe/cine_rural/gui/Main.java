@@ -1,5 +1,6 @@
 package br.ufrpe.cine_rural.gui;
-/*
+
+/* SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> EMISSÃO INGRESSO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -55,7 +56,7 @@ public class Main extends Application {
 */
 
 
-
+// TELA DE SELECIONAR PRODUTO PARA COMPRAR
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -87,6 +88,45 @@ public class Main extends Application {
 
 
 
+
+
+
+
+
+
+/* TELA DE ADICIONAR PRODUTO
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/br/ufrpe/cine_rural/gui/AdicionarProduto.fxml"
+                )
+        );
+
+        Scene scene = new Scene(loader.load());
+
+        stage.setTitle("Adicionar Produto");
+        stage.setWidth(900);
+        stage.setHeight(700);
+        stage.setResizable(false);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+*/
 
 
 

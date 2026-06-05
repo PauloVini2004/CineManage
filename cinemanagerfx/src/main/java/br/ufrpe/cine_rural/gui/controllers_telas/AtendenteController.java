@@ -12,4 +12,6 @@ public class AtendenteController {
 
     @FXML
     private Button btnEncCaix;
+
+
 }

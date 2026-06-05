@@ -25,7 +25,7 @@ public class ProdutoNegocios{
 
      // Cadastra produto da bomboniere com controle de estoque.
 
-    public void cadastrarProduto(int id, String nome, double preco, int qtdEstoque) {
+    public void cadastrarProduto(int id, String nome, double preco, int qtdEstoque, String caminhoImagem) {
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome do produto não pode ser vazio.");
         }
@@ -39,7 +39,8 @@ public class ProdutoNegocios{
             throw new IllegalStateException("Já existe um produto com o ID: " + id);
         }
 
-        repositorioProduto.cadastrar(new Produto(id, nome, preco, qtdEstoque));
+
+        repositorioProduto.cadastrar(new Produto(id, nome, preco, qtdEstoque, caminhoImagem));
     }
 
 
@@ -56,11 +57,12 @@ public class ProdutoNegocios{
 
      // Atualiza dados de um produto existente.
 
-    public void atualizarProduto(int id, String novoNome, double novoPreco, int novaQtd) {
+    public void atualizarProduto(int id, String novoNome, double novoPreco, int novaQtd, String novoCaminho) {
         Produto produto = buscarProduto(id);
         produto.setNome(novoNome);
         produto.setPreco(novoPreco);
         produto.setQtdEstoque(novaQtd);
+        produto.setCaminhoImagem(novoCaminho);
         repositorioProduto.atualizar(produto);
     }
 

@@ -5,12 +5,14 @@ public class Produto {
     private double preco;
     private String nome;
     private int qtdEstoque;
+    private String caminhoImagem;
 
-    public Produto(int id, String nome, double preco, int qtdEstoque) {
+    public Produto(int id, String nome, double preco, int qtdEstoque, String caminhoImagem) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.qtdEstoque = qtdEstoque;
+        this.caminhoImagem = caminhoImagem;
     }
  
     public void reduzirEstoque(int qtd) {
@@ -33,6 +35,7 @@ public class Produto {
     public int getQtdEstoque() { 
         return qtdEstoque; 
     }
+    public String getCaminhoImagem(){return caminhoImagem;}
 
     public void setId(int id) { 
         this.id = id; 
@@ -46,4 +49,5 @@ public class Produto {
     public void setQtdEstoque(int qtdEstoque) { 
         this.qtdEstoque = qtdEstoque; 
     }
+    public void setCaminhoImagem(String caminhoImagem) { this.caminhoImagem = caminhoImagem; }
 }

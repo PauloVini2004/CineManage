@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="900.0" stylesheets="@EstiloAdicionarProduto.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.AdicionarProdutoController">
+
+    <children>
+
+        <!-- Botão Voltar -->
+        <Button fx:id="btnVoltar" layoutX="70" layoutY="60" styleClass="btn-voltar" text="Voltar" />
+
+        <!-- Formulário -->
+        <VBox layoutX="180" layoutY="100" prefWidth="560" spacing="28">
+
+            <children>
+
+                <VBox spacing="8">
+                    <Label styleClass="label-form" text="Identificador" />
+                    <TextField fx:id="txtId" styleClass="campo" />
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label styleClass="label-form" text="Nome" />
+                    <TextField fx:id="txtNome" styleClass="campo" />
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label styleClass="label-form" text="Preço" />
+                    <TextField fx:id="txtPreco" styleClass="campo" />
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label styleClass="label-form" text="Imagem" />
+                    <TextField fx:id="txtImagem" styleClass="campo" />
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label styleClass="label-form" text="Quantidade de estoque" />
+                    <TextField fx:id="txtQuantidade" styleClass="campo" />
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <!-- Salvar -->
+        <Button fx:id="btnSalvar" layoutX="800" layoutY="625" style="-fx-translate-x: -70;" styleClass="btn-salvar" text="Salvar" />
+
+    </children>
+
+</AnchorPane>

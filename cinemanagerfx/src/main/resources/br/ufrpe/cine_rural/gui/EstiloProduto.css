@@ -10,6 +10,38 @@
     -fx-font-weight: bold;
     -fx-translate-y: -15;
 }
+/* CARDS */
+.card-produto {
+    -fx-background-color: #1c1c1c;
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-alignment: center;
+    -fx-background-radius: 12;
+}
+
+.card-produto .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+
+}
+
+.card-produto .button {
+    -fx-background-color: #d32f2f;
+    -fx-text-fill: white;
+}
+
+.scroll-pane {
+    -fx-background-color: black;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: black;
+}
+
+.area-produtos {
+    -fx-background-color: black;
+}
 
 /* BOTÃO VOLTAR */
 
@@ -111,6 +143,7 @@
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-translate-y: -10;
+    -fx-background-radius: 60;
 
 
     -fx-padding: 0;
