@@ -122,7 +122,7 @@ public class AdicionarProdutoController {
             FXMLLoader loader =
                     new FXMLLoader(
                             getClass().getResource(
-                                    "/br/ufrpe/cine_rural/gui/Atendente-View.fxml"
+                                    "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
                             )
                     );
 

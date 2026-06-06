@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@EstiloProduto.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.ProdutoController">
+
+    <children>
+
+        <Label layoutX="55.0" layoutY="50.0" styleClass="titulo" text="SELECIONE O PRODUTO" />
+
+        <Button fx:id="btnVoltar" layoutX="55.0" layoutY="145.0" styleClass="btn-voltar" text="Voltar" />
+
+        <Button fx:id="resumoCompra" layoutX="285.0" layoutY="145.0" styleClass="btn-subtotal" text="0 itens | Subtotal R$0,00" />
+
+        <Button fx:id="btnAvancar" layoutX="475.0" layoutY="145.0" styleClass="btn-avancar" text="Avançar" />
+
+        <ScrollPane fitToWidth="true" layoutX="50" layoutY="200" prefHeight="500" prefWidth="900" style="-fx-background:black;">
+
+            <content>
+
+                <TilePane fx:id="tileProdutos" hgap="30" prefColumns="4" styleClass="area-produtos" vgap="30" />
+
+            </content>
+
+        </ScrollPane>
+
+    </children>
+
+</AnchorPane>

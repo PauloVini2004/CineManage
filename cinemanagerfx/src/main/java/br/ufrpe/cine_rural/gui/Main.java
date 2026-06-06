@@ -56,7 +56,10 @@ public class Main extends Application {
 */
 
 
-/*TELA DE SELECIONAR PRODUTO PARA COMPRAR
+
+
+
+/*  TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -69,7 +72,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFormatoTelasProduto/Produto.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Produto.fxml"));
             Parent root = loader.load();
 
             primaryStage.setTitle("Produto");
@@ -93,8 +96,7 @@ public class Main extends Application {
 
 
 
-
-/* TELA DE ADICIONAR PRODUTO
+/* (voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO(editar vai para produto por enquanto)
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -107,13 +109,13 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/br/ufrpe/cine_rural/gui/AdicionarProduto.fxml"
+                        "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
                 )
         );
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Adicionar Produto");
+        stage.setTitle("Listar Produto");
         stage.setWidth(900);
         stage.setHeight(700);
         stage.setResizable(false);
@@ -127,9 +129,6 @@ public class Main extends Application {
     }
 }
 */
-
-
-
 
 
 

@@ -150,6 +150,7 @@ public class ProdutoController {
         return card;
     }
 
+    //Isso aqui vai ser apagado depois, foi só para testar os ítens na tela
     private void inicializarEstoqueGlobal() {
 
         if (produtoNegocios.isEstoqueVazio()) {
