@@ -65,23 +65,36 @@ public class ListarProdutosController {
         imagem.setFitHeight(130);
         imagem.setPreserveRatio(true);
 
+        System.out.println(
+                produto.getNome()
+                        + " -> "
+                        + produto.getCaminhoImagem()
+        );
+
         try {
 
-            imagem.setImage(
-                    new Image(
-                            getClass()
-                                    .getResource(produto.getCaminhoImagem())
-                                    .toExternalForm()
-                    )
-            );
+            if (produto.getCaminhoImagem() != null &&
+                    !produto.getCaminhoImagem().isBlank()) {
+
+                Image img = new Image(
+                        new java.io.File(
+                                produto.getCaminhoImagem()
+                        ).toURI().toString()
+                );
+
+                imagem.setImage(img);
+            }
 
         } catch (Exception e) {
 
             System.out.println(
-                    "Imagem não encontrada: "
-                            + produto.getNome()
+                    "Erro ao carregar imagem: "
+                            + produto.getCaminhoImagem()
             );
+
+            e.printStackTrace();
         }
+
 
         Label estoque =
                 new Label(
@@ -171,11 +184,17 @@ public class ListarProdutosController {
             FXMLLoader loader =
                     new FXMLLoader(
                             getClass().getResource(
-                                    "/br/ufrpe/cine_rural/gui/Produto.fxml"
+                                    "/br/ufrpe/cine_rural/gui/EditarProduto.fxml"
                             )
                     );
 
+
             Parent root = loader.load();
+
+            EditarProdutoController controller =
+                    loader.getController();
+
+            controller.carregarProduto(produto);
 
             Stage stage =
                     (Stage) btnVoltar

@@ -51,8 +51,8 @@
                 <TilePane
                         fx:id="tileProdutos"
                         prefColumns="4"
-                        hgap="55"
-                        vgap="70"
+                        hgap="60"
+                        vgap="30"
                         styleClass="tile-pane"/>
 
             </content>

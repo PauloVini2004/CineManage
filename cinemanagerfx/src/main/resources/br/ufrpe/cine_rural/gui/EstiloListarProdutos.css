@@ -30,6 +30,8 @@
 
     -fx-pref-width: 95;
     -fx-pref-height: 32;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
 }
 
 .btn-adicionar {
@@ -46,13 +48,14 @@
 
 .card-produto {
     -fx-alignment: center-left;
+
 }
 
 .nome-produto {
 
     -fx-text-fill: white;
 
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
 
@@ -67,7 +70,7 @@
 
     -fx-text-fill: white;
 
-    -fx-font-size: 22px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
@@ -77,19 +80,25 @@
 
     -fx-text-fill: white;
 
-    -fx-background-radius: 20;
+    -fx-background-radius: 60;
 
     -fx-font-size: 8px;
 
-    -fx-pref-width: 40px;
-    -fx-pref-height: 20px;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 15px;
+    -fx-translate-x: -5;
+    -fx-font-weight: bold;
 }
 
 .btn-voltar:hover {
     -fx-background-color: #202020;
 }
 
-.btn-adicionar:hover,
-.btn-editar:hover {
+.btn-adicionar{
     -fx-background-color: #ff2b2b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
 }

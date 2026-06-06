@@ -11,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import java.io.File;
 
 public class AdicionarProdutoController {
 
@@ -29,9 +31,6 @@ public class AdicionarProdutoController {
     private TextField txtPreco;
 
     @FXML
-    private TextField txtImagem;
-
-    @FXML
     private TextField txtQuantidade;
 
     @FXML
@@ -40,12 +39,36 @@ public class AdicionarProdutoController {
     @FXML
     private Button btnVoltar;
 
+    private String caminhoImagemSelecionada;
+
+    @FXML
+    private Button btnSelecionarImagem;
+
     @FXML
     public void initialize() {
 
         btnSalvar.setOnAction(e -> salvarProduto());
-
         btnVoltar.setOnAction(e -> voltar());
+        btnSelecionarImagem.setOnAction( e -> selecionarImagem());
+
+    }
+
+    @FXML
+    private void selecionarImagem() {
+
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.setTitle("Selecionar Imagem");
+
+        File arquivo =
+                fileChooser.showOpenDialog(
+                        (Stage) btnSalvar.getScene().getWindow()
+                );
+
+        if (arquivo != null) {
+            caminhoImagemSelecionada =
+                    arquivo.getAbsolutePath();
+        }
     }
 
     private void salvarProduto() {
@@ -66,15 +89,13 @@ public class AdicionarProdutoController {
                     txtQuantidade.getText().trim()
             );
 
-            String caminhoImagem =
-                    txtImagem.getText().trim();
 
             produtoNegocios.cadastrarProduto(
                     id,
                     nome,
                     preco,
                     quantidade,
-                    caminhoImagem
+                    caminhoImagemSelecionada
             );
             System.out.println(
                     "Produtos após cadastro: "
@@ -111,7 +132,6 @@ public class AdicionarProdutoController {
         txtId.clear();
         txtNome.clear();
         txtPreco.clear();
-        txtImagem.clear();
         txtQuantidade.clear();
     }
 

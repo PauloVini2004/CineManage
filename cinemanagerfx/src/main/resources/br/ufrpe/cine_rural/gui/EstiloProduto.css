@@ -8,27 +8,56 @@
     -fx-text-fill: #d50000;
     -fx-font-size: 50px;
     -fx-font-weight: bold;
-    -fx-translate-y: -15;
-}
-/* CARDS */
-.card-produto {
-    -fx-background-color: #1c1c1c;
-    -fx-padding: 15;
-    -fx-spacing: 8;
-    -fx-alignment: center;
-    -fx-background-radius: 12;
+    -fx-translate-y: 20;
 }
 
-.card-produto .label {
+.btn-voltar {
+    -fx-background-color: black;
     -fx-text-fill: white;
-    -fx-font-weight: bold;
 
+    -fx-border-color: white;
+    -fx-border-width: 1;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+
+    -fx-pref-width: 100;
+    -fx-pref-height: 35;
+    -fx-translate-x: -60;
 }
 
-.card-produto .button {
-    -fx-background-color: #d32f2f;
+.btn-subtotal {
+
+    -fx-background-color: black;
+
     -fx-text-fill: white;
+
+    -fx-background-radius: 30;
+    -fx-border-radius: 20;
+    -fx-border-color: white;
+
+    -fx-pref-width: 300;
+    -fx-pref-height: 35;
+    -fx-translate-x: 120;
+
 }
+
+.btn-avancar {
+
+    -fx-background-color: #d50000;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: white;
+
+    -fx-pref-width: 110;
+    -fx-pref-height: 35;
+    -fx-translate-x: 60;
+}
+
+/* SCROLL */
 
 .scroll-pane {
     -fx-background-color: black;
@@ -40,111 +69,89 @@
 }
 
 .area-produtos {
+
     -fx-background-color: black;
+
+    -fx-padding: 20;
 }
 
-/* BOTÃO VOLTAR */
+/* CARD */
 
-.btn-voltar {
-    -fx-background-color: black;
-    -fx-text-fill: white;
+.card-produto {
 
-    -fx-border-color: white;
-    -fx-border-width: 1;
-    -fx-font-weight: bold;
+    -fx-background-color: transparent;
 
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
+    -fx-pref-width: 105;
 
-    -fx-pref-width: 100;
-    -fx-pref-height: 35;
-    -fx-translate-x: 7;
-    -fx-translate-y: -20;
+    -fx-spacing: 4;
 
-
+    -fx-alignment: center;
 }
 
-/* SUBTOTAL */
-
-.btn-subtotal {
-    -fx-background-color: black;
-    -fx-text-fill: white;
-    -fx-border-width: 1;
-    -fx-border-color: white;
-    -fx-font-weight: bold;
-
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-
-    -fx-pref-width: 300;
-    -fx-pref-height: 35;
-    -fx-translate-x: 130;
-    -fx-translate-y: -20;
-
-    -fx-alignment: center-left;
-
-    -fx-padding: 0 90 0 15;
-}
-
-/* AVANÇAR */
-
-.btn-avancar {
-    -fx-background-color: #d50000;
-    -fx-text-fill: white;
-    -fx-border-width: 1;
-    -fx-border-color: white;
-
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-
-    -fx-pref-width: 110;
-    -fx-pref-height: 37;
-    -fx-translate-x: 130;
-    -fx-translate-y: -20;
-
-    -fx-font-weight: bold;
-}
-
-/* PRODUTOS */
+/* NOME */
 
 .nome-produto {
-    -fx-text-fill: white;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
 
+    -fx-text-fill: white;
+
+    -fx-font-size: 12px;
+
+    -fx-font-weight: bold;
 }
+
+/* IMAGEM */
 
 .imagem-produto {
 
-    -fx-pref-width: 30;
-    -fx-pref-height: 40;
+    -fx-border-color:white;
 
+    -fx-border-width: 2;
 }
+
+/* CONTADOR */
 
 .contador {
-    -fx-text-fill: #d50000;
-    -fx-font-size: 10px;
 
+    -fx-text-fill: #d50000;
+
+    -fx-font-size: 10px;
+    -fx-translate-x: -20;
 }
+
+/* PREÇO */
 
 .preco {
+
     -fx-text-fill: white;
-    -fx-font-size: 13px;
+
+    -fx-font-size: 12px;
+
     -fx-font-weight: bold;
 
+    -fx-translate-x: -30;
+
+
+
 }
+
+/* BOTÕES */
 
 .btn-mais,
 .btn-menos {
 
     -fx-background-color: transparent;
+
     -fx-text-fill: #d50000;
 
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-translate-y: -10;
-    -fx-background-radius: 60;
+    -fx-font-size: 22px;
 
+    -fx-font-weight: bold;
 
     -fx-padding: 0;
+
+    -fx-translate-x: 60;
+    -fx-translate-y: -30;
+
+    -fx-min-width: 15;
+    -fx-min-height: 15;
 }

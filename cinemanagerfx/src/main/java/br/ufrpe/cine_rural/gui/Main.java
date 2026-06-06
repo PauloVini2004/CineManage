@@ -58,8 +58,7 @@ public class Main extends Application {
 
 
 
-
-/*  TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
+/*TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -95,8 +94,7 @@ public class Main extends Application {
 
 
 
-
-/* (voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO(editar vai para produto por enquanto)
+/*(voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -111,7 +109,7 @@ public class Main extends Application {
                 getClass().getResource(
                         "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
                 )
-        );
+        ;
 
         Scene scene = new Scene(loader.load());
 

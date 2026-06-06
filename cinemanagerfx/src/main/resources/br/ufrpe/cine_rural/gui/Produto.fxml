@@ -3,27 +3,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@EstiloProduto.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.ProdutoController">
+<AnchorPane
+        prefWidth="900"
+        prefHeight="700"
+        styleClass="root"
+        stylesheets="@EstiloProduto.css"
+        xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.ProdutoController">
 
     <children>
 
-        <Label layoutX="55.0" layoutY="50.0" styleClass="titulo" text="SELECIONE O PRODUTO" />
+        <VBox
+                alignment="TOP_CENTER"
+                prefWidth="900"
+                prefHeight="700"
+                spacing="20">
 
-        <Button fx:id="btnVoltar" layoutX="55.0" layoutY="145.0" styleClass="btn-voltar" text="Voltar" />
+            <Label
+                    text=" "
+                    styleClass="titulo"/>
 
-        <Button fx:id="resumoCompra" layoutX="285.0" layoutY="145.0" styleClass="btn-subtotal" text="0 itens | Subtotal R$0,00" />
+            <HBox
+                    alignment="CENTER"
+                    spacing="20">
 
-        <Button fx:id="btnAvancar" layoutX="475.0" layoutY="145.0" styleClass="btn-avancar" text="Avançar" />
+                <Button
+                        fx:id="btnVoltar"
+                        text="Voltar"
+                        styleClass="btn-voltar"/>
 
-        <ScrollPane fitToWidth="true" layoutX="50" layoutY="200" prefHeight="500" prefWidth="900" style="-fx-background:black;">
+                <Button
+                        fx:id="resumoCompra"
+                        text="0 itens | Subtotal R$0,00"
+                        styleClass="btn-subtotal"/>
 
-            <content>
+                <Button
+                        fx:id="btnAvancar"
+                        text="Avançar"
+                        styleClass="btn-avancar"/>
 
-                <TilePane fx:id="tileProdutos" hgap="30" prefColumns="4" styleClass="area-produtos" vgap="30" />
+            </HBox>
 
-            </content>
+            <ScrollPane
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    vbarPolicy="AS_NEEDED"
+                    prefWidth="700"
+                    prefHeight="450"
+                    styleClass="scroll-pane">
 
-        </ScrollPane>
+                <content>
+
+                    <TilePane
+                            fx:id="tileProdutos"
+                            alignment="TOP_CENTER"
+                            prefColumns="5"
+                            hgap="30"
+                            vgap="25"
+                            styleClass="area-produtos"/>
+
+                </content>
+
+            </ScrollPane>
+
+        </VBox>
 
     </children>
 

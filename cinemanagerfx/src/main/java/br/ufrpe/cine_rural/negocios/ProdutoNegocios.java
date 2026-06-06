@@ -1,7 +1,6 @@
 package br.ufrpe.cine_rural.negocios;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
-import br.ufrpe.cine_rural.dados.interfaces.IRepositorioProduto;
 import br.ufrpe.cine_rural.model.loja.Produto;
 
 import java.util.ArrayList;
@@ -57,12 +56,12 @@ public class ProdutoNegocios{
 
      // Atualiza dados de um produto existente.
 
-    public void atualizarProduto(int id, String novoNome, double novoPreco, int novaQtd, String novoCaminho) {
+    public void atualizarProduto(int id, String novoNome, double novoPreco, int novaQtd, String novoCaminhoImagem) {
         Produto produto = buscarProduto(id);
         produto.setNome(novoNome);
         produto.setPreco(novoPreco);
         produto.setQtdEstoque(novaQtd);
-        produto.setCaminhoImagem(novoCaminho);
+        produto.setCaminhoImagem(novoCaminhoImagem);
         repositorioProduto.atualizar(produto);
     }
 
