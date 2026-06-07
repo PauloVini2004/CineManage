@@ -326,7 +326,7 @@ public class ProdutoController {
 
     private void avancarParaPagamento() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Atendente-View.fxml")); //colocar dados cliente quando estiver disponível
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/NovoFormulario.fxml")); //colocar dados cliente quando estiver disponível
             Parent root = loader.load();
 
             Stage stage =
