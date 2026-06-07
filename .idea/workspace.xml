@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04aa6610-8b67-41d3-91cf-27505aa413d7" name="Changes" comment="teste">
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/ufrpe/cine_rural/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/ufrpe/cine_rural/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/gui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/gui/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -109,7 +109,7 @@ public class Main extends Application {
                 getClass().getResource(
                         "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
                 )
-        ;
+        );
 
         Scene scene = new Scene(loader.load());
 
