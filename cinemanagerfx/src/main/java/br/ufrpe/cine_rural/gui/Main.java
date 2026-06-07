@@ -94,7 +94,7 @@ public class Main extends Application {
 
 
 
-/*(voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
+//(voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -126,7 +126,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
+
 
 
 

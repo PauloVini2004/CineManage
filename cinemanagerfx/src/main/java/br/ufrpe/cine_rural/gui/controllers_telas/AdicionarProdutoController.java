@@ -13,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class AdicionarProdutoController {
 
@@ -60,14 +63,40 @@ public class AdicionarProdutoController {
 
         fileChooser.setTitle("Selecionar Imagem");
 
-        File arquivo =
-                fileChooser.showOpenDialog(
-                        (Stage) btnSalvar.getScene().getWindow()
-                );
+        File arquivo = fileChooser.showOpenDialog(
+                (Stage) btnSalvar.getScene().getWindow()
+        );
 
         if (arquivo != null) {
-            caminhoImagemSelecionada =
-                    arquivo.getAbsolutePath();
+
+            try {
+
+                Path pastaDestino =
+                        Path.of("br/ufrpe/cine_rural/gui/ImagensProduto/ImagensProduto");
+
+                Files.createDirectories(pastaDestino);
+
+                Path destino =
+                        pastaDestino.resolve(
+                                arquivo.getName()
+                        );
+
+                Files.copy(
+                        arquivo.toPath(),
+                        destino,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+                caminhoImagemSelecionada =
+                        "dados/imagens/" +
+                                arquivo.getName();
+
+            } catch (Exception e) {
+
+                mostrarErro(
+                        "Erro ao copiar imagem."
+                );
+            }
         }
     }
 
