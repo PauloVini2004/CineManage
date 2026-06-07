@@ -1,6 +1,6 @@
 
 .root {
-    -fx-background-color: black;
+    -fx-background-color: white;
     -fx-font-family: Arial;
 }
 
@@ -13,20 +13,15 @@
     -fx-background-color: transparent;
 }
 
-.tile-pane {
-    -fx-alignment: top-center;
-    -fx-padding: 30 0 50 0;
-}
-
 .btn-voltar {
 
     -fx-background-color: transparent;
 
-    -fx-border-color: white;
+    -fx-border-color: black;
     -fx-border-radius: 20;
     -fx-background-radius: 20;
 
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
     -fx-pref-width: 95;
     -fx-pref-height: 32;
@@ -40,7 +35,7 @@
 
     -fx-background-radius: 20;
 
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
     -fx-pref-width: 180;
     -fx-pref-height: 35;
@@ -53,7 +48,7 @@
 
 .nome-produto {
 
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
     -fx-font-size: 12px;
     -fx-font-weight: bold;
@@ -68,7 +63,7 @@
 
 .preco {
 
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -89,9 +84,13 @@
     -fx-translate-x: -5;
     -fx-font-weight: bold;
 }
+.btn-editar:hover {
+    -fx-background-color: black;
+}
+
 
 .btn-voltar:hover {
-    -fx-background-color: #202020;
+    -fx-background-color: #ff2b2b ;
 }
 
 .btn-adicionar{
@@ -99,6 +98,9 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 13px;
-    -fx-border-color: white;
+    -fx-border-color: black;
     -fx-border-radius: 20;
+}
+.btn-adicionar:hover {
+    -fx-background-color: black;
 }

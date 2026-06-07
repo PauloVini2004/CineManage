@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: black;
+    -fx-background-color: white;
 }
 
 /* TÍTULO */
@@ -24,6 +24,11 @@
     -fx-pref-width: 100;
     -fx-pref-height: 35;
     -fx-translate-x: -60;
+    -fx-font-weight: bold;
+}
+.btn-voltar:hover{
+    -fx-background-color: red;
+    -fx-font-weight: bold;
 }
 
 .btn-subtotal {
@@ -39,6 +44,7 @@
     -fx-pref-width: 300;
     -fx-pref-height: 35;
     -fx-translate-x: 120;
+    -fx-font-weight: bold;
 
 }
 
@@ -55,22 +61,29 @@
     -fx-pref-width: 110;
     -fx-pref-height: 35;
     -fx-translate-x: 60;
+    -fx-font-weight: bold;
+}
+.btn-avancar:hover{
+    -fx-background-color: white;
+    -fx-text-fill: red;
+    -fx-border-color: black;
+    -fx-font-weight: bold;
 }
 
 /* SCROLL */
 
 .scroll-pane {
-    -fx-background-color: black;
+    -fx-background-color: white;
     -fx-border-color: transparent;
 }
 
 .scroll-pane > .viewport {
-    -fx-background-color: black;
+    -fx-background-color: white;
 }
 
 .area-produtos {
 
-    -fx-background-color: black;
+    -fx-background-color: white;
 
     -fx-padding: 20;
 }
@@ -92,7 +105,7 @@
 
 .nome-produto {
 
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
     -fx-font-size: 12px;
 
@@ -115,14 +128,15 @@
     -fx-text-fill: #d50000;
 
     -fx-font-size: 10px;
-    -fx-translate-x: -20;
+    -fx-translate-x: -5;
+    -fx-font-weight: bold;
 }
 
 /* PREÇO */
 
 .preco {
 
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
     -fx-font-size: 12px;
 
@@ -154,4 +168,8 @@
 
     -fx-min-width: 15;
     -fx-min-height: 15;
+}
+.btn-mais:hover,
+.btn-menos:hover{
+    -fx-text-fill: black;
 }

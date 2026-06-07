@@ -31,12 +31,15 @@
 
             <VBox spacing="5">
                 <Label text="Identificador" />
-                <TextField fx:id="txtId" />
+                <TextField fx:id="txtId"
+                           editable="false"
+                           focusTraversable="false"
+                           style="-fx-background-color: #231f20" />
             </VBox>
 
             <VBox spacing="5">
                 <Label text="Nome" />
-                <TextField fx:id="txtNome" />
+                <TextField fx:id="txtNome"/>
             </VBox>
 
             <VBox spacing="5">

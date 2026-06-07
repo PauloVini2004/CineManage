@@ -1,6 +1,7 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
+import br.ufrpe.cine_rural.model.loja.ItemVenda;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
 
@@ -52,6 +53,9 @@ public class ProdutoController {
 
         btnVoltar.setOnAction(
                 e -> voltarParaAtendente()
+        );
+        btnAvancar.setOnAction(
+                e -> avancarParaPagamento()
         );
 
     }
@@ -318,4 +322,113 @@ public class ProdutoController {
             e.printStackTrace();
         }
     }
+
+
+    private void avancarParaPagamento() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Atendente-View.fxml")); //colocar dados cliente quando estiver disponível
+            Parent root = loader.load();
+
+            Stage stage =
+                    (Stage) btnAvancar
+                            .getScene()
+                            .getWindow();
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+            stage.show();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+            /* Alterar metodo para isso depois de Dados cliente estar disponível
+            try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/DadosCliente.fxml")); //colocar dados cliente quando estiver disponível
+            Parent root = loader.load();
+
+            PagamentoController controller =
+                    loader.getController();
+
+            controller.receberItensVenda(
+                    gerarItensVenda()
+            );
+
+            Stage stage =
+                    (Stage) btnAvancar
+                            .getScene()
+                            .getWindow();
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+            stage.show();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+    */
+
+    private ArrayList<ItemVenda> gerarItensVenda() { //Gera lista de produtos adicionados ao carrinho
+
+        ArrayList<ItemVenda> itens =
+                new ArrayList<>();
+
+        ArrayList<Produto> produtos =
+                produtoNegocios.listarProdutos();
+
+        for (Produto produto : produtos) {
+
+            int qtd =
+                    quantidades.getOrDefault(
+                            produto.getId(),
+                            0
+                    );
+
+            if (qtd > 0) {
+
+                itens.add(
+                        new ItemVenda(
+                                qtd,
+                                produto
+                        )
+                );
+            }
+        }
+
+        return itens;
+    }
+
+
+    /* Isso aqui eh pra colocar no DadosCliente Controller, para os dados de tela serem passados
+    public class PagamentoController {
+
+    private ArrayList<ItemVenda> itensVenda;
+
+    public void receberItensVenda(
+            ArrayList<ItemVenda> itensVenda
+    ) {
+
+        this.itensVenda = itensVenda;
+
+        for (ItemVenda item : itensVenda) {
+
+            System.out.println(
+                    item.getProduto().getNome()
+                    + " x "
+                    + item.getQuantidade()
+                    + " = R$ "
+                    + item.getSubtotal()
+            );
+        }
+    }
+}
+     */
 }

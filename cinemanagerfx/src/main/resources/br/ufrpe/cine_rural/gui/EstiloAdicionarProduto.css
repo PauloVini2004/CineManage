@@ -26,7 +26,6 @@
     -fx-pref-height: 34;
 
     -fx-padding: 0 10 0 10;
-
 }
 
 .campo:focused {
@@ -45,10 +44,12 @@
     -fx-translate-y: 0;
     -fx-cursor: hand;
     -fx-font-weight: bold;
-    -fx-border-color: white;
+    -fx-border-color: gray;
     -fx-border-radius: 20;
 }
-
+.imagem-produto:hover{
+    -fx-background-color: red;
+}
 
 
 
@@ -69,6 +70,9 @@
     -fx-cursor: hand;
     -fx-font-weight: bold;
 }
+.btn-voltar:hover{
+    -fx-background-color: red;
+}
 
 /* Botão Salvar */
 
@@ -87,5 +91,8 @@
     -fx-font-weight: bold;
     -fx-border-color: white;
     -fx-border-radius: 20;
+}
+.btn-salvar:hover{
+    -fx-background-color: black;
 }
 

@@ -160,7 +160,7 @@ public class ListarProdutosController {
     private void voltarParaGerente() {
 
         trocarTela(
-                "/br/ufrpe/cine_rural/gui/home-view.fxml",
+                "/br/ufrpe/cine_rural/gui/Gerente-View.fxml",
                 btnVoltar
         );
     }

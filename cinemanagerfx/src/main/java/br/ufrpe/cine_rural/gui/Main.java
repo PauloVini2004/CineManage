@@ -58,7 +58,7 @@ public class Main extends Application {
 
 
 
-/*TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
+//TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -87,7 +87,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
+
 
 
 
@@ -109,11 +109,11 @@ public class Main extends Application {
                 getClass().getResource(
                         "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
                 )
-        ;
+        );
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Listar Produto");
+        stage.setTitle("Gerenciar Produto");
         stage.setWidth(900);
         stage.setHeight(700);
         stage.setResizable(false);
@@ -127,7 +127,6 @@ public class Main extends Application {
     }
 }
 */
-
 
 
 

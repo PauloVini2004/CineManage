@@ -3,36 +3,26 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.TilePane?>
 
-<BorderPane
-        xmlns="http://javafx.com/javafx/17"
-        xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.ListarProdutosController"
-        stylesheets="@EstiloListarProdutos.css"
-        styleClass="root"
-        prefHeight="700.0"
-        prefWidth="900.0">
+<BorderPane prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@EstiloListarProdutos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.ListarProdutosController">
 
     <top>
-        <HBox alignment="CENTER">
+        <HBox alignment="CENTER" prefHeight="158.0" prefWidth="900.0">
             <padding>
-                <Insets top="70" right="70" bottom="40" left="70"/>
+                <Insets bottom="40" left="70" right="70" top="70" />
             </padding>
 
             <children>
 
-                <Button
-                        fx:id="btnVoltar"
-                        text="Voltar"
-                        styleClass="btn-voltar"/>
+                <Button fx:id="btnVoltar" styleClass="btn-voltar" text="Voltar" />
 
-                <Region HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS" />
 
-                <Button
-                        fx:id="btnAdicionar"
-                        text="Adicionar produto"
-                        styleClass="btn-adicionar"/>
+                <Button fx:id="btnAdicionar" styleClass="btn-adicionar" text="Adicionar produto" />
 
             </children>
 
@@ -41,19 +31,11 @@
 
     <center>
 
-        <ScrollPane
-                fitToWidth="true"
-                hbarPolicy="NEVER"
-                styleClass="scroll-pane">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="598.0" prefWidth="900.0" styleClass="scroll-pane">
 
             <content>
 
-                <TilePane
-                        fx:id="tileProdutos"
-                        prefColumns="4"
-                        hgap="60"
-                        vgap="30"
-                        styleClass="tile-pane"/>
+                <TilePane fx:id="tileProdutos" hgap="60" prefColumns="5" style="-fx-translate-x: 65 " styleClass="tile-pane" vgap="30" />
 
             </content>
 
