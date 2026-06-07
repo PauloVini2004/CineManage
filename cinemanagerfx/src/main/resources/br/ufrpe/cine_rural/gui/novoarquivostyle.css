@@ -1,0 +1,150 @@
+/* ==========================
+   FUNDO DA JANELA
+   ========================== */
+
+.anchor-pane {
+    -fx-background-color: #2f2f2f;
+}
+
+/* ==========================
+   CARD DO FORMULÁRIO
+   ========================== */
+
+.vbox {
+    -fx-background-color: #000000;
+
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+
+    -fx-border-color: #d9d9d9;
+    -fx-border-width: 2;
+
+    -fx-padding: 30;
+    -fx-spacing: 15;
+}
+
+/* ==========================
+   TÍTULO
+   ========================== */
+
+.titulo {
+    -fx-text-fill: white;
+    -fx-font-size: 38px;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-weight: normal;
+}
+
+/* ==========================
+   LABELS
+   ========================== */
+
+.label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: bold;
+}
+
+/* ==========================
+   CAMPOS DE TEXTO
+   ========================== */
+
+.text-field {
+    -fx-background-color: #000000;
+
+    -fx-border-color: #6b6b6b;
+    -fx-border-width: 1;
+
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #8f8f8f;
+
+    -fx-font-size: 15px;
+
+    -fx-pref-height: 40;
+    -fx-padding: 0 12 0 12;
+}
+
+.text-field:focused {
+    -fx-border-color: white;
+    -fx-border-width: 1.5;
+}
+
+/* ==========================
+   RADIO BUTTONS
+   ========================== */
+
+.radio-button {
+    -fx-background-color: #1a1a1a;
+
+    -fx-background-radius: 8;
+
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+
+    -fx-padding: 12;
+}
+
+.radio-button .radio {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 50%;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: white;
+}
+
+/* ==========================
+   BOTÃO PRINCIPAL
+   ========================== */
+
+.button {
+    -fx-background-color: #e8e8e8;
+
+    -fx-background-radius: 25;
+
+    -fx-text-fill: black;
+    -fx-font-size: 20px;
+    -fx-font-family: "Segoe UI";
+
+    -fx-pref-height: 50;
+
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #ffffff;
+}
+
+/* ==========================
+   TABPANE
+   ========================== */
+
+.tab-pane {
+    -fx-background-color: #2f2f2f;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: #2f2f2f;
+}
+
+.tab {
+    -fx-background-color: #1d1d1d;
+}
+
+.tab:selected {
+    -fx-background-color: #000000;
+}
+
+.tab .tab-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.tab-content-area {
+    -fx-background-color: #000000;
+}
