@@ -4,8 +4,6 @@
     -fx-font-family: Arial;
 }
 
-/* SCROLL */
-
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-background: transparent;
@@ -20,51 +18,44 @@
     -fx-padding: 30 0 50 0;
 }
 
-/* BOTÕES SUPERIORES */
-
 .btn-voltar {
 
     -fx-background-color: transparent;
 
     -fx-border-color: white;
-    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
 
     -fx-text-fill: white;
 
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-
     -fx-pref-width: 95;
     -fx-pref-height: 32;
-
-    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
 }
 
 .btn-adicionar {
 
     -fx-background-color: #d50000;
 
-    -fx-text-fill: white;
-
     -fx-background-radius: 20;
+
+    -fx-text-fill: white;
 
     -fx-pref-width: 180;
     -fx-pref-height: 35;
-
-    -fx-font-size: 15;
 }
-
-/* CARD */
 
 .card-produto {
     -fx-alignment: center-left;
+
 }
 
 .nome-produto {
 
     -fx-text-fill: white;
 
-    -fx-font-size: 17;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
 
@@ -72,18 +63,16 @@
 
     -fx-text-fill: #d50000;
 
-    -fx-font-size: 10;
+    -fx-font-size: 10px;
 }
 
 .preco {
 
     -fx-text-fill: white;
 
-    -fx-font-size: 20;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
-
-/* EDITAR */
 
 .btn-editar {
 
@@ -91,23 +80,25 @@
 
     -fx-text-fill: white;
 
-    -fx-font-size: 8;
+    -fx-background-radius: 60;
 
-    -fx-background-radius: 30;
+    -fx-font-size: 8px;
 
-    -fx-pref-width: 35;
-    -fx-pref-height: 20;
-
-    -fx-padding: 0;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 15px;
+    -fx-translate-x: -5;
+    -fx-font-weight: bold;
 }
-
-/* HOVER */
 
 .btn-voltar:hover {
     -fx-background-color: #202020;
 }
 
-.btn-adicionar:hover,
-.btn-editar:hover {
+.btn-adicionar{
     -fx-background-color: #ff2b2b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
 }

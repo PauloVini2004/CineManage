@@ -34,20 +34,22 @@
                 </VBox>
 
                 <VBox spacing="8">
-                    <Label styleClass="label-form" text="Imagem" />
-                    <TextField fx:id="txtImagem" styleClass="campo" />
+                    <Label styleClass="label-form" text="Quantidade de estoque" />
+                    <TextField fx:id="txtQuantidade" styleClass="campo" />
                 </VBox>
 
                 <VBox spacing="8">
-                    <Label styleClass="label-form" text="Quantidade de estoque" />
-                    <TextField fx:id="txtQuantidade" styleClass="campo" />
+                    <Button fx:id="btnSelecionarImagem"
+                            text="Selecionar Imagem"
+                            onAction="#selecionarImagem"
+                            styleClass="imagem-produto"/>
                 </VBox>
 
             </children>
         </VBox>
 
         <!-- Salvar -->
-        <Button fx:id="btnSalvar" layoutX="800" layoutY="625" style="-fx-translate-x: -70;" styleClass="btn-salvar" text="Salvar" />
+        <Button fx:id="btnSalvar"  styleClass="btn-salvar" text="Salvar" />
 
     </children>
 

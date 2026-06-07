@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javafx.scene.layout.TilePane;
@@ -44,8 +45,6 @@ public class ProdutoController {
 
     @FXML
     public void initialize() {
-
-        inicializarEstoqueGlobal();
 
         carregarProdutos();
 
@@ -82,32 +81,26 @@ public class ProdutoController {
                                 + " disp."
                 );
 
-        ImageView imagem =
-                new ImageView();
-
-        imagem.setFitWidth(150);
-        imagem.setFitHeight(225);
-        imagem.setPreserveRatio(true);
+        ImageView imagem = new ImageView();
 
         try {
 
-            imagem.setImage(
-                    new Image(
-                            getClass()
-                                    .getResource(
-                                            produto.getCaminhoImagem()
-                                    )
-                                    .toExternalForm()
-                    )
+            Image img = new Image(
+                    new File(produto.getCaminhoImagem())
+                            .toURI()
+                            .toString()
             );
+
+            imagem.setImage(img);
 
         } catch (Exception e) {
 
             System.out.println(
-                    "Erro ao carregar imagem de "
-                            + produto.getNome()
+                    "Imagem não encontrada: "
+                            + produto.getCaminhoImagem()
             );
-        }
+        };
+
 
         Button btnMais =
                 new Button("+");
@@ -147,77 +140,25 @@ public class ProdutoController {
                 botoes
         );
 
+        nome.getStyleClass().add("nome-produto");
+
+        preco.getStyleClass().add("preco");
+
+        contador.getStyleClass().add("contador");
+
+        imagemPane.getStyleClass().add("imagem-produto");
+
+        btnMais.getStyleClass().add("btn-mais");
+
+        btnMenos.getStyleClass().add("btn-menos");
+
+        imagem.setFitWidth(100);
+        imagem.setFitHeight(130);
+        imagem.setPreserveRatio(false);
+
         return card;
     }
 
-    private void inicializarEstoqueGlobal() {
-
-        if (produtoNegocios.isEstoqueVazio()) {
-
-            try {
-
-                produtoNegocios.cadastrarProduto(
-                        1,
-                        "Pipoca",
-                        14.90,
-                        50,
-                        "/br/ufrpe/cine_rural/gui/ImagensProduto/Pipoca2.jpg"
-                );
-
-                produtoNegocios.cadastrarProduto(
-                        2,
-                        "Coca Cola",
-                        10.50,
-                        30,
-                        "/br/ufrpe/cine_rural/gui/ImagensProduto/RefriCoca.jpg"
-                );
-
-                produtoNegocios.cadastrarProduto(
-                        3,
-                        "Refri Fanta",
-                        9.50,
-                        20,
-                        "/br/ufrpe/cine_rural/gui/ImagensProduto/RefriFanta.jpg"
-                );
-
-                produtoNegocios.cadastrarProduto(
-                        4,
-                        "Guaraná",
-                        9.50,
-                        15,
-                        "/br/ufrpe/cine_rural/gui/ImagensProduto/Guarana.jpg"
-                );
-
-                produtoNegocios.cadastrarProduto(
-                        5,
-                        "Sprite",
-                        9.50,
-                        40,
-                        "/br/ufrpe/cine_rural/gui/ImagensProduto/RefriSprite.jpg"
-                );
-
-                produtoNegocios.cadastrarProduto(
-                        6,
-                        "Hershey's",
-                        13.80,
-                        10,
-                        "/br/ufrpe/cine_rural/gui/ImagensProduto/Hersheys.jpg"
-                );
-
-                System.out.println(
-                        "[Sistema] Estoque inicializado com sucesso!"
-                );
-
-            } catch (Exception e) {
-
-                System.out.println(
-                        "Erro ao inicializar o estoque padrão."
-                );
-
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     private void carregarProdutos() {

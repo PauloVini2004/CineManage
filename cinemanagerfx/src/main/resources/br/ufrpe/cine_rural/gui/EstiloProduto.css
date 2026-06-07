@@ -1,0 +1,157 @@
+.root {
+    -fx-background-color: black;
+}
+
+/* TÍTULO */
+
+.titulo {
+    -fx-text-fill: #d50000;
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-translate-y: 20;
+}
+
+.btn-voltar {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+
+    -fx-border-color: white;
+    -fx-border-width: 1;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+
+    -fx-pref-width: 100;
+    -fx-pref-height: 35;
+    -fx-translate-x: -60;
+}
+
+.btn-subtotal {
+
+    -fx-background-color: black;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 30;
+    -fx-border-radius: 20;
+    -fx-border-color: white;
+
+    -fx-pref-width: 300;
+    -fx-pref-height: 35;
+    -fx-translate-x: 120;
+
+}
+
+.btn-avancar {
+
+    -fx-background-color: #d50000;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: white;
+
+    -fx-pref-width: 110;
+    -fx-pref-height: 35;
+    -fx-translate-x: 60;
+}
+
+/* SCROLL */
+
+.scroll-pane {
+    -fx-background-color: black;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: black;
+}
+
+.area-produtos {
+
+    -fx-background-color: black;
+
+    -fx-padding: 20;
+}
+
+/* CARD */
+
+.card-produto {
+
+    -fx-background-color: transparent;
+
+    -fx-pref-width: 105;
+
+    -fx-spacing: 4;
+
+    -fx-alignment: center;
+}
+
+/* NOME */
+
+.nome-produto {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 12px;
+
+    -fx-font-weight: bold;
+}
+
+/* IMAGEM */
+
+.imagem-produto {
+
+    -fx-border-color:white;
+
+    -fx-border-width: 2;
+}
+
+/* CONTADOR */
+
+.contador {
+
+    -fx-text-fill: #d50000;
+
+    -fx-font-size: 10px;
+    -fx-translate-x: -20;
+}
+
+/* PREÇO */
+
+.preco {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 12px;
+
+    -fx-font-weight: bold;
+
+    -fx-translate-x: -30;
+
+
+
+}
+
+/* BOTÕES */
+
+.btn-mais,
+.btn-menos {
+
+    -fx-background-color: transparent;
+
+    -fx-text-fill: #d50000;
+
+    -fx-font-size: 22px;
+
+    -fx-font-weight: bold;
+
+    -fx-padding: 0;
+
+    -fx-translate-x: 60;
+    -fx-translate-y: -30;
+
+    -fx-min-width: 15;
+    -fx-min-height: 15;
+}

@@ -1,0 +1,101 @@
+.root {
+    -fx-background-color: black;
+}
+
+.label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.titulo-produto {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-translate-x: 20;
+    -fx-translate-y: 12;
+}
+
+.imagem-produto {
+    -fx-translate-x: 20 ;
+}
+
+.estoque {
+    -fx-text-fill: #d50000;
+    -fx-font-size: 18px;
+    -fx-translate-x: 20 ;
+}
+
+.preco {
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-translate-x: 170;
+    -fx-translate-y: -40;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+    -fx-background-radius: 50;
+    -fx-text-fill: white;
+    -fx-pref-width: 440;
+    -fx-pref-height: 38;
+}
+.btn-escolherimagem{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-pref-width: 220;
+    -fx-pref-height: 35;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+}
+
+.btn-voltar {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+    -fx-font-size: 15px;
+    -fx-pref-width: 90;
+    -fx-pref-height: 20;
+    -fx-translate-x: 15;
+}
+
+.btn-excluir {
+    -fx-background-color: #ff0000;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-background-radius: 20;
+    -fx-pref-width: 140;
+    -fx-pref-height: 35;
+    -fx-translate-y: -30;
+    -fx-translate-x: 15;
+    -fx-font-weight: bold;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+}
+
+.btn-confirmar {
+    -fx-background-color: #ff0000;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-pref-width: 170;
+    -fx-pref-height: 35;
+    -fx-translate-x: 265;
+    -fx-translate-y: -55;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+}
+
+
+.btn-vermelho:hover {
+    -fx-background-color: #ff3333;
+}
