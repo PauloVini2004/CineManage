@@ -72,7 +72,7 @@ public class AdicionarProdutoController {
             try {
 
                 Path pastaDestino =
-                        Path.of("br/ufrpe/cine_rural/gui/ImagensProduto/ImagensProduto");
+                        Path.of("br/ufrpe/cine_rural/gui/ImagensProduto");
 
                 Files.createDirectories(pastaDestino);
 
