@@ -150,18 +150,6 @@ public class AssentoController {
                                 .toExternalForm()
                 );
 
-                IngressoController ic = loader.getController();
-                ic.setAssentosSelecionados(nomeAssentosSelecionados);
-                ic.setTipoSala(nomeSala);
-
-                Stage stageAtual = (Stage) painel.getScene().getWindow();
-                stageAtual.setTitle("Ingresso");
-                stageAtual.setScene(scene);
-
-                ic.setTituloFilme(tituloFilme);
-                ic.setHorario(dataHorario);
-                ic.setAssentosSelecionados(nomeAssentosSelecionados);
-                ic.setTipoSala(nomeSala);
 
             } catch (Exception e) {
                 e.printStackTrace();
