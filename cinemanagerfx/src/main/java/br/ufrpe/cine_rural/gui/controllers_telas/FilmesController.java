@@ -4,6 +4,8 @@ import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Genero;
 import br.ufrpe.cine_rural.enums.Idioma;
 import br.ufrpe.cine_rural.enums.StatusSessao;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.model.tiposala.Comum;
@@ -28,6 +30,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static br.ufrpe.cine_rural.enums.StatusSessao.ABERTA;
+
 public class FilmesController {
 
     @FXML
@@ -35,67 +39,38 @@ public class FilmesController {
 
     private Sessao sessaoSelecionada = null;
 
-    @FXML
-    public void initialize() {
+    private RepositorioFilmeImpl repositorioFilmes;
+    private RepositorioSessaoImpl repositorioSessoes;
 
-        // Imagens dos Posters da Tela Filmes tirados do resource (o que isso gerou de incompatibilidade foi brincadeira)
-        Image poster1 = new Image(getClass().getResourceAsStream("/br/ufrpe/cine_rural/gui/Project_Hail_Mary_poster.jpg"));
-        Image poster2 = new Image(getClass().getResourceAsStream("/br/ufrpe/cine_rural/gui/Odisseia.jpg"));
-        Image poster3 = new Image(getClass().getResourceAsStream("/br/ufrpe/cine_rural/gui/Zootopia_2.jpg"));
+    public void setRepositorios(RepositorioFilmeImpl filmes,
+                                RepositorioSessaoImpl sessoes) {
 
-        // Criando Filmes
-        Filme devoradores = new Filme(
-                "Devoradores de Estrelas",
-                "Sinopse...",
-                130,
-                Genero.FICCAO,
-                ClassificacaoIndicativa.QUATORZE,
-                LocalTime.of(2, 10),
-                poster1
-        );
+        this.repositorioFilmes = filmes;
+        this.repositorioSessoes = sessoes;
 
-        Filme odisseia = new Filme(
-                "A Odisseia",
-                "Sinopse...",
-                150,
-                Genero.DRAMA,
-                ClassificacaoIndicativa.DEZESSEIS,
-                LocalTime.of(2, 30),
-                poster2
-        );
+        carregarFilmes();
 
-        Filme zootopia2 = new Filme(
-                "Zootopia 2",
-                "Sinopse...",
-                90,
-                Genero.COMEDIA,
-                ClassificacaoIndicativa.LIVRE,
-                LocalTime.of(1, 30),
-                poster3
-        );
+    }
 
-        // Listando Sessões
-        List<Sessao> sessoes = List.of(
-                new Sessao(Idioma.DUBLADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 14, 30), devoradores, new Vip(1, 20)),
-                new Sessao(Idioma.LEGENDADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 18, 0), odisseia, new Imax(2,40)),
-                new Sessao(Idioma.DUBLADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 20, 0), zootopia2, new Comum(3,20)),
-                new Sessao(Idioma.DUBLADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 18, 0), zootopia2, new Comum(3,20)),
-                new Sessao(Idioma.DUBLADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 20, 0), zootopia2, new Imax(5,60)),
-                new Sessao(Idioma.DUBLADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 10, 0), zootopia2, new Vip(6, 10)),
-                new Sessao(Idioma.DUBLADO, StatusSessao.ABERTA, LocalDateTime.of(2026, 5, 30, 20, 0), odisseia, new Vip(7, 20))
-                );
+    private void carregarFilmes() {
 
-        // Corrigido: Agrupando por Título do filme (String) para evitar conflitos de hash de objetos
         Map<String, List<Sessao>> porFilme = new LinkedHashMap<>();
 
-        for (Sessao s : sessoes) {
-            String tituloFilme = s.getFilme().getTitulo();
-            porFilme.computeIfAbsent(tituloFilme, k -> new ArrayList<>()).add(s);
+        for (Sessao s : repositorioSessoes.listar()) {
+            if(s.getStatus() == ABERTA) {
+                String tituloFilme = s.getFilme().getTitulo();
+                porFilme.computeIfAbsent(tituloFilme, k -> new ArrayList<>()).add(s);
+            }
         }
 
         for (List<Sessao> grupo : porFilme.values()) {
             criarCard(grupo);
         }
+    }
+
+
+    @FXML
+    public void initialize() {
     }
 
 
@@ -168,18 +143,6 @@ public class FilmesController {
                     );
 
                     AssentoController ac = loader.getController();
-                    ac.setDados(
-                            s,
-                            heranca,
-                            s.getSala().getId(),
-                            s.getSala().toString(),
-                            s.getHorario().format(DateTimeFormatter.ofPattern("HH:mm")),
-                            s.getIdioma(),
-                            s.getFilme().getDuracao(),
-                            s.getFilme().getClassificacao(),
-                            s.getFilme().getPoster(),
-                            s.getFilme().getTitulo()
-                    );
 
                     Stage stageAssentos = (Stage) containerFilmes.getScene().getWindow();
                     stageAssentos.setTitle("Assentos — " + s.getFilme().getTitulo());

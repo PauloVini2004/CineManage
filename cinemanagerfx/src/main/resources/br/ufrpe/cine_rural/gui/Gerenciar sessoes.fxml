@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0"
+            prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.GerenciarSessaoController">
+
+    <children>
+
+        <VBox AnchorPane.bottomAnchor="20.0"
+              AnchorPane.leftAnchor="20.0"
+              AnchorPane.rightAnchor="20.0"
+              AnchorPane.topAnchor="20.0"
+              spacing="20.0">
+
+            <children>
+
+                <Label text="Gerenciar Sessões"
+                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+
+                <Separator />
+
+                <GridPane hgap="16.0" vgap="14.0">
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100.0"
+                                           prefWidth="120.0" />
+                        <ColumnConstraints hgrow="ALWAYS"
+                                           prefWidth="500.0" />
+                    </columnConstraints>
+
+                    <children>
+
+                        <Label text="Filme:"
+                               style="-fx-font-weight: bold;"
+                               GridPane.rowIndex="0"/>
+
+                        <ComboBox fx:id="cbFilme"
+                                  promptText="Selecione um filme"
+                                  GridPane.columnIndex="1"
+                                  GridPane.rowIndex="0"/>
+
+                        <Label text="Sala:"
+                               style="-fx-font-weight: bold;"
+                               GridPane.rowIndex="1"/>
+
+                        <ComboBox fx:id="cbSala"
+                                  promptText="Selecione uma sala"
+                                  GridPane.columnIndex="1"
+                                  GridPane.rowIndex="1"/>
+
+                        <Label text="Idioma:"
+                               style="-fx-font-weight: bold;"
+                               GridPane.rowIndex="2"/>
+
+                        <ComboBox fx:id="cbIdioma"
+                                  promptText="Selecione o idioma"
+                                  GridPane.columnIndex="1"
+                                  GridPane.rowIndex="2"/>
+
+                        <Label text="Status:"
+                               style="-fx-font-weight: bold;"
+                               GridPane.rowIndex="3"/>
+
+                        <ComboBox fx:id="cbStatus"
+                                  promptText="Selecione o status"
+                                  GridPane.columnIndex="1"
+                                  GridPane.rowIndex="3"/>
+
+                        <Label text="Data:"
+                               style="-fx-font-weight: bold;"
+                               GridPane.rowIndex="4"/>
+
+                        <DatePicker fx:id="dpData"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="4"/>
+
+                        <Label text="Hora:"
+                               style="-fx-font-weight: bold;"
+                               GridPane.rowIndex="5"/>
+
+                        <TextField fx:id="txtHora"
+                                   promptText="Ex: 19:30"
+                                   GridPane.columnIndex="1"
+                                   GridPane.rowIndex="5"/>
+
+                    </children>
+
+                </GridPane>
+
+                <HBox alignment="TOP_RIGHT">
+
+                    <children>
+
+                        <Button text="Adicionar Sessão"
+                                onAction="#cadastrarSessao"
+                                style="-fx-background-color: #2ECC71;
+                                       -fx-text-fill: white;
+                                       -fx-font-size: 14px;
+                                       -fx-font-weight: bold;
+                                       -fx-padding: 10px 24px;" />
+
+                    </children>
+
+                </HBox>
+
+                <Separator />
+
+                <VBox spacing="10">
+
+                    <children>
+
+                        <HBox alignment="CENTER_LEFT"
+                              spacing="10">
+
+                            <children>
+
+                                <Label text="Sessões Cadastradas"
+                                       style="-fx-font-size: 16px;
+                                              -fx-font-weight: bold;
+                                              -fx-text-fill: #2C3E50;" />
+
+                                <Region HBox.hgrow="ALWAYS"/>
+
+                                <Button text="Editar"
+                                        style="-fx-background-color: #2980B9;
+                                               -fx-text-fill: white;
+                                               -fx-font-weight: bold;
+                                               -fx-padding: 6px 14px;" />
+
+                                <Button text="Remover"
+                                        style="-fx-background-color: #E74C3C;
+                                               -fx-text-fill: white;
+                                               -fx-font-weight: bold;
+                                               -fx-padding: 6px 14px;" />
+
+                            </children>
+
+                        </HBox>
+
+                        <TableView fx:id="tabelaSessoes"
+                                   prefHeight="350">
+
+                            <columns>
+
+                                <TableColumn fx:id="colFilme"
+                                             text="Filme" />
+
+                                <TableColumn fx:id="colSala"
+                                             text="Sala" />
+
+                                <TableColumn fx:id="colHorario"
+                                             text="Horário" />
+
+                                <TableColumn fx:id="colIdioma"
+                                             text="Idioma" />
+
+                                <TableColumn fx:id="colStatus"
+                                             text="Status" />
+
+                            </columns>
+
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+
+                        </TableView>
+
+                    </children>
+
+                </VBox>
+
+            </children>
+
+        </VBox>
+
+    </children>
+
+</AnchorPane>

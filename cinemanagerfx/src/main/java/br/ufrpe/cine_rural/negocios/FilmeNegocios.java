@@ -6,6 +6,7 @@ import br.ufrpe.cine_rural.enums.Genero;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.dados.interfaces.IRepositorioFilme;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.scene.image.Image;
 
 
@@ -50,7 +51,6 @@ public class FilmeNegocios {
                 duracao,
                 genero,
                 classificacao,
-                localTime,
                 poster
         );
 

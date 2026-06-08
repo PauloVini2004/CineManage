@@ -2,7 +2,6 @@ package br.ufrpe.cine_rural.model;
 
 import br.ufrpe.cine_rural.enums.Idioma;
 import br.ufrpe.cine_rural.enums.StatusSessao;
-
 import br.ufrpe.cine_rural.model.tiposala.Sala;
 
 import java.time.LocalDateTime;
@@ -10,32 +9,32 @@ import java.util.ArrayList;
 
 public class Sessao {
 
+    // Atributos na ordem da tabela
+    private Filme filme;
+    private Sala sala;
+    private LocalDateTime horario;
     private Idioma idioma;
     private StatusSessao status;
 
-    private LocalDateTime horario;
-
-    private Filme filme;
-    private Sala sala;
-
     private ArrayList<Ingresso> ingressos;
 
-    public Sessao(Idioma idioma,
-                  StatusSessao status,
+    // Construtor na ordem da tabela
+    public Sessao(Filme filme,
+                  Sala sala,
                   LocalDateTime horario,
-                  Filme filme,
-                  Sala sala) {
+                  Idioma idioma,
+                  StatusSessao status) {
 
-        this.idioma = idioma;
-        this.status = status;
-        this.horario = horario;
         this.filme = filme;
         this.sala = sala;
+        this.horario = horario;
+        this.idioma = idioma;
+        this.status = status;
         this.ingressos = new ArrayList<>();
     }
 
+    // Métodos de negócio para Ingressos
     public void adicionarIngressos(Ingresso ingresso) {
-
         ingressos.add(ingresso);
     }
 
@@ -47,22 +46,31 @@ public class Sessao {
         return ingressos.size();
     }
 
+    public void setIngressos(ArrayList<Ingresso> ingressos) {
+        this.ingressos = ingressos;
+    }
+
+    // --- Getters e Setters na ordem da tabela ---
+
+    // Filme
     public Filme getFilme() {
         return filme;
     }
 
+    public void setFilme(Filme filme) {
+        this.filme = filme;
+    }
+
+    // Sala
     public Sala getSala() {
         return sala;
     }
 
-    public Idioma getIdioma() {
-        return idioma;
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 
-    public StatusSessao getStatus() {
-        return status;
-    }
-
+    // Horário
     public LocalDateTime getHorario() {
         return horario;
     }
@@ -71,23 +79,21 @@ public class Sessao {
         this.horario = horario;
     }
 
-    public void setStatus(StatusSessao status) {
-        this.status = status;
+    // Idioma
+    public Idioma getIdioma() {
+        return idioma;
     }
 
     public void setIdioma(Idioma idioma) {
         this.idioma = idioma;
     }
 
-    public void setFilme(Filme filme) {
-        this.filme = filme;
+    // Status
+    public StatusSessao getStatus() {
+        return status;
     }
 
-    public void setSala(Sala sala) {
-        this.sala = sala;
-    }
-
-    public void setIngressos(ArrayList<Ingresso> ingressos) {
-        this.ingressos = ingressos;
+    public void setStatus(StatusSessao status) {
+        this.status = status;
     }
 }

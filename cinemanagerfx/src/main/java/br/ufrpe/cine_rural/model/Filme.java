@@ -12,7 +12,6 @@ public class Filme {
     private int duracao; // em minutos
     private Genero genero;
     private ClassificacaoIndicativa classificacao;
-    private LocalTime localTime; // Horário ou duração formatada se necessário
     private Image poster;
 
     public Filme(String titulo,
@@ -20,14 +19,12 @@ public class Filme {
                  int duracao,
                  Genero genero,
                  ClassificacaoIndicativa classificacao,
-                 LocalTime localTime,
                  Image poster) {
         this.titulo = titulo;
         this.sinopse = sinopse;
         this.duracao = duracao;
         this.genero = genero;
         this.classificacao = classificacao;
-        this.localTime = localTime;
         this.poster = poster;
     }
 
@@ -42,6 +39,9 @@ public class Filme {
     public ClassificacaoIndicativa getClassificacao() { return classificacao; }
     public void setClassificacao(ClassificacaoIndicativa classificacao) { this.classificacao = classificacao; }
 
-    public LocalTime getLocalTime() { return localTime; }
-    public void setLocalTime(LocalTime localTime) { this.localTime = localTime; }
+    @Override
+    public String toString() {
+        return titulo;
+    }
+
 }
