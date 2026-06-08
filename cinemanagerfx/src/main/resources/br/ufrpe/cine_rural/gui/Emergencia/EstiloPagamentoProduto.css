@@ -1,0 +1,69 @@
+.root {
+    -fx-background-color: #F5F6FA;
+}
+
+.titulo {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2F3640;
+}
+
+.text-field,
+.combo-box {
+    -fx-pref-width: 350;
+    -fx-pref-height: 42;
+
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+
+    -fx-font-size: 14px;
+}
+
+.text-area {
+    -fx-pref-width: 350;
+
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+
+    -fx-font-size: 14px;
+}
+
+.total {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27AE60;
+}
+
+.botao-voltar {
+    -fx-background-color: #E74C3C;
+    -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-pref-width: 140;
+    -fx-pref-height: 42;
+
+    -fx-background-radius: 8;
+}
+
+.botao-pagar {
+    -fx-background-color: #27AE60;
+    -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-pref-width: 140;
+    -fx-pref-height: 42;
+
+    -fx-background-radius: 8;
+}
+
+.botao-voltar:hover {
+    -fx-opacity: 0.9;
+}
+
+.botao-pagar:hover {
+    -fx-opacity: 0.9;
+}

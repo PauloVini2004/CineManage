@@ -2,7 +2,11 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Idioma;
+import br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoIngressoController;
 import br.ufrpe.cine_rural.gui.dto.SalasMapas;
+import br.ufrpe.cine_rural.model.Assento;
+import br.ufrpe.cine_rural.model.Ingresso;
+import br.ufrpe.cine_rural.model.Sessao;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +17,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import br.ufrpe.cine_rural.enums.CategoriaMeiaEntrada;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static br.ufrpe.cine_rural.enums.CategoriaMeiaEntrada.ESTUDANTE;
 
 public class AssentoController {
 
@@ -28,7 +35,9 @@ public class AssentoController {
 
     private List<String> nomeAssentosSelecionados = new ArrayList<>();
 
-    // Variavéis para o setDados
+    // Guarda o objeto sessão completo recebido do FilmesController
+    private Sessao sessaoAtual;
+
     private int heranca;
     private int numeroSessao;
     private String nomeSala;
@@ -39,12 +48,16 @@ public class AssentoController {
     private Image poster;
     private String tituloFilme;
 
-    // Matriz dos Mapas e variavel de seleção de assentos
     private int[][] layoutAtual;
     private int assentosSelecionados = 0;
 
-    // Metodo chamado pelo FilmesController após load()
-    public void setDados(int heranca,
+    @FXML
+    public void initialize() {
+        // Inicialização padrão gerenciada pelo JavaFX (mantido limpo)
+    }
+
+    public void setDados(Sessao sessao,
+                         int heranca,
                          int numeroSessao,
                          String nomeSala,
                          String dataHorario,
@@ -54,8 +67,9 @@ public class AssentoController {
                          Image poster,
                          String tituloFilme) {
 
+        this.sessaoAtual = sessao;
         this.heranca = heranca;
-        this.numeroSessao  = numeroSessao;
+        this.numeroSessao = numeroSessao;
         this.nomeSala = nomeSala;
         this.dataHorario = dataHorario;
         this.idioma = idioma;
@@ -64,8 +78,6 @@ public class AssentoController {
         this.poster = poster;
         this.tituloFilme = tituloFilme;
 
-
-        // Switch case dos layouts dos mapas
         switch (heranca) {
             case 1 -> layoutAtual = SalasMapas.copiar(SalasMapas.salaComum);
             case 2 -> layoutAtual = SalasMapas.copiar(SalasMapas.salaImax);
@@ -73,21 +85,14 @@ public class AssentoController {
             default -> layoutAtual = SalasMapas.copiar(SalasMapas.salaComum);
         }
 
-        // Textos da tela Assento com concatenação de dados variavéis vindos do FilmesController
         textoSessaoInfo.setText(
                 "Cinema Rural — Sessão " + numeroSessao
                         + " | " + nomeSala
                         + " | " + dataHorario
         );
 
-        /*
-           Texto base da seleção de cadeiras (Retirei do fxml para os controlladores)
-           Objetivo : Pegar os dados dos cliques do usuario de um metodo/algoritmos e
-           incrementar ou decrementar x00 Ingressos"
-        */
         textoContador.setText("N. de cadeiras selecionadas  x00 Ingressos");
 
-        // Chamando Métodos
         ocuparAssentosAleatorios();
         gerarAssentos();
         exibirPoster();
@@ -95,7 +100,6 @@ public class AssentoController {
         configurarBotaoIngressos();
     }
 
-    // Exibição do Poster do filme selecionado da tela Filmes para tela Assentos
     private void exibirPoster() {
         ImageView posterView = new ImageView(poster);
         posterView.setFitWidth(210);
@@ -105,30 +109,22 @@ public class AssentoController {
         painel.getChildren().add(posterView);
     }
 
-    // Utilização do platform para retornar da tela Assentos para Filmes, tive que editar algumas coisas no fxml
     private void configurarBotaoVoltar() {
-
         Platform.runLater(() -> {
-
-            Button btnVoltar = (Button) painel.lookup(".botao-vermelho");
-
-            if (btnVoltar != null) {
-                btnVoltar.setOnAction(event -> {
+            Button btnVoltarReal = (Button) painel.lookup(".botao-vermelho");
+            if (btnVoltarReal != null) {
+                btnVoltarReal.setOnAction(event -> {
                     try {
                         FXMLLoader loader = new FXMLLoader(
                                 getClass().getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml")
                         );
-
                         Scene scene = new Scene(loader.load());
                         scene.getStylesheets().add(
-                                getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
-                                        .toExternalForm()
+                                getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css").toExternalForm()
                         );
-
                         Stage stageAtual = (Stage) painel.getScene().getWindow();
                         stageAtual.setTitle("Filmes");
                         stageAtual.setScene(scene);
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -137,19 +133,51 @@ public class AssentoController {
         });
     }
 
-    // Utilização do platform para prosseguir da tela Assentos até a tela Ingressos, tive que editar algumas coisas no fxml também
     private void configurarBotaoIngressos() {
         btnIngressos.setOnAction(event -> {
+            if (nomeAssentosSelecionados.isEmpty()) {
+                return;
+            }
             try {
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/br/ufrpe/cine_rural/gui/EmissaoIngresso.fxml")
-                );
-                Scene scene = new Scene(loader.load());
-                scene.getStylesheets().add(
-                        getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloIngresso.css")
-                                .toExternalForm()
+                        getClass().getResource("/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml")
                 );
 
+                Scene scene = new Scene(loader.load());
+                PagamentoIngressoController controller = loader.getController();
+
+
+                double precoDinamico = 10.0;
+                if (this.sessaoAtual != null && this.sessaoAtual.getSala() != null) {
+                    precoDinamico = this.sessaoAtual.getSala().getPreco();
+                }
+
+                ArrayList<Ingresso> ingressos = new ArrayList<>();
+                for (String nomeAssento : nomeAssentosSelecionados) {
+
+                    Assento objetoAssento = new Assento(nomeAssento);
+
+                    Ingresso ingresso = new Ingresso(
+                            this.sessaoAtual,
+                            objetoAssento,
+                            precoDinamico,
+                            CategoriaMeiaEntrada.INTEIRA
+                    );
+
+                    sessaoAtual.adicionarIngressos(ingresso);
+
+                    ingressos.add(ingresso);
+                }
+
+                controller.receberIngressos(ingressos);
+
+                scene.getStylesheets().add(
+                        getClass().getResource("/br/ufrpe/cine_rural/gui/Emergencia/EstiloPagamentoIngresso.css").toExternalForm()
+                );
+
+                Stage stageAtual = (Stage) painel.getScene().getWindow();
+                stageAtual.setTitle("Pagamento");
+                stageAtual.setScene(scene);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -157,77 +185,55 @@ public class AssentoController {
         });
     }
 
-
-    /*
-     Metodo para gerar aleatoriamente Assentos ocupados, tive que mudar certas coisas do SalaMapas
-     Antes o mapeamento era de true ou false e mudei para 0, 1 e 2
-     Já que são 3 tipos de cadeiras boolean não fez muito sentido da minha parte
-     */
-
     private void ocuparAssentosAleatorios() {
         Random random = new Random();
         int totalAssentos = 0;
 
         for (int[] linha : layoutAtual) {
             for (int assento : linha) {
-                if (assento == 1) totalAssentos++;  // só conta livres
+                if (assento == 1) totalAssentos++;
             }
         }
 
-        int quantidade = (int)(totalAssentos * (0.1 + random.nextDouble() * 0.2));
-
+        int quantidade = (int) (totalAssentos * (0.1 + random.nextDouble() * 0.2));
         int ocupados = 0;
+
         while (ocupados < quantidade) {
             int i = random.nextInt(layoutAtual.length);
             int j = random.nextInt(layoutAtual[i].length);
 
-            if (layoutAtual[i][j] == 1) {   // só marca se for livre
-                layoutAtual[i][j] = 2;      // 2 = ocupado
+            if (layoutAtual[i][j] == 1) {
+                layoutAtual[i][j] = 2; // 2 representa ocupado
                 ocupados++;
             }
         }
     }
 
-    @FXML
-    public void initialize() {
-
-    }
-
-    /*
-    Metodo para Gerar, pintar e organizar nomes dos assentos, também
-    receber informações pelo event executado pelo usuario, com verificador de assento ocupado
-    e incremento e decremento da variavel de seleção no text da tela Assento
-     */
     private void gerarAssentos() {
-
         int tamanho = layoutAtual.length;
-
-        // Um caos enorme conseguir acertar a posição correta da matriz na tela, pelo menos não tive que usar gridpane
-        double areaX = 40 ;
+        double areaX = 40;
         double areaY = 90;
         double areaLargura = 620;
         double areaAltura = 340;
         double espacamento = 5;
 
         double larguraBotao = (areaLargura - ((tamanho - 1) * espacamento)) / tamanho;
-        double alturaBotao  = (areaAltura  - ((tamanho - 1) * espacamento)) / tamanho;
+        double alturaBotao = (areaAltura - ((tamanho - 1) * espacamento)) / tamanho;
 
-        String verde    = "-fx-background-color: #00c853; -fx-text-fill: white; -fx-font-weight: bold;";
-        String azul     = "-fx-background-color: #2962ff; -fx-text-fill: white; -fx-font-weight: bold;";
+        String verde = "-fx-background-color: #00c853; -fx-text-fill: white; -fx-font-weight: bold;";
+        String azul = "-fx-background-color: #2962ff; -fx-text-fill: white; -fx-font-weight: bold;";
         String vermelho = "-fx-background-color: #fc4949; -fx-text-fill: white; -fx-font-weight: bold;";
-
 
         for (int i = 0; i < layoutAtual.length; i++) {
             for (int j = 0; j < layoutAtual[i].length; j++) {
-
                 if (layoutAtual[i][j] == 0) continue;
 
                 boolean estaOcupado = layoutAtual[i][j] == 2;
 
-                Button botao = new Button((char)('A' + i) + "" + (j + 1));
+                Button botao = new Button((char) ('A' + i) + "" + (j + 1));
                 botao.setPrefSize(larguraBotao, alturaBotao);
                 botao.setLayoutX(areaX + j * (larguraBotao + espacamento));
-                botao.setLayoutY(areaY + i * (alturaBotao  + espacamento));
+                botao.setLayoutY(areaY + i * (alturaBotao + espacamento));
 
                 if (estaOcupado) {
                     botao.setStyle(vermelho);

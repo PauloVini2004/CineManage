@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ProdutoArquivo {
 
-    private static final String ARQUIVO = "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/produtos.csv";
+    private static final String ARQUIVO = "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/produtos.csv";
 
     public static void salvar(ArrayList<Produto> produtos) {
 

@@ -1,6 +1,6 @@
 package br.ufrpe.cine_rural.gui;
 
-/* SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> EMISSÃO INGRESSO
+/* SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,8 +20,10 @@ public class Main extends Application {
         );
 
         FXMLLoader loader3 = new FXMLLoader(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/EmissaoIngresso.fxml")
+                Main.class.getResource("/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml")
         );
+
+
 
         Scene sceneAssentos = new Scene(loader1.load());
         sceneAssentos.getStylesheets().add(
@@ -35,11 +37,13 @@ public class Main extends Application {
                         .toExternalForm()
         );
 
-        Scene sceneIngresso = new Scene(loader3.load());
-        sceneIngresso.getStylesheets().add(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/EstiloIngresso.css")
+        Scene scenePagamento = new Scene(loader3.load());
+        scenePagamento.getStylesheets().add(
+                Main.class.getResource("/br/ufrpe/cine_rural/gui/Emergencia/EstiloPagamentoIngresso.css")
                         .toExternalForm()
         );
+
+
 
         Stage stage1 = new Stage();
         stage1.setTitle("Filmes");
@@ -57,7 +61,6 @@ public class Main extends Application {
 
 
 
-
 /*TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -71,7 +74,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Produto.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/TelasProduto/Produto.fxml"));
             Parent root = loader.load();
 
             primaryStage.setTitle("Produto");
@@ -91,10 +94,7 @@ public class Main extends Application {
 
 
 
-
-
-
-//(voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
+/*(voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -107,7 +107,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
+                        "/br/ufrpe/cine_rural/gui/TelasProduto/ListarProdutos.fxml"
                 )
         );
 
@@ -126,9 +126,5 @@ public class Main extends Application {
         launch(args);
     }
 }
-
-
-
-
-
+*/
 

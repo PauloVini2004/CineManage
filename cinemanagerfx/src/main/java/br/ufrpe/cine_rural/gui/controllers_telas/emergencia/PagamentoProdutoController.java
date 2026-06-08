@@ -1,0 +1,246 @@
+package br.ufrpe.cine_rural.gui.controllers_telas.emergencia;
+
+import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaLojinhaImpl;
+import br.ufrpe.cine_rural.model.Cliente;
+import br.ufrpe.cine_rural.model.loja.ItemVenda;
+
+import br.ufrpe.cine_rural.model.loja.VendaLojinha;
+import br.ufrpe.cine_rural.util.GeradorPDF;
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.util.ArrayList;
+
+public class PagamentoProdutoController {
+
+    @FXML
+    private TextField txtNome;
+
+    @FXML
+    private TextField txtEmail;
+
+    @FXML
+    private TextField txtCpf;
+
+    @FXML
+    private TextField txtIdade;
+
+    @FXML
+    private ComboBox<String> comboPagamento;
+
+    @FXML
+    private TextArea txtResumoCompra;
+
+    @FXML
+    private Label lblTotal;
+
+    @FXML
+    private Button btnVoltar;
+
+    @FXML
+    private Button btnPagar;
+
+    private ArrayList<ItemVenda> itensVenda;
+
+    private double total;
+
+    @FXML
+    public void initialize() {
+
+        comboPagamento.setItems(
+                FXCollections.observableArrayList(
+                        "PIX",
+                        "Cartão",
+                        "Dinheiro"
+                )
+        );
+
+        btnPagar.setOnAction(
+                e -> realizarPagamento()
+        );
+
+        btnVoltar.setOnAction(
+                e -> voltarParaProduto()
+        );
+
+
+    }
+
+    public void receberItensVenda(
+            ArrayList<ItemVenda> itens
+    ) {
+        System.out.println("Recebi " + itens.size() + " itens");
+
+        this.itensVenda = itens;
+
+        atualizarResumo();
+
+    }
+
+    private void atualizarResumo() {
+
+        if (itensVenda == null)
+            return;
+
+        StringBuilder resumo =
+                new StringBuilder();
+
+        total = 0;
+
+        for (ItemVenda item : itensVenda) {
+
+            resumo.append(
+                    item.getProduto().getNome()
+            );
+
+            resumo.append(
+                    " x"
+            );
+
+            resumo.append(
+                    item.getQuantidade()
+            );
+
+            resumo.append(
+                    " - R$ "
+            );
+
+            resumo.append(
+                    String.format(
+                            "%.2f",
+                            item.getSubtotal()
+                    )
+            );
+
+            resumo.append("\n");
+
+            System.out.println(
+                    item.getProduto().getNome()
+                            + " qtd=" + item.getQuantidade()
+                            + " subtotal=" + item.getSubtotal()
+            );
+
+            total += item.getSubtotal();
+        }
+
+        txtResumoCompra.setText(
+                resumo.toString()
+        );
+
+        lblTotal.setText(
+                "Total R$ "
+                        + String.format(
+                        "%.2f",
+                        total
+                )
+        );
+        System.out.println("TOTAL = " + total);
+    }
+
+    private void realizarPagamento() {
+
+        try {
+
+            Cliente cliente =
+                    new Cliente(
+                            txtNome.getText(),
+                            txtCpf.getText(),
+                            Integer.parseInt(
+                                    txtIdade.getText()
+                            ),
+                            txtEmail.getText()
+                    );
+
+            if (comboPagamento.getValue() == null) {
+
+                mostrarErro(
+                        "Selecione uma forma de pagamento."
+                );
+
+                return;
+            }
+
+             GeradorPDF.gerarNotaFiscalProduto(
+                    cliente,
+                    itensVenda,
+                    total
+             );
+
+            VendaLojinha venda =
+                    new VendaLojinha(itensVenda);
+
+            RepositorioVendaLojinhaImpl repositorio =
+                    new RepositorioVendaLojinhaImpl();
+
+            repositorio.cadastrar(venda);
+
+
+            Alert alert =
+                    new Alert(
+                            Alert.AlertType.INFORMATION
+                    );
+
+            alert.setTitle(
+                    "Pagamento"
+            );
+
+            alert.setHeaderText(
+                    null
+            );
+
+            alert.setContentText(
+                    "Pagamento realizado com sucesso."
+            );
+
+            alert.showAndWait();
+
+        } catch (NumberFormatException e) {
+
+            mostrarErro(
+                    "Idade inválida."
+            );
+        }
+
+    }
+
+    private void mostrarErro(
+            String mensagem
+    ) {
+
+        Alert alert =
+                new Alert(
+                        Alert.AlertType.ERROR
+                );
+
+        alert.setHeaderText(
+                null
+        );
+
+        alert.setContentText(
+                mensagem
+        );
+
+        alert.showAndWait();
+    }
+
+    private void voltarParaProduto() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/TelasProduto/Produto.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnVoltar.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao tentar voltar para a tela de Produto. Verifique o caminho do FXML.");
+            e.printStackTrace();
+        }
+    }
+}

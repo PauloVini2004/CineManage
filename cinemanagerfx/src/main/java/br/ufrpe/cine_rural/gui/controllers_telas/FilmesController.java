@@ -169,6 +169,7 @@ public class FilmesController {
 
                     AssentoController ac = loader.getController();
                     ac.setDados(
+                            s,
                             heranca,
                             s.getSala().getId(),
                             s.getSala().toString(),

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@EstiloPagamentoProduto.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoProdutoController">
+
+    <center>
+        <VBox alignment="CENTER" spacing="18" BorderPane.alignment="CENTER">
+
+            <padding>
+                <Insets bottom="30" left="40" right="40" top="30" />
+            </padding>
+
+            <Label styleClass="titulo" text="Pagamento" />
+
+            <TextField fx:id="txtNome" promptText="Nome" />
+
+            <TextField fx:id="txtEmail" promptText="E-mail" />
+
+            <TextField fx:id="txtCpf" promptText="CPF" />
+
+            <TextField fx:id="txtIdade" promptText="Idade" />
+
+            <ComboBox fx:id="comboPagamento" promptText="Forma de Pagamento" />
+
+            <TextArea fx:id="txtResumoCompra" editable="false" prefHeight="180" />
+
+            <Label fx:id="lblTotal" styleClass="total" text="Total R$ 0,00" />
+
+            <HBox alignment="CENTER" spacing="20">
+
+                <Button fx:id="btnVoltar" styleClass="botao-voltar" text="Voltar" />
+
+                <Button fx:id="btnPagar" styleClass="botao-pagar" text="Pagar" />
+
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>

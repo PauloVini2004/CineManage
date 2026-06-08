@@ -289,7 +289,7 @@ public class EditarProdutoController {
             FXMLLoader loader =
                     new FXMLLoader(
                             getClass().getResource(
-                                    "/br/ufrpe/cine_rural/gui/ListarProdutos.fxml"
+                                    "/br/ufrpe/cine_rural/gui/TelasProduto/ListarProdutos.fxml"
                             )
                     );
 

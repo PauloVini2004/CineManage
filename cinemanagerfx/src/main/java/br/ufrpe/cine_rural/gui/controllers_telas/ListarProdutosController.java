@@ -168,7 +168,7 @@ public class ListarProdutosController {
     private void adicionarProduto() {
 
         trocarTela(
-                "/br/ufrpe/cine_rural/gui/AdicionarProduto.fxml",
+                "/br/ufrpe/cine_rural/gui/TelasProduto/AdicionarProduto.fxml",
                 btnAdicionar
         );
     }
@@ -184,7 +184,7 @@ public class ListarProdutosController {
             FXMLLoader loader =
                     new FXMLLoader(
                             getClass().getResource(
-                                    "/br/ufrpe/cine_rural/gui/EditarProduto.fxml"
+                                    "/br/ufrpe/cine_rural/gui/TelasProduto/EditarProduto.fxml"
                             )
                     );
 

@@ -3,6 +3,7 @@ package br.ufrpe.cine_rural.model;
 import br.ufrpe.cine_rural.enums.TipoAssento;
 
 public class Assento {
+
     private String codigo;
     private TipoAssento status;
     private int frequenciaOcupacao;
@@ -13,10 +14,12 @@ public class Assento {
         this.frequenciaOcupacao = 0;
     }
 
-
-
     public String getCodigo() {
         return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public TipoAssento getStatus() {
@@ -34,5 +37,10 @@ public class Assento {
 
     public int getFrequenciaOcupacao() {
         return frequenciaOcupacao;
+    }
+
+    @Override
+    public String toString() {
+        return codigo;
     }
 }

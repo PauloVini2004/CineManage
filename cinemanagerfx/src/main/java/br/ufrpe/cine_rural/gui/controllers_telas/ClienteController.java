@@ -3,6 +3,7 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+
 public class ClienteController {
 
     @FXML
@@ -51,6 +52,7 @@ public class ClienteController {
 
     @FXML
     private Button btnVoltar2;
+
 
 
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoIngressoController"
+        stylesheets="@EstiloPagamentoIngresso.css">
+
+    <center>
+        <VBox spacing="15"
+              alignment="CENTER"
+              BorderPane.alignment="CENTER">
+
+            <padding>
+                <Insets top="25"
+                        right="25"
+                        bottom="25"
+                        left="25"/>
+            </padding>
+
+            <Label text="Pagamento de Ingresso"
+                   styleClass="titulo"/>
+
+            <TextField fx:id="txtNome"
+                       promptText="Nome"/>
+
+            <TextField fx:id="txtEmail"
+                       promptText="E-mail"/>
+
+            <TextField fx:id="txtCpf"
+                       promptText="CPF"/>
+
+            <TextField fx:id="txtIdade"
+                       promptText="Idade"/>
+
+            <ComboBox fx:id="comboMeiaEntrada"
+                      promptText="Meia Entrada"/>
+
+            <ComboBox fx:id="comboPagamento"
+                      promptText="Forma de Pagamento"/>
+
+            <TextArea fx:id="txtResumoCompra"
+                      editable="false"
+                      prefHeight="180"/>
+
+            <Label fx:id="lblTotal"
+                   text="Total R$ 0,00"
+                   styleClass="total"/>
+
+            <HBox spacing="15"
+                  alignment="CENTER">
+
+                <Button fx:id="btnVoltar"
+                        text="Voltar"
+                        styleClass="botao-voltar"/>
+
+                <Button fx:id="btnPagar"
+                        text="Pagar"
+                        styleClass="botao-pagar"/>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

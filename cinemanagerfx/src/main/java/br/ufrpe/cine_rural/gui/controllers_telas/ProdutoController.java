@@ -1,6 +1,7 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
+import br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoProdutoController;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
@@ -30,6 +31,9 @@ import javafx.scene.layout.StackPane;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Pos;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class ProdutoController {
 
@@ -325,33 +329,40 @@ public class ProdutoController {
 
 
     private void avancarParaPagamento() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/NovoFormulario.fxml")); //colocar dados cliente quando estiver disponível
-            Parent root = loader.load();
 
-            Stage stage =
-                    (Stage) btnAvancar
-                            .getScene()
-                            .getWindow();
+        ArrayList<ItemVenda> itensVenda =
+                gerarItensVenda();
 
-            stage.setScene(
-                    new Scene(root)
+        if (itensVenda.isEmpty()) {
+
+            Alert alerta =
+                    new Alert(
+                            Alert.AlertType.WARNING
+                    );
+
+            alerta.setTitle("Carrinho vazio");
+            alerta.setHeaderText(null);
+            alerta.setContentText(
+                    "Selecione pelo menos um produto para continuar."
             );
 
-            stage.show();
+            alerta.showAndWait();
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
+            return;
         }
-    }
 
-            /* Alterar metodo para isso depois de Dados cliente estar disponível
-            try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/DadosCliente.fxml")); //colocar dados cliente quando estiver disponível
+        try {
+
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass().getResource(
+                                    "/br/ufrpe/cine_rural/gui/emergencia/PagamentoProduto.fxml"
+                            )
+                    );
+
             Parent root = loader.load();
 
-            PagamentoController controller =
+            PagamentoProdutoController controller =
                     loader.getController();
 
             controller.receberItensVenda(
@@ -370,11 +381,10 @@ public class ProdutoController {
             stage.show();
 
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
-    */
+
 
     private ArrayList<ItemVenda> gerarItensVenda() { //Gera lista de produtos adicionados ao carrinho
 
@@ -392,6 +402,12 @@ public class ProdutoController {
                             0
                     );
 
+            System.out.println(
+                    produto.getNome()
+                            + " -> id=" + produto.getId()
+                            + " qtd=" + qtd
+            );
+
             if (qtd > 0) {
 
                 itens.add(
@@ -401,34 +417,11 @@ public class ProdutoController {
                         )
                 );
             }
+
+            System.out.println("Mapa de quantidades:");
+            System.out.println(quantidades);
         }
 
         return itens;
     }
-
-
-    /* Isso aqui eh pra colocar no DadosCliente Controller, para os dados de tela serem passados
-    public class PagamentoController {
-
-    private ArrayList<ItemVenda> itensVenda;
-
-    public void receberItensVenda(
-            ArrayList<ItemVenda> itensVenda
-    ) {
-
-        this.itensVenda = itensVenda;
-
-        for (ItemVenda item : itensVenda) {
-
-            System.out.println(
-                    item.getProduto().getNome()
-                    + " x "
-                    + item.getQuantidade()
-                    + " = R$ "
-                    + item.getSubtotal()
-            );
-        }
-    }
-}
-     */
 }
