@@ -128,3 +128,52 @@ public class Main extends Application {
 }
 */
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
+import br.ufrpe.cine_rural.gui.controllers_telas.GerenciarSessaoController;
+import br.ufrpe.cine_rural.model.tiposala.Comum;
+import br.ufrpe.cine_rural.model.tiposala.Imax;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        RepositorioFilmeImpl filmes = new RepositorioFilmeImpl();
+        RepositorioSalaImpl salas = new RepositorioSalaImpl();
+
+        Comum sala1 = new Comum(1, 20);
+        Imax sala2 = new Imax(2, 30);
+        salas.cadastrar(sala1);
+        salas.cadastrar(sala2);
+
+        RepositorioSessaoImpl sessoes = new RepositorioSessaoImpl(filmes, salas);
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/br/ufrpe/cine_rural/gui/Gerenciar sessoes.fxml"
+                )
+        );
+
+        Scene scene = new Scene(loader.load());
+
+        GerenciarSessaoController controller =
+                loader.getController();
+
+        controller.setRepositorios(filmes, sessoes, salas);
+
+        stage.setTitle("Cine Rural");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

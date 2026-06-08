@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04aa6610-8b67-41d3-91cf-27505aa413d7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/gui/controllers_telas/FilmesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/gui/controllers_telas/FilmesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/model/Filme.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/model/Filme.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/model/Sessao.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/model/Sessao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/negocios/FilmeNegocios.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/negocios/FilmeNegocios.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/implemento/RepositorioFilmeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/implemento/RepositorioFilmeImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/implemento/RepositorioSessaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/implemento/RepositorioSessaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/gui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/gui/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/negocios/SessaoNegocios.java" beforeDir="false" afterPath="$PROJECT_DIR$/cinemanagerfx/src/main/java/br/ufrpe/cine_rural/negocios/SessaoNegocios.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,36 +66,36 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.br.ufrpe.cine_rural.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.br.ufrpe.cine_rural.gui.Main.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/gowkh/Documents/git-e-github/maks/CineManage&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.16015625&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Main.executor": "Run",
+    "Application.br.ufrpe.cine_rural.Main.executor": "Run",
+    "Application.br.ufrpe.cine_rural.gui.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/gowkh/Documents/git-e-github/maks/CineManage",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.16015625",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gowkh\Documents\git-e-github\maks\CineManage" />
@@ -150,20 +152,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.br.ufrpe.cine_rural.gui.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.br.ufrpe.cine_rural.Main" />
-        <item itemvalue="Application.br.ufrpe.cine_rural.gui.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.br.ufrpe.cine_rural.Main" />
       </list>

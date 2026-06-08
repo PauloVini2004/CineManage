@@ -41,7 +41,7 @@ public class SessaoNegocios {
             }
         }
 
-        Sessao sessao = new Sessao(idioma, StatusSessao.ABERTA, horario, filme, sala);
+        Sessao sessao = new Sessao(filme, sala, horario, idioma, StatusSessao.ABERTA);
         repositorioSessao.cadastrar(sessao);
     }
 
