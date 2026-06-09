@@ -4,8 +4,7 @@ import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.VendaIngresso;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaIngressoImpl;
-import br.ufrpe.cine_rural.model.loja.ItemVenda;
-import br.ufrpe.cine_rural.model.loja.VendaLojinha;
+
 import br.ufrpe.cine_rural.util.GeradorPDF;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -14,9 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class PagamentoIngressoController {
@@ -81,18 +77,53 @@ public class PagamentoIngressoController {
     }
 
     private void realizarPagamento() {
+
+        String nome = txtNome.getText().trim();
+        String email = txtEmail.getText().trim();
+        String cpf = txtCpf.getText().trim();
+        String idadeTexto = txtIdade.getText().trim();
+
+        if (nome.isEmpty()) {
+            mostrarErro("Informe o nome do cliente.");
+            return;
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarErro("E-mail inválido.");
+            return;
+        }
+
+        if (!cpf.matches("\\d{11}")) {
+            mostrarErro("CPF deve conter exatamente 11 números.");
+            return;
+        }
+
+        if (!idadeTexto.matches("\\d+")) {
+            mostrarErro("Idade deve conter apenas números.");
+            return;
+        }
+
+        int idade = Integer.parseInt(idadeTexto);
+
+        if (idade < 0 || idade > 120) {
+            mostrarErro("Idade inválida.");
+            return;
+        }
+
+
         try {
             if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() || txtIdade.getText().isEmpty()) {
                 mostrarErro("Preencha as informações do Cliente.");
                 return;
             }
 
-            Cliente cliente = new Cliente(
-                    txtNome.getText(),
-                    txtCpf.getText(),
-                    Integer.parseInt(txtIdade.getText()),
-                    txtEmail.getText()
-            );
+            Cliente cliente =
+                    new Cliente(
+                            nome,
+                            cpf,
+                            idade,
+                            email
+                    );
 
             if (comboPagamento.getValue() == null) {
                 mostrarErro("Selecione uma forma de pagamento.");

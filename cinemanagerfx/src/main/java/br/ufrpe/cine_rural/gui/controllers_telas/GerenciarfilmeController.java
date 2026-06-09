@@ -4,6 +4,7 @@ import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Genero;
 import br.ufrpe.cine_rural.model.Filme;
+import br.ufrpe.cine_rural.negocios.FilmeNegocios;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import java.io.File;
 
 public class GerenciarfilmeController {
 
-    private RepositorioFilmeImpl repositorio = new RepositorioFilmeImpl();
+    private FilmeNegocios filmeNegocios;
 
     @FXML
     private TableView<Filme> tabelaFilmes;
@@ -54,8 +55,8 @@ public class GerenciarfilmeController {
 
     private File arquivoImagem;
 
-    public void setRepositorios(RepositorioFilmeImpl filmes) {
-        this.repositorio = filmes;
+    public void setNegocios(FilmeNegocios filmeNegocios) {
+        this.filmeNegocios = filmeNegocios;
         atualizarTabela();
     }
 
@@ -76,8 +77,6 @@ public class GerenciarfilmeController {
 
         colClassificacao.setCellValueFactory(
                 new PropertyValueFactory<>("classificacao"));
-
-        atualizarTabela();
     }
 
     private void atualizarTabela() {
@@ -87,7 +86,7 @@ public class GerenciarfilmeController {
         }
 
         ObservableList<Filme> filmesObservaveis =
-                FXCollections.observableArrayList(repositorio.listar());
+                FXCollections.observableArrayList(filmeNegocios.listarFilmes());
 
         tabelaFilmes.setItems(filmesObservaveis);
         tabelaFilmes.refresh();
@@ -155,19 +154,18 @@ public class GerenciarfilmeController {
             poster = new Image(arquivoImagem.toURI().toString());
         }
 
-        Filme novo = new Filme(
+        filmeNegocios.cadastrarFilme(
                 titulo,
                 sinopse,
                 duracao,
                 genero,
                 classificacao,
+                null,
                 poster
         );
 
-        repositorio.cadastrar(novo);
-
         System.out.println("Filme cadastrado com sucesso!");
-        System.out.println("Quantidade de filmes: " + repositorio.listar().size());
+        System.out.println("Quantidade de filmes: " + filmeNegocios.listarFilmes().size());
 
         atualizarTabela();
 

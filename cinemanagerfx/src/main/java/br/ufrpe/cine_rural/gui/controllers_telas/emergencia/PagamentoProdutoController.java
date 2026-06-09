@@ -1,5 +1,6 @@
 package br.ufrpe.cine_rural.gui.controllers_telas.emergencia;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaLojinhaImpl;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
@@ -145,16 +146,47 @@ public class PagamentoProdutoController {
 
     private void realizarPagamento() {
 
+
+        String nome = txtNome.getText().trim();
+        String email = txtEmail.getText().trim();
+        String cpf = txtCpf.getText().trim();
+        String idadeTexto = txtIdade.getText().trim();
+
+        if (nome.isEmpty()) {
+            mostrarErro("Informe o nome do cliente.");
+            return;
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarErro("E-mail inválido.");
+            return;
+        }
+
+        if (!cpf.matches("\\d{11}")) {
+            mostrarErro("CPF deve conter exatamente 11 números.");
+            return;
+        }
+
+        if (!idadeTexto.matches("\\d+")) {
+            mostrarErro("Idade deve conter apenas números.");
+            return;
+        }
+
+        int idade = Integer.parseInt(idadeTexto);
+
+        if (idade < 0 || idade > 120) {
+            mostrarErro("Idade inválida.");
+            return;
+        }
+
         try {
 
             Cliente cliente =
                     new Cliente(
-                            txtNome.getText(),
-                            txtCpf.getText(),
-                            Integer.parseInt(
-                                    txtIdade.getText()
-                            ),
-                            txtEmail.getText()
+                            nome,
+                            cpf,
+                            idade,
+                            email
                     );
 
             if (comboPagamento.getValue() == null) {
@@ -166,17 +198,48 @@ public class PagamentoProdutoController {
                 return;
             }
 
-             GeradorPDF.gerarNotaFiscalProduto(
+            GeradorPDF.gerarNotaFiscalProduto(
                     cliente,
                     itensVenda,
                     total
-             );
+            );
 
             VendaLojinha venda =
                     new VendaLojinha(itensVenda);
 
+            venda.setCliente(cliente);
+
+            venda.setFormaPagamento(
+                    comboPagamento.getValue()
+            );
+
+            venda.setDataVenda(
+                    java.time.LocalDateTime.now()
+            );
+
+            RepositorioProdutoImpl repositorioProduto =
+                    RepositorioProdutoImpl.getInstancia();
+
+
             RepositorioVendaLojinhaImpl repositorio =
                     new RepositorioVendaLojinhaImpl();
+
+            for (ItemVenda item : itensVenda) {
+
+                item.getProduto().reduzirEstoque(
+                        item.getQuantidade()
+                );
+
+                repositorioProduto.atualizar(
+                        item.getProduto()
+                );
+
+                System.out.println(
+                        item.getProduto().getNome()
+                                + " estoque restante = "
+                                + item.getProduto().getQtdEstoque()
+                );
+            }
 
             repositorio.cadastrar(venda);
 

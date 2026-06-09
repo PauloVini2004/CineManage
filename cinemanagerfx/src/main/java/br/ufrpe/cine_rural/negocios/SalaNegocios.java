@@ -1,30 +1,27 @@
 package br.ufrpe.cine_rural.negocios;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSala;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSessao;
 import br.ufrpe.cine_rural.model.tiposala.Sala;
-import br.ufrpe.cine_rural.model.tiposala.Comum;
-import br.ufrpe.cine_rural.model.tiposala.Vip;
 import br.ufrpe.cine_rural.model.tiposala.Imax;
+import br.ufrpe.cine_rural.model.tiposala.Vip;
+import br.ufrpe.cine_rural.model.tiposala.Comum;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Controller responsável pelo cadastro e gestão de salas.
- *
- * REQ03 – Cadastrar salas com identificação e capacidade total de assentos.
- * REQ04 – Herança: Comum (preco=1.0), VIP (preco=3.0), IMAX (preco=2.0).
- *
- * Os construtores reais do seu código:
- *   Comum(int id, int capacidade)  → super(id, capacidade, 1.0)
- *   Imax (int id, int capacidade)  → super(id, capacidade, 2.0)
- *   Vip  (int id, int capacidade)  → super(id, capacidade, 3.0)
- *
- * O preço base é fixado pelo tipo de sala, mas pode ser sobrescrito via
- * atualizarPreco() para promoções específicas.
- */
+
 public class SalaNegocios {
 
+    private final IRepositorioSala repositorioSala;
+
     private final List<Sala> salas = new ArrayList<>();
+
+    public SalaNegocios(IRepositorioSala repositorioSala) {
+        this.repositorioSala = repositorioSala;
+    }
 
     // -------------------------------------------------------------------------
     // REQ03 / REQ04 – Cadastro por tipo
@@ -36,7 +33,7 @@ public class SalaNegocios {
         validarCapacidade(capacidade);
         Comum sala = new Comum(id, capacidade);   // construtor real do seu projeto
         salas.add(sala);
-        System.out.println("[SalaNegocios] Sala Comum #" + id + " cadastrada (cap.: " + capacidade + ").");
+        System.out.println("[SalaController] Sala Comum #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
@@ -46,7 +43,7 @@ public class SalaNegocios {
         validarCapacidade(capacidade);
         Vip sala = new Vip(id, capacidade);        // construtor real do seu projeto
         salas.add(sala);
-        System.out.println("[SalaNegocios] Sala VIP #" + id + " cadastrada (cap.: " + capacidade + ").");
+        System.out.println("[SalaController] Sala VIP #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
@@ -56,7 +53,7 @@ public class SalaNegocios {
         validarCapacidade(capacidade);
         Imax sala = new Imax(id, capacidade);      // construtor real do seu projeto
         salas.add(sala);
-        System.out.println("[SalaNegocios] Sala IMAX #" + id + " cadastrada (cap.: " + capacidade + ").");
+        System.out.println("[SalaController] Sala IMAX #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
@@ -72,13 +69,13 @@ public class SalaNegocios {
     public void atualizarPreco(Sala sala, double novoPreco) {
         if (novoPreco < 0) throw new IllegalArgumentException("Preço não pode ser negativo.");
         sala.setPreco(novoPreco);
-        System.out.println("[SalaNegocios] Preço da sala #" + sala.getId() + " → R$ " + novoPreco);
+        System.out.println("[SalaController] Preço da sala #" + sala.getId() + " → R$ " + novoPreco);
     }
 
     public void atualizarCapacidade(Sala sala, int novaCapacidade) {
         validarCapacidade(novaCapacidade);
         sala.setCapacidade(novaCapacidade);
-        System.out.println("[SalaNegocios] Capacidade da sala #" + sala.getId() + " → " + novaCapacidade);
+        System.out.println("[SalaController] Capacidade da sala #" + sala.getId() + " → " + novaCapacidade);
     }
 
     // -------------------------------------------------------------------------
@@ -86,7 +83,7 @@ public class SalaNegocios {
     // -------------------------------------------------------------------------
 
     public List<Sala> listarSalas() {
-        return new ArrayList<>(salas);
+        return repositorioSala.listar();
     }
 
     public Sala buscarPorId(int id) {
@@ -100,7 +97,7 @@ public class SalaNegocios {
 
     public void removerSala(Sala sala) {
         salas.remove(sala);
-        System.out.println("[SalaNegocios] Sala #" + sala.getId() + " removida.");
+        System.out.println("[SalaController] Sala #" + sala.getId() + " removida.");
     }
 
     // -------------------------------------------------------------------------

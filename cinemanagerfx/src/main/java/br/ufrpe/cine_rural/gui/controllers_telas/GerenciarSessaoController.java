@@ -9,6 +9,9 @@ import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.model.tiposala.Sala;
 
+import br.ufrpe.cine_rural.negocios.FilmeNegocios;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios;
+import br.ufrpe.cine_rural.negocios.SalaNegocios;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,9 +21,9 @@ import java.time.LocalDateTime;
 
 public class GerenciarSessaoController {
 
-    private RepositorioFilmeImpl repositorioFilmes;
-    private RepositorioSessaoImpl repositorioSessaos;
-    private RepositorioSalaImpl repositorioSalas;
+    private FilmeNegocios negociosFilmes;
+    private SessaoNegocios negociosSessaos;
+    private SalaNegocios negociosSalas;
 
     @FXML
     private TableView<Sessao> tabelaSessoes;
@@ -60,13 +63,13 @@ public class GerenciarSessaoController {
 
     private ObservableList<Sessao> sessoes = FXCollections.observableArrayList();
 
-    public void setRepositorios(RepositorioFilmeImpl filmes,
-                                RepositorioSessaoImpl sessoesRepo,
-                                RepositorioSalaImpl salas) {
+    public void setRepositorios(FilmeNegocios negociosFilmes,
+                                SessaoNegocios negociosSessaos,
+                                SalaNegocios negociosSalas) {
 
-        this.repositorioFilmes = filmes;
-        this.repositorioSessaos = sessoesRepo;
-        this.repositorioSalas = salas;
+        this.negociosFilmes = negociosFilmes;
+        this.negociosSessaos = negociosSessaos;
+        this.negociosSalas = negociosSalas;
 
         carregarCombos();
         atualizarTabela();
@@ -122,15 +125,10 @@ public class GerenciarSessaoController {
 
             LocalDateTime horario = dpData.getValue().atTime(hora, minuto);
 
-            Sessao sessao = new Sessao(
-                    filme,
+            negociosSessaos.cadastrarSessao(filme,
                     sala,
                     horario,
-                    idioma,
-                    status
-            );
-
-            repositorioSessaos.cadastrar(sessao);
+                    idioma);
 
             atualizarTabela();
             limparCampos();
@@ -150,11 +148,11 @@ public class GerenciarSessaoController {
     }
 
     private void atualizarTabela() {
-        sessoes.setAll(repositorioSessaos.listar());
+        sessoes.setAll(negociosSessaos.listarSessoes());
     }
 
     private void carregarCombos() {
-        cbFilme.getItems().setAll(repositorioFilmes.listar());
-        cbSala.getItems().setAll(repositorioSalas.listar());
+        cbFilme.getItems().setAll(negociosFilmes.listarFilmes());
+        cbSala.getItems().setAll(negociosSalas.listarSalas());
     }
 }
