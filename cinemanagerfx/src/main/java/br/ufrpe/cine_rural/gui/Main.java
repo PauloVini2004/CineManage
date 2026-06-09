@@ -61,7 +61,7 @@ public class Main extends Application {
 
 
 
-/*TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
+/*TELA ATENDENTE <- PRODUTO -> PAGAMENTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -92,9 +92,44 @@ public class Main extends Application {
 }
 */
 
+/*TELA PAGAMENTO INGRESSO
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml"
+                )
+        );
+
+        Scene scene = new Scene(loader.load());
+
+        stage.setTitle("Listar Produto");
+        stage.setWidth(900);
+        stage.setHeight(700);
+        stage.setResizable(false);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+*/
 
 
-//TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
+
+
+/*TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -126,6 +161,7 @@ public class Main extends Application {
         launch(args);
     }
 }
+ */
 
 
 // Gerenciar Filmes
