@@ -48,7 +48,7 @@
                       prefHeight="180"/>
 
             <Label fx:id="lblTotal"
-                   text="Total R$ 0,00"
+                   text="TOTAL R$ 0,00"
                    styleClass="total"/>
 
             <HBox spacing="15"

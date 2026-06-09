@@ -37,7 +37,7 @@
 .total {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: red;
+    -fx-text-fill: black;
     -fx-translate-y: 25;
 }
 

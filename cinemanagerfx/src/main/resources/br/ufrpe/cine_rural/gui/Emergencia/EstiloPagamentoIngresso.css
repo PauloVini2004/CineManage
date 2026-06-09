@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #f4f6f8;
+    -fx-background-color: white;
 }
 
 .titulo {
@@ -7,11 +7,21 @@
     -fx-font-weight: bold;
 }
 
-.text-field,
-.combo-box,
-.text-area {
+.text-field{
     -fx-pref-width: 350;
     -fx-font-size: 14px;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20 ;
+    -fx-border-color: gray;
+}
+.combo-box{
+    -fx-pref-width: 350;
+    -fx-font-size: 14px;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20 ;
+    -fx-background-color: white;
+    -fx-border-color: gray;
+
 }
 
 .text-area {
@@ -21,14 +31,39 @@
 .total {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
+    -fx-translate-y: 20;
 }
 
 .botao-voltar {
-    -fx-background-color: #c0392b;
+    -fx-background-color: black;
     -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-pref-width: 140;
+    -fx-pref-height: 42;
+    -fx-translate-x: -250 ;
+    -fx-translate-y: -30 ;
+    -fx-border-color: white;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
 
 .botao-pagar {
-    -fx-background-color: #27ae60;
+    -fx-background-color: red;
     -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-pref-width: 140;
+    -fx-pref-height: 42;
+    -fx-translate-x: 250 ;
+    -fx-translate-y: -30 ;
+    -fx-border-color: white;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
