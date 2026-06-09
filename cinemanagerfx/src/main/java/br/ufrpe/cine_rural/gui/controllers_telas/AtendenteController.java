@@ -13,5 +13,10 @@ public class AtendenteController {
     @FXML
     private Button btnEncCaix;
 
+    @FXML
+    public void btnCprIngrAction() {
+        ScreenManager.getInstance().showFilmesScreen();
+    }
+
 
 }
