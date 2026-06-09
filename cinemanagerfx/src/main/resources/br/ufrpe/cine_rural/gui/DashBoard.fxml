@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="720.0"
+            prefWidth="1280.0"
+            stylesheets="@DashEstilo2.css"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1">
+
+    <top>
+        <VBox spacing="5" styleClass="header">
+            <padding>
+                <Insets top="20" right="25" bottom="20" left="25"/>
+            </padding>
+
+            <Label text="Relatórios e Estatísticas"
+                   styleClass="title"/>
+
+            <Label text="Acompanhe vendas, ocupação e alertas operacionais"
+                   styleClass="subtitle"/>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+
+        <VBox spacing="20">
+
+            <padding>
+                <Insets top="20"
+                        right="20"
+                        bottom="20"
+                        left="20"/>
+            </padding>
+
+            <!-- LINHA 1 -->
+
+            <HBox spacing="20">
+
+                <!-- FILTROS -->
+
+                <VBox prefWidth="300"
+                      spacing="10"
+                      styleClass="card">
+
+                    <Label text="Filtros"
+                           styleClass="card-title"/>
+
+                    <Label text="Selecione os parâmetros do relatório"
+                           styleClass="info-label"/>
+
+                    <ComboBox fx:id="cbFilmes"
+                              promptText="Selecione um filme"/>
+
+                    <DatePicker fx:id="dpInicio"/>
+
+                    <DatePicker fx:id="dpFim"/>
+
+                    <Button text="Pesquisar"
+                            styleClass="primary-button"/>
+
+                </VBox>
+
+                <!-- BILHETERIA -->
+
+                <VBox spacing="10"
+                      styleClass="card"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Bilheteria por Filme"
+                           styleClass="card-title"/>
+
+                    <BarChart fx:id="graficoBilheteria"
+                              prefHeight="320"
+                              animated="false">
+
+                        <xAxis>
+                            <CategoryAxis/>
+                        </xAxis>
+
+                        <yAxis>
+                            <NumberAxis/>
+                        </yAxis>
+
+                    </BarChart>
+
+                    <Label text="Taxa de Ocupação"
+                           styleClass="info-label"/>
+
+                    <ProgressBar fx:id="barraOcupacao"
+                                 progress="0.0"/>
+
+                    <Label fx:id="lblTaxa"
+                           text="Taxa de Ocupação: 0%"
+                           styleClass="info-label"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- LINHA 2 -->
+
+            <HBox spacing="20">
+
+                <!-- BOMBONIERE -->
+
+                <VBox spacing="10"
+                      styleClass="card"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Bomboniere"
+                           styleClass="card-title"/>
+
+                    <PieChart fx:id="graficoBomboniere"
+                              prefHeight="300"
+                              labelsVisible="true"/>
+
+                </VBox>
+
+                <!-- ASSENTOS -->
+
+                <VBox spacing="10"
+                      styleClass="card"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Assentos Mais Ocupados"
+                           styleClass="card-title"/>
+
+                    <TableView fx:id="tbAssentos"
+                               prefHeight="300"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- ALERTAS -->
+
+            <VBox spacing="10"
+                  styleClass="card alert-card">
+
+                <Label text="Alertas e Notificações"
+                       styleClass="alert-title"/>
+
+                <ListView fx:id="listaAlertas"
+                          prefHeight="120"/>
+
+            </VBox>
+
+            <!-- BOTÕES -->
+
+            <HBox spacing="10">
+
+                <Button text="Exportar CSV"
+                        styleClass="export-button"/>
+
+                <Button text="Atualizar Dashboard"
+                        styleClass="secondary-button"/>
+
+                <Button text="Enviar E-mail"
+                        styleClass="primary-button"/>
+
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>
