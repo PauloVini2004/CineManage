@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -27,7 +28,7 @@ public class HomeController {
     private Button btnGerente;
 
     @FXML
-    private Text txtGerente;
+    private Button btnAtendente;
 
     @FXML
     public void btnGerenteAction() throws IOException {
@@ -40,11 +41,21 @@ public class HomeController {
         Optional<String> result = tiDialog.showAndWait();
         if (result.isPresent()) {
             switch (result.get()) {
-                case "1234": HomeController.gerenteAtual = "PAULO!"; break;
-                case "2345": HomeController.gerenteAtual = "JULIA!"; break;
-                case "3456": HomeController.gerenteAtual = "ARTHUR!"; break;
-                case "4567": HomeController.gerenteAtual = "GABRIEL!"; break;
-                case "5678": HomeController.gerenteAtual = "GEDEDIAS!"; break;
+                case "1234": this.gerenteAtual = "PAULO!";
+                    ScreenManager.getInstance().showGerenteScreen();
+                    break;
+                case "2345": this.gerenteAtual = "JULIA!";
+                    ScreenManager.getInstance().showGerenteScreen();
+                    break;
+                case "3456": this.gerenteAtual = "ARTHUR!";
+                    ScreenManager.getInstance().showGerenteScreen();
+                    break;
+                case "4567": this.gerenteAtual = "GABRIEL!";
+                    ScreenManager.getInstance().showGerenteScreen();
+                    break;
+                case "5678": this.gerenteAtual = "GEDEDIAS!";
+                    ScreenManager.getInstance().showGerenteScreen();
+                    break;
                 default:
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Erro");
@@ -54,6 +65,11 @@ public class HomeController {
                     break;
             }
         }
+    }
+
+    @FXML
+    public void btnAtendenteAction() throws IOException {
+        ScreenManager.getInstance().showAtendenteScreen();
     }
 
     @FXML

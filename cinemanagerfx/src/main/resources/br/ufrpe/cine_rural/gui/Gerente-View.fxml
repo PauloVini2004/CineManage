@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -19,7 +20,7 @@
          <children>
             <ImageView fitHeight="179.0" fitWidth="440.0" pickOnBounds="true" style="-fx-translate-y: 50;">
                <image>
-                  <Image url="@Imagens/Fita_Filme_Decor.png" />
+                  <Image url="@Fita_Filme_Decor.png" />
                </image>
             </ImageView>
             <TextFlow layoutX="259.0" prefHeight="168.0" prefWidth="606.0" style="-fx-translate-y: 50;" textAlignment="CENTER">
@@ -30,11 +31,7 @@
                      </font>
                   </Text>
                   <Region prefHeight="14.0" prefWidth="258.0" style="-fx-translate-y: 200; -fx-translate-x: -100;" />
-                  <Text fill="#b90000" scaleX="5.0" scaleY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-translate-y: 200; -fx-translate-x: -100;" text="GERENTE!" textAlignment="CENTER" wrappingWidth="84.53668403625488">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Text>
+                  <Label fx:id="txtGerente" scaleX="5.0" scaleY="5.0" style="-fx-translate-y: 200; -fx-translate-x: -100;" text="Gerente!" textFill="#b90000" />
                </children>
             </TextFlow>
          </children>
@@ -46,13 +43,13 @@
             <HBox prefHeight="120.0" prefWidth="900.0" style="-fx-background-color: BLACK;">
                <children>
                   <Region layoutX="141.0" layoutY="10.0" prefHeight="60.0" prefWidth="140.0" />
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="138.0" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Relatorio" textAlignment="RIGHT" textFill="WHITE" />
-                  <Region prefHeight="27.0" prefWidth="80.0" />
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="141.0" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Cinema" textFill="WHITE" />
-                  <Region prefHeight="0.0" prefWidth="80.0" HBox.hgrow="ALWAYS" />
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="143.0" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Produtos" textFill="WHITE" />
-                  <Region layoutX="148.0" layoutY="10.0" prefHeight="60.0" prefWidth="80.0" />
-                  <Button alignment="CENTER" layoutX="589.0" layoutY="10.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="143.0" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Clientes" textFill="WHITE" />
+                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="138.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Relatorio" textAlignment="RIGHT" textFill="WHITE" />
+                  <Region prefHeight="27.0" prefWidth="100.0" />
+                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="141.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Cinema" textFill="WHITE" />
+                  <Region prefHeight="0.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="150.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Produtos" textFill="WHITE" />
+                  <Region layoutX="148.0" layoutY="10.0" prefHeight="60.0" prefWidth="100.0" />
+                  <Button alignment="CENTER" layoutX="589.0" layoutY="10.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="143.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Clientes" textFill="WHITE" />
                   <Region layoutX="722.0" layoutY="10.0" prefHeight="60.0" prefWidth="140.0" />
                </children>
                <opaqueInsets>
@@ -63,7 +60,7 @@
             <HBox prefHeight="166.0" prefWidth="900.0" style="-fx-background-color: BLACK;">
                <children>
                   <Region prefHeight="117.0" prefWidth="804.0" />
-                  <Button fx:id="btnSair" alignment="CENTER" mnemonicParsing="false" onAction="#onSairClick" prefHeight="26.0" prefWidth="143.0" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Sair" textFill="WHITE" />
+                  <Button fx:id="btnSair" alignment="CENTER" mnemonicParsing="false" onAction="#onSairClick" prefHeight="26.0" prefWidth="143.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Sair" textFill="WHITE" />
                   <Region prefHeight="106.0" prefWidth="101.0" />
                </children>
             </HBox>
