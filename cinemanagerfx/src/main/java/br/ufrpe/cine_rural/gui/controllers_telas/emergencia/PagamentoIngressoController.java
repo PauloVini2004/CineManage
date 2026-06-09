@@ -73,7 +73,7 @@ public class PagamentoIngressoController {
         resumo.append("-------------------------------");
 
         txtResumoCompra.setText(resumo.toString());
-        lblTotal.setText("Total R$ " + String.format("%.2f", total));
+        lblTotal.setText("TOTAL R$ " + String.format("%.2f", total));
     }
 
     private void realizarPagamento() {
