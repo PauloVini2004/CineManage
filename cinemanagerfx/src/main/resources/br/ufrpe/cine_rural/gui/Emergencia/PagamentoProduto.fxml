@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@EstiloPagamentoProduto.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoProdutoController">
+<BorderPane prefHeight="700.0" prefWidth="900.0" stylesheets="@EstiloPagamentoProduto.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoProdutoController">
 
     <center>
         <VBox alignment="CENTER" spacing="18" BorderPane.alignment="CENTER">
@@ -23,11 +23,11 @@
 
             <TextField fx:id="txtIdade" promptText="Idade" />
 
-            <ComboBox fx:id="comboPagamento" promptText="Forma de Pagamento" />
+            <ComboBox fx:id="comboPagamento" promptText="Forma de Pagamento" styleClass="comboPagamento" />
 
             <TextArea fx:id="txtResumoCompra" editable="false" prefHeight="180" />
 
-            <Label fx:id="lblTotal" styleClass="total" text="Total R$ 0,00" />
+            <Label fx:id="lblTotal" styleClass="total" text="TOTAL R$ 0,00" />
 
             <HBox alignment="CENTER" spacing="20">
 

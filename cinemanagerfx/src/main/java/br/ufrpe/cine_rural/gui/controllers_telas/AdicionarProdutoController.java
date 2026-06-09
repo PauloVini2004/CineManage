@@ -55,7 +55,6 @@ public class AdicionarProdutoController {
         btnSelecionarImagem.setOnAction( e -> selecionarImagem());
 
     }
-
     @FXML
     private void selecionarImagem() {
 
@@ -72,7 +71,7 @@ public class AdicionarProdutoController {
             try {
 
                 Path pastaDestino =
-                        Path.of("br/ufrpe/cine_rural/gui/ImagensProduto");
+                        Path.of("ImagensProdutos");
 
                 Files.createDirectories(pastaDestino);
 
@@ -88,14 +87,20 @@ public class AdicionarProdutoController {
                 );
 
                 caminhoImagemSelecionada =
-                        "dados/imagens/" +
-                                arquivo.getName();
+                        destino.toString();
+
+                System.out.println(
+                        "Imagem salva em: "
+                                + caminhoImagemSelecionada
+                );
 
             } catch (Exception e) {
 
                 mostrarErro(
                         "Erro ao copiar imagem."
                 );
+
+                e.printStackTrace();
             }
         }
     }
@@ -116,6 +121,11 @@ public class AdicionarProdutoController {
 
             int quantidade = Integer.parseInt(
                     txtQuantidade.getText().trim()
+            );
+
+            System.out.println(
+                    "CAMINHO SALVO: "
+                            + caminhoImagemSelecionada
             );
 
 

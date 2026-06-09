@@ -1,11 +1,11 @@
 .root {
-    -fx-background-color: #F5F6FA;
+    -fx-background-color: white;
 }
 
 .titulo {
     -fx-font-size: 30px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2F3640;
+    -fx-text-fill: black;
 }
 
 .text-field,
@@ -13,17 +13,23 @@
     -fx-pref-width: 350;
     -fx-pref-height: 42;
 
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: gray;
 
     -fx-font-size: 14px;
+}
+.comboPagamento{
+    -fx-translate-x: -235;
+    -fx-background-color: white;
+    -fx-border-color: gray;
 }
 
 .text-area {
     -fx-pref-width: 350;
 
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 
     -fx-font-size: 14px;
 }
@@ -31,11 +37,12 @@
 .total {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #27AE60;
+    -fx-text-fill: red;
+    -fx-translate-y: 25;
 }
 
 .botao-voltar {
-    -fx-background-color: #E74C3C;
+    -fx-background-color: black;
     -fx-text-fill: white;
 
     -fx-font-size: 14px;
@@ -43,12 +50,16 @@
 
     -fx-pref-width: 140;
     -fx-pref-height: 42;
+    -fx-translate-x: -250 ;
+    -fx-translate-y: -30 ;
+    -fx-border-color: white;
 
-    -fx-background-radius: 8;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
 
 .botao-pagar {
-    -fx-background-color: #27AE60;
+    -fx-background-color: red;
     -fx-text-fill: white;
 
     -fx-font-size: 14px;
@@ -56,14 +67,22 @@
 
     -fx-pref-width: 140;
     -fx-pref-height: 42;
+    -fx-translate-x: 250 ;
+    -fx-translate-y: -30 ;
+    -fx-border-color: white;
 
-    -fx-background-radius: 8;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
 
 .botao-voltar:hover {
     -fx-opacity: 0.9;
+    -fx-background-color: red;
 }
 
 .botao-pagar:hover {
     -fx-opacity: 0.9;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-color: black;
 }

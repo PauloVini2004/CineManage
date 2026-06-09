@@ -135,7 +135,7 @@ public class PagamentoProdutoController {
         );
 
         lblTotal.setText(
-                "Total R$ "
+                "TOTAL R$ "
                         + String.format(
                         "%.2f",
                         total
