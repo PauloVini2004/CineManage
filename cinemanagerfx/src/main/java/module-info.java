@@ -11,5 +11,4 @@ module br.ufrpe.cine_rural {
     opens br.ufrpe.cine_rural.gui.controllers_telas.emergencia to javafx.fxml;
 
     opens br.ufrpe.cine_rural.model to javafx.base;
-    opens br.ufrpe.cine_rural.dados.interfaces to javafx.fxml;
 }
