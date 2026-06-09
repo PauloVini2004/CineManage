@@ -7,6 +7,8 @@ import br.ufrpe.cine_rural.gui.dto.SalasMapas;
 import br.ufrpe.cine_rural.model.Assento;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.Sessao;
+import br.ufrpe.cine_rural.negocios.FilmeNegocios;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,33 +28,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Controller da tela de assentos.
- *
- * Persistência: o mapa de assentos ocupados (gerado aleatoriamente UMA ÚNICA VEZ
- * na primeira abertura de cada sessão) fica armazenado em layoutsPorSessao,
- * um Map estático indexado pelo horário da sessão.
- * Nas próximas aberturas da mesma sessão o layout já salvo é reutilizado.
- */
 public class AssentoController {
 
-    // -------------------------------------------------------------------------
-    // Persistência de layouts por sessão (sobrevive a navegações dentro da JVM)
-    // -------------------------------------------------------------------------
     private static final Map<LocalDateTime, int[][]> layoutsPorSessao = new HashMap<>();
 
-    // -------------------------------------------------------------------------
-    // Componentes FXML
-    // -------------------------------------------------------------------------
     @FXML private AnchorPane painel;
     @FXML private Text textoSessaoInfo;
     @FXML private Text textoContador;
     @FXML private Button btnVoltar;
     @FXML private Button btnIngressos;
 
-    // -------------------------------------------------------------------------
-    // Estado da tela
-    // -------------------------------------------------------------------------
     private List<String> nomeAssentosSelecionados = new ArrayList<>();
 
     private Sessao sessaoAtual;
@@ -63,29 +48,26 @@ public class AssentoController {
     private Idioma idioma;
     private int duracao;
     private ClassificacaoIndicativa classificacao;
-    private Image poster;
+    private String posterPath; // ✅ era Image poster
     private String tituloFilme;
 
     private int[][] layoutAtual;
     private int assentosSelecionados = 0;
 
-    private br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl repositorioFilmes;
-    private br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl repositorioSessoes;
+    // ✅ Camadas de negócio no lugar dos repositórios
+    private FilmeNegocios filmeNegocios;
+    private SessaoNegocios sessaoNegocios;
 
     @FXML
-    public void initialize() {
-        // Inicialização gerenciada pelo JavaFX — mantido limpo.
+    public void initialize() {}
+
+    // ✅ Recebe FilmeNegocios e SessaoNegocios, não os repositórios
+    public void setNegocios(FilmeNegocios filmeNegocios, SessaoNegocios sessaoNegocios) {
+        this.filmeNegocios = filmeNegocios;
+        this.sessaoNegocios = sessaoNegocios;
     }
 
-    // Adiciona os repositorios para o FilmesController poder receber os dados e passar a tela
-    public void setRepositorios(
-            br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl filmes,
-            br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl sessoes) {
-        this.repositorioFilmes = filmes;
-        this.repositorioSessoes = sessoes;
-    }
-
-    // a Geração aleatoria só ocorre uma única vez, depois persiste
+    // ✅ poster agora é String
     public void setDados(Sessao sessao,
                          int heranca,
                          int numeroSessao,
@@ -94,30 +76,26 @@ public class AssentoController {
                          Idioma idioma,
                          int duracao,
                          ClassificacaoIndicativa classificacao,
-                         Image poster,
+                         String posterPath,
                          String tituloFilme) {
 
-        this.sessaoAtual    = sessao;
-        this.heranca        = heranca;
-        this.numeroSessao   = numeroSessao;
-        this.nomeSala       = nomeSala;
-        this.dataHorario    = dataHorario;
-        this.idioma         = idioma;
-        this.duracao        = duracao;
-        this.classificacao  = classificacao;
-        this.poster         = poster;
-        this.tituloFilme    = tituloFilme;
+        this.sessaoAtual   = sessao;
+        this.heranca       = heranca;
+        this.numeroSessao  = numeroSessao;
+        this.nomeSala      = nomeSala;
+        this.dataHorario   = dataHorario;
+        this.idioma        = idioma;
+        this.duracao       = duracao;
+        this.classificacao = classificacao;
+        this.posterPath    = posterPath; // ✅ String
+        this.tituloFilme   = tituloFilme;
 
-        // Tenta recuperar layout já persistido para esta sessão
         LocalDateTime chave = sessao.getHorario();
         if (layoutsPorSessao.containsKey(chave)) {
-            // Sessão já foi aberta antes — reutiliza o layout existente
             layoutAtual = layoutsPorSessao.get(chave);
         } else {
-            // Primeira abertura desta sessão: copia o mapa base e gera ocupados
             layoutAtual = criarLayoutBase(heranca);
             ocuparAssentosAleatorios();
-            // Persiste para usos futuros (dentro da mesma execução)
             layoutsPorSessao.put(chave, layoutAtual);
         }
 
@@ -135,7 +113,6 @@ public class AssentoController {
         configurarBotaoIngressos();
     }
 
-    // matrizes Layouts
     private int[][] criarLayoutBase(int heranca) {
         return switch (heranca) {
             case 2  -> SalasMapas.copiar(SalasMapas.salaImax);
@@ -144,7 +121,6 @@ public class AssentoController {
         };
     }
 
-    // Ocupador aleatorio entre 10% a 30% dos Assentos disponiveis por sala
     private void ocuparAssentosAleatorios() {
         Random random = new Random();
         int totalAssentos = 0;
@@ -161,22 +137,28 @@ public class AssentoController {
         while (ocupados < quantidade) {
             int i = random.nextInt(layoutAtual.length);
             int j = random.nextInt(layoutAtual[i].length);
-
             if (layoutAtual[i][j] == 1) {
-                layoutAtual[i][j] = 2; // 2 = ocupado
+                layoutAtual[i][j] = 2;
                 ocupados++;
             }
         }
     }
 
     private void exibirPoster() {
-        if (poster == null) return;
-        ImageView posterView = new ImageView(poster);
-        posterView.setFitWidth(210);
-        posterView.setFitHeight(280);
-        posterView.setLayoutX(685);
-        posterView.setLayoutY(65);
-        painel.getChildren().add(posterView);
+        // ✅ Converte String → Image aqui, na camada de UI
+        if (posterPath == null || posterPath.isBlank()) return;
+
+        try {
+            Image imagem = new Image(posterPath);
+            ImageView posterView = new ImageView(imagem);
+            posterView.setFitWidth(210);
+            posterView.setFitHeight(280);
+            posterView.setLayoutX(685);
+            posterView.setLayoutY(65);
+            painel.getChildren().add(posterView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void configurarBotaoVoltar() {
@@ -195,8 +177,9 @@ public class AssentoController {
                         );
 
                         FilmesController fc = loader.getController();
-                        if (repositorioFilmes != null && repositorioSessoes != null) {
-                            fc.setRepositorios(repositorioFilmes, repositorioSessoes);
+                        // ✅ Passa FilmeNegocios e SessaoNegocios, não os repositórios
+                        if (filmeNegocios != null && sessaoNegocios != null) {
+                            fc.setNegocios(filmeNegocios, sessaoNegocios);
                         }
 
                         Stage stageAtual = (Stage) painel.getScene().getWindow();
@@ -215,8 +198,7 @@ public class AssentoController {
             if (nomeAssentosSelecionados.isEmpty()) return;
 
             try {
-                PagamentoIngressoController.cenaAnterior =
-                        painel.getScene();
+                PagamentoIngressoController.cenaAnterior = painel.getScene();
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/br/ufrpe/cine_rural/gui/PagamentoIngresso.fxml")
                 );
@@ -259,7 +241,6 @@ public class AssentoController {
         });
     }
 
-    // Organização de persistencia na geração das cadeiras e identificação de assentos ocupados após venda de ingresso
     private void gerarAssentos() {
         int tamanho = layoutAtual.length;
         double areaX       = 40;
@@ -313,26 +294,14 @@ public class AssentoController {
         }
     }
 
-    public static void ocuparAssentos(
-            LocalDateTime horarioSessao,
-            List<String> assentos
-    ) {
+    public static void ocuparAssentos(LocalDateTime horarioSessao, List<String> assentos) {
         int[][] layout = layoutsPorSessao.get(horarioSessao);
-
-        if (layout == null) {
-            return;
-        }
+        if (layout == null) return;
 
         for (String nome : assentos) {
-
-            int linha = nome.charAt(0) - 'A';
-
-            int coluna = Integer.parseInt(
-                    nome.substring(1)
-            ) - 1;
-
+            int linha  = nome.charAt(0) - 'A';
+            int coluna = Integer.parseInt(nome.substring(1)) - 1;
             layout[linha][coluna] = 2;
         }
     }
-
 }

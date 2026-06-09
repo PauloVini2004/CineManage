@@ -34,8 +34,7 @@ public class FilmeNegocios {
                                int duracao,
                                Genero genero,
                                ClassificacaoIndicativa classificacao,
-                               LocalTime localTime,
-                               Image poster) {
+                               String poster) {
 
         if (titulo == null || titulo.isBlank()) {
             throw new IllegalArgumentException("Título do filme não pode ser vazio.");

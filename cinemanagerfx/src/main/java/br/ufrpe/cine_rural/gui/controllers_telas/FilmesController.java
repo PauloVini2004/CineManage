@@ -1,14 +1,10 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
-import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
-import br.ufrpe.cine_rural.enums.Idioma;
-import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
-import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
+
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
-import br.ufrpe.cine_rural.model.tiposala.Comum;
-import br.ufrpe.cine_rural.model.tiposala.Imax;
-import br.ufrpe.cine_rural.model.tiposala.Vip;
+import br.ufrpe.cine_rural.negocios.FilmeNegocios;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -33,34 +29,28 @@ public class FilmesController {
     @FXML
     private VBox containerFilmes;
 
-    private RepositorioFilmeImpl repositorioFilmes;
-    private RepositorioSessaoImpl repositorioSessoes;
+    private FilmeNegocios filmeNegocios;
+    private SessaoNegocios sessaoNegocios;
 
-    // Recebe os repositorios e carrega os csvs para a tela de assento
-    public void setRepositorios(RepositorioFilmeImpl filmes,
-                                RepositorioSessaoImpl sessoes) {
-        this.repositorioFilmes  = filmes;
-        this.repositorioSessoes = sessoes;
+    public void setNegocios(FilmeNegocios filmeNegocios, SessaoNegocios sessaoNegocios) {
+        this.filmeNegocios = filmeNegocios;
+        this.sessaoNegocios = sessaoNegocios;
         carregarFilmes();
     }
 
     @FXML
-    public void initialize() {
-        // Os repositórios chegam via setRepositorios()
-    }
+    public void initialize() {}
 
     private void carregarFilmes() {
-        // Agrupa as sessões abertas por título do filme
         Map<String, List<Sessao>> porFilme = new LinkedHashMap<>();
 
-        for (Sessao s : repositorioSessoes.listar()) {
+        for (Sessao s : sessaoNegocios.listarSessoes()) {
             if (s.getStatus() == ABERTA) {
                 String titulo = s.getFilme().getTitulo();
                 porFilme.computeIfAbsent(titulo, k -> new ArrayList<>()).add(s);
             }
         }
 
-        // Garante que o containerFilmes esteja limpo antes de popular
         containerFilmes.getChildren().clear();
 
         for (List<Sessao> grupo : porFilme.values()) {
@@ -68,35 +58,44 @@ public class FilmesController {
         }
     }
 
-    // Criação de cards dos filmes dinamica ao csv
-
     private void criarCard(List<Sessao> grupo) {
         if (grupo == null || grupo.isEmpty()) return;
 
         Sessao sessaoBase = grupo.get(0);
-        Filme  filme      = sessaoBase.getFilme();
+        Filme filme = sessaoBase.getFilme();
 
         HBox card = new HBox(15);
 
-        // Poster
         VBox posterContainer = new VBox();
-        Image posterImg = filme.getPoster();
-        ImageView posterView = new ImageView(posterImg);
+        String posterPath = filme.getCaminhoPoster();
+        ImageView posterView = new ImageView();
+        if (posterPath != null && !posterPath.isBlank()) {
+            try {
+                Image img;
+                if (posterPath.startsWith("file:") || posterPath.startsWith("http")) {
+                    img = new Image(posterPath);
+                } else {
+                    var stream = getClass().getResourceAsStream(posterPath);
+                    img = (stream != null) ? new Image(stream) : null;
+                }
+                if (img != null) posterView.setImage(img);
+            } catch (Exception e) {
+                System.err.println("Não foi possível carregar o poster: " + posterPath);
+            }
+        }
         posterView.setFitWidth(150);
         posterView.setFitHeight(220);
         posterContainer.getChildren().add(posterView);
 
-        // Informações textuais
         VBox info = new VBox(5);
 
-        Label titulo         = new Label(filme.getTitulo());
+        Label titulo = new Label(filme.getTitulo());
         titulo.getStyleClass().add("titulo-filme");
 
-        Label classificacao  = new Label("Classificação: " + filme.getClassificacao());
-        Label duracao        = new Label("Duração: " + filme.getDuracao() + " min");
-        Label idioma         = new Label("Idioma: " + sessaoBase.getIdioma());
+        Label classificacao = new Label("Classificação: " + filme.getClassificacao());
+        Label duracao = new Label("Duração: " + filme.getDuracao() + " min");
+        Label idioma = new Label("Idioma: " + sessaoBase.getIdioma());
 
-        // Horários agrupados por sala
         HBox horariosContainer = new HBox(15);
         Map<String, HBox> salasMap = new LinkedHashMap<>();
 
@@ -107,7 +106,7 @@ public class FilmesController {
 
             if (!salasMap.containsKey(nomeSala)) {
                 VBox blocoSessao = new VBox(5);
-                Label salaLabel  = new Label(nomeSala);
+                Label salaLabel = new Label(nomeSala);
                 salaLabel.getStyleClass().add("sala");
                 HBox horariosSala = new HBox(5);
                 blocoSessao.getChildren().addAll(salaLabel, horariosSala);
@@ -116,9 +115,8 @@ public class FilmesController {
             }
 
             Button btnHorario = new Button(s.getHorario().format(formatter));
-
-            btnHorario.setOnAction(event -> abrirAssentos(s));
-
+            // (mudança aqui) ao clicar no horário, navega para a tela de assentos
+            btnHorario.setOnAction(event -> irParaAssentos(s));
             salasMap.get(nomeSala).getChildren().add(btnHorario);
         }
 
@@ -127,58 +125,38 @@ public class FilmesController {
         containerFilmes.getChildren().add(card);
     }
 
-    // Navegação pra tela de Assentos
-
-    private void abrirAssentos(Sessao s) {
-        // Determina o tipo da sala (herança): 1=Comum, 2=Imax, 3=Vip
-        int heranca = switch (s.getSala()) {
-            case Comum c -> 1;
-            case Imax  i -> 2;
-            case Vip   v -> 3;
-            default      -> 1;
-        };
-
-        // Número de ordem da sessão na lista
-        int numeroSessao = repositorioSessoes.listar().indexOf(s) + 1;
-
-        // Data/horário formatado
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String dataHorario = s.getHorario().format(dtf);
-
+    private void irParaAssentos(Sessao sessao) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/br/ufrpe/cine_rural/gui/Assentos.fxml")
             );
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(
-                    getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloAssentos.css")
-                            .toExternalForm()
-            );
 
-            AssentoController ac = loader.getController();
+            AssentoController  controller = loader.getController();
+            controller.setNegocios(filmeNegocios, sessaoNegocios);
 
-            // Injeta repositórios para que o botão Voltar funcione
-            ac.setRepositorios(repositorioFilmes, repositorioSessoes);
+            int heranca = sessao.getSala().getId();
+            int numeroSessao = sessaoNegocios.listarSessoes().indexOf(sessao) + 1;
+            String nomeSala = sessao.getSala().toString();
+            String dataHorario = sessao.getHorario()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 
-            // Passa todos os dados da sessão
-            ac.setDados(
-                    s,
+            controller.setDados(
+                    sessao,
                     heranca,
                     numeroSessao,
-                    s.getSala().toString(),
+                    nomeSala,
                     dataHorario,
-                    s.getIdioma(),
-                    s.getFilme().getDuracao(),
-                    s.getFilme().getClassificacao(),
-                    s.getFilme().getPoster(),
-                    s.getFilme().getTitulo()
+                    sessao.getIdioma(),
+                    sessao.getFilme().getDuracao(),
+                    sessao.getFilme().getClassificacao(),
+                    sessao.getFilme().getCaminhoPoster(),
+                    sessao.getFilme().getTitulo()
             );
 
             Stage stage = (Stage) containerFilmes.getScene().getWindow();
-            stage.setTitle("Assentos — " + s.getFilme().getTitulo());
+            stage.setTitle("Escolha seu Assento");
             stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();

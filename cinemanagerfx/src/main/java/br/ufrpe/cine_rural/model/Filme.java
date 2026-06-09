@@ -2,46 +2,85 @@ package br.ufrpe.cine_rural.model;
 
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Genero;
-import javafx.scene.image.Image;
-import java.time.LocalTime;
 
 public class Filme {
 
     private String titulo;
     private String sinopse;
-    private int duracao; // em minutos
+    private int duracao;
     private Genero genero;
     private ClassificacaoIndicativa classificacao;
-    private Image poster;
+    private String caminhoPoster;
 
     public Filme(String titulo,
                  String sinopse,
                  int duracao,
                  Genero genero,
                  ClassificacaoIndicativa classificacao,
-                 Image poster) {
+                 String caminhoPoster) {
+
         this.titulo = titulo;
         this.sinopse = sinopse;
         this.duracao = duracao;
         this.genero = genero;
         this.classificacao = classificacao;
-        this.poster = poster;
+        this.caminhoPoster = caminhoPoster;
     }
 
-    public Image getPoster() { return poster; }
-    public void setPoster(Image poster) { this.poster = poster; }
+    // --- GETTERS ---
+    public String getTitulo() {
+        return titulo;
+    }
 
-    public String getTitulo() { return titulo; }
-    public String getSinopse() { return sinopse; }
-    public int getDuracao() { return duracao; }
-    public Genero getGenero() { return genero; }
+    public String getSinopse() {
+        return sinopse;
+    }
 
-    public ClassificacaoIndicativa getClassificacao() { return classificacao; }
-    public void setClassificacao(ClassificacaoIndicativa classificacao) { this.classificacao = classificacao; }
+    public int getDuracao() {
+        return duracao;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public ClassificacaoIndicativa getClassificacao() {
+        return classificacao;
+    }
+
+    public String getCaminhoPoster() {
+        return caminhoPoster;
+    }
+
+
+    // --- SETTERS (Adicionados aqui para permitir alteração dos dados) ---
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+
+    public void setClassificacao(ClassificacaoIndicativa classificacao) {
+        this.classificacao = classificacao;
+    }
+
+    public void setCaminhoPoster(String caminhoPoster) {
+        this.caminhoPoster = caminhoPoster;
+    }
+
 
     @Override
     public String toString() {
         return titulo;
     }
-
 }

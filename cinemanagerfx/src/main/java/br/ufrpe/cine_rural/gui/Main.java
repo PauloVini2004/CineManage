@@ -1,10 +1,15 @@
 package br.ufrpe.cine_rural.gui;
 
+
 // SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
+/*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.gui.controllers_telas.FilmesController;
+import br.ufrpe.cine_rural.negocios.FilmeNegocios;
+import br.ufrpe.cine_rural.negocios.SalaNegocios;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios; // Importado
 import br.ufrpe.cine_rural.model.tiposala.Comum;
 import br.ufrpe.cine_rural.model.tiposala.Imax;
 import br.ufrpe.cine_rural.model.tiposala.Vip;
@@ -18,20 +23,24 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // 1. Repositório de filmes — carrega filmes.csv automaticamente no construtor
+        // 1. Instanciação dos Repositórios (Persistência/Dados)
         RepositorioFilmeImpl repositorioFilmes = new RepositorioFilmeImpl();
-
-        // 2. Repositório de salas — salas pré-definidas (referenciadas pelo ID no sessoes.csv)
         RepositorioSalaImpl repositorioSalas = new RepositorioSalaImpl();
+
+        // Salas pré-definidas sendo cadastradas no repositório
         repositorioSalas.cadastrar(new Comum(1, 80));   // Sala 1 → Comum
         repositorioSalas.cadastrar(new Imax(2,  60));   // Sala 2 → Imax
         repositorioSalas.cadastrar(new Vip(3,   30));   // Sala 3 → Vip
 
-        // 3. Repositório de sessões — carrega sessoes.csv usando os repositórios acima
         RepositorioSessaoImpl repositorioSessoes =
                 new RepositorioSessaoImpl(repositorioFilmes, repositorioSalas);
 
-        // 4. Carrega a tela de Filmes
+        // 2. Instanciação da Camada de Negócios (Injeção de Dependência dos Repositórios)
+        SalaNegocios salaNegocios = new SalaNegocios(repositorioSalas);
+        SessaoNegocios sessaoNegocios = new SessaoNegocios(repositorioSessoes);
+        FilmeNegocios filmeNegocios = new FilmeNegocios(repositorioFilmes, sessaoNegocios);
+
+        // 3. Carrega a interface gráfica (Fxml) da tela de Filmes
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml")
         );
@@ -41,9 +50,9 @@ public class Main extends Application {
                         .toExternalForm()
         );
 
-        // 5. Injeta os repositórios no controller a partir dos CSV's
+        // 4. Injeta as instâncias de NEGÓCIOS no controller em vez dos repositórios
         FilmesController filmesController = loader.getController();
-        filmesController.setRepositorios(repositorioFilmes, repositorioSessoes);
+        filmesController.setNegocios(filmeNegocios, sessaoNegocios);
 
         primaryStage.setTitle("Cinema Rural — Filmes em Cartaz");
         primaryStage.setScene(scene);
@@ -55,8 +64,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-
-
+*/
 /* TELA DASHBOARD
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -89,7 +97,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
+
 
 
 
@@ -194,7 +202,8 @@ public class Main extends Application {
 }
 */
 
-/* Gerenciar Filmes
+//Gerenciar Filmes
+/*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -247,14 +256,14 @@ public class Main extends Application {
 }
 */
 
-
-/* Gerenciar Sessoes
+//Gerenciar Sessoes
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.gui.controllers_telas.GerenciarSessaoController;
 import br.ufrpe.cine_rural.model.tiposala.Comum;
+import br.ufrpe.cine_rural.model.tiposala.Vip;
 import br.ufrpe.cine_rural.model.tiposala.Imax;
 import br.ufrpe.cine_rural.negocios.FilmeNegocios;
 import br.ufrpe.cine_rural.negocios.SalaNegocios;
@@ -275,6 +284,7 @@ public class Main extends Application {
 
         salas.cadastrar(new Comum(1, 20));
         salas.cadastrar(new Imax(2, 30));
+        salas.cadastrar(new Vip(3, 20));
 
         RepositorioSessaoImpl sessoes =
                 new RepositorioSessaoImpl(filmes, salas);
@@ -314,7 +324,6 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
 
 /* Teste Formulario/Relatorios
 
