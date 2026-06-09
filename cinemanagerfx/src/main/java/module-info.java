@@ -8,7 +8,6 @@ module br.ufrpe.cine_rural {
     exports br.ufrpe.cine_rural.gui;
 
     opens br.ufrpe.cine_rural.gui.controllers_telas to javafx.fxml;
-    opens br.ufrpe.cine_rural.gui.controllers_telas.emergencia to javafx.fxml;
 
     opens br.ufrpe.cine_rural.model to javafx.base;
 }

@@ -22,7 +22,7 @@
             stylesheets="@DashEstilo2.css"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.DashBoardController">
+            fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.DashboardController">
     <top>
         <VBox spacing="10" styleClass="header">
             <padding>
