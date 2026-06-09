@@ -1,5 +1,6 @@
 package br.ufrpe.cine_rural.gui.controllers_telas.emergencia;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaLojinhaImpl;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
@@ -166,17 +167,48 @@ public class PagamentoProdutoController {
                 return;
             }
 
-             GeradorPDF.gerarNotaFiscalProduto(
+            GeradorPDF.gerarNotaFiscalProduto(
                     cliente,
                     itensVenda,
                     total
-             );
+            );
 
             VendaLojinha venda =
                     new VendaLojinha(itensVenda);
 
+            venda.setCliente(cliente);
+
+            venda.setFormaPagamento(
+                    comboPagamento.getValue()
+            );
+
+            venda.setDataVenda(
+                    java.time.LocalDateTime.now()
+            );
+
+            RepositorioProdutoImpl repositorioProduto =
+                    RepositorioProdutoImpl.getInstancia();
+
+
             RepositorioVendaLojinhaImpl repositorio =
                     new RepositorioVendaLojinhaImpl();
+
+            for (ItemVenda item : itensVenda) {
+
+                item.getProduto().reduzirEstoque(
+                        item.getQuantidade()
+                );
+
+                repositorioProduto.atualizar(
+                        item.getProduto()
+                );
+
+                System.out.println(
+                        item.getProduto().getNome()
+                                + " estoque restante = "
+                                + item.getProduto().getQtdEstoque()
+                );
+            }
 
             repositorio.cadastrar(venda);
 
