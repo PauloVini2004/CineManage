@@ -1,6 +1,6 @@
 package br.ufrpe.cine_rural.gui;
 
-/* SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
+// SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -41,7 +41,7 @@ public class Main extends Application {
                         .toExternalForm()
         );
 
-        // 5. Injeta os repositórios no controller — ele populará a tela a partir dos CSVs
+        // 5. Injeta os repositórios no controller a partir dos CSV's
         FilmesController filmesController = loader.getController();
         filmesController.setRepositorios(repositorioFilmes, repositorioSessoes);
 
@@ -55,11 +55,11 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
 
 
 
-/*TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
+
+/*TELA ATENDENTE <- PRODUTO -> PAGAMENTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

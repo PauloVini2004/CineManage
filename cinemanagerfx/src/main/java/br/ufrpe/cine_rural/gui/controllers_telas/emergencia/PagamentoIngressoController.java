@@ -30,6 +30,7 @@ public class PagamentoIngressoController {
 
     private ArrayList<Ingresso> ingressos;
     private double total;
+    public static Scene cenaAnterior;
 
     @FXML
     public void initialize() {
@@ -171,11 +172,10 @@ public class PagamentoIngressoController {
     private void voltarParaAssento() {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Assentos.fxml"));
-            Parent root = loader.load();
-
             Stage stage = (Stage) btnVoltar.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(
+                    PagamentoIngressoController.cenaAnterior
+            );
             stage.setTitle("Assentos");
             stage.show();
         } catch (Exception e) {

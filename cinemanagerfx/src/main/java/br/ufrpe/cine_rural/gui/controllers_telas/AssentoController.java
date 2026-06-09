@@ -215,6 +215,8 @@ public class AssentoController {
             if (nomeAssentosSelecionados.isEmpty()) return;
 
             try {
+                PagamentoIngressoController.cenaAnterior =
+                        painel.getScene();
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml")
                 );
