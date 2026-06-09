@@ -86,7 +86,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
     private void carregarCSV() throws IOException {
 
         File arquivo = new File(
-                "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/csv/filmes.csv"
+                "src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
         );
 
         if (!arquivo.exists()) {
@@ -128,7 +128,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
 
         BufferedWriter writer = new BufferedWriter(
                 new FileWriter(
-                        "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/csv/filmes.csv"
+                        "src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
                 )
         );
 

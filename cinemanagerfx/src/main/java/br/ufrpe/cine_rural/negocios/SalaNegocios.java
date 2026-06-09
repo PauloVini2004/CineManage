@@ -1,30 +1,27 @@
-package main.java.br.ufrpe.cine_rural.negocios;
+package br.ufrpe.cine_rural.negocios;
 
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Sala;
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Comum;
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Vip;
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Imax;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSala;
+import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSessao;
+import br.ufrpe.cine_rural.model.tiposala.Sala;
+import br.ufrpe.cine_rural.model.tiposala.Imax;
+import br.ufrpe.cine_rural.model.tiposala.Vip;
+import br.ufrpe.cine_rural.model.tiposala.Comum;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Controller responsável pelo cadastro e gestão de salas.
- *
- * REQ03 – Cadastrar salas com identificação e capacidade total de assentos.
- * REQ04 – Herança: Comum (preco=1.0), VIP (preco=3.0), IMAX (preco=2.0).
- *
- * Os construtores reais do seu código:
- *   Comum(int id, int capacidade)  → super(id, capacidade, 1.0)
- *   Imax (int id, int capacidade)  → super(id, capacidade, 2.0)
- *   Vip  (int id, int capacidade)  → super(id, capacidade, 3.0)
- *
- * O preço base é fixado pelo tipo de sala, mas pode ser sobrescrito via
- * atualizarPreco() para promoções específicas.
- */
-public class SalaController {
+
+public class SalaNegocios {
+
+    private final IRepositorioSala repositorioSala;
 
     private final List<Sala> salas = new ArrayList<>();
+
+    public SalaNegocios(IRepositorioSala repositorioSala) {
+        this.repositorioSala = repositorioSala;
+    }
 
     // -------------------------------------------------------------------------
     // REQ03 / REQ04 – Cadastro por tipo
@@ -86,7 +83,7 @@ public class SalaController {
     // -------------------------------------------------------------------------
 
     public List<Sala> listarSalas() {
-        return new ArrayList<>(salas);
+        return repositorioSala.listar();
     }
 
     public Sala buscarPorId(int id) {
