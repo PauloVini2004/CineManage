@@ -146,16 +146,47 @@ public class PagamentoProdutoController {
 
     private void realizarPagamento() {
 
+
+        String nome = txtNome.getText().trim();
+        String email = txtEmail.getText().trim();
+        String cpf = txtCpf.getText().trim();
+        String idadeTexto = txtIdade.getText().trim();
+
+        if (nome.isEmpty()) {
+            mostrarErro("Informe o nome do cliente.");
+            return;
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarErro("E-mail inválido.");
+            return;
+        }
+
+        if (!cpf.matches("\\d{11}")) {
+            mostrarErro("CPF deve conter exatamente 11 números.");
+            return;
+        }
+
+        if (!idadeTexto.matches("\\d+")) {
+            mostrarErro("Idade deve conter apenas números.");
+            return;
+        }
+
+        int idade = Integer.parseInt(idadeTexto);
+
+        if (idade < 0 || idade > 120) {
+            mostrarErro("Idade inválida.");
+            return;
+        }
+
         try {
 
             Cliente cliente =
                     new Cliente(
-                            txtNome.getText(),
-                            txtCpf.getText(),
-                            Integer.parseInt(
-                                    txtIdade.getText()
-                            ),
-                            txtEmail.getText()
+                            nome,
+                            cpf,
+                            idade,
+                            email
                     );
 
             if (comboPagamento.getValue() == null) {

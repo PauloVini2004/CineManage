@@ -61,7 +61,7 @@ public class Main extends Application {
 
 
 
-/*TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
+//TELA ATENDENTE <- PRODUTO -> DADOS CLIENTE (avançar não funciona. Ainda não foi fornecida a tela dados cliente no main para a conexão)
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -90,11 +90,10 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
 
 
 
-/*(voltar vai para home por enquanto)TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
+/*TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -127,6 +126,8 @@ public class Main extends Application {
     }
 }
 */
+
+
 // Gerenciar Filmes
 /*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
@@ -180,7 +181,9 @@ public class Main extends Application {
     }
 }
 */
-// Gerenciar Sessoes
+
+
+/* Gerenciar Sessoes
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
@@ -246,3 +249,4 @@ public class Main extends Application {
         launch(args);
     }
 }
+*/
