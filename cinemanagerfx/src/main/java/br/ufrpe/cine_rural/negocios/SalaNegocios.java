@@ -1,9 +1,9 @@
-package main.java.br.ufrpe.cine_rural.negocios;
+package br.ufrpe.cine_rural.negocios;
 
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Sala;
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Comum;
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Vip;
-import main.java.br.ufrpe.cine_rural.model.beans.HerancaSala.Imax;
+import br.ufrpe.cine_rural.model.tiposala.Sala;
+import br.ufrpe.cine_rural.model.tiposala.Comum;
+import br.ufrpe.cine_rural.model.tiposala.Vip;
+import br.ufrpe.cine_rural.model.tiposala.Imax;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  * O preço base é fixado pelo tipo de sala, mas pode ser sobrescrito via
  * atualizarPreco() para promoções específicas.
  */
-public class SalaController {
+public class SalaNegocios {
 
     private final List<Sala> salas = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class SalaController {
         validarCapacidade(capacidade);
         Comum sala = new Comum(id, capacidade);   // construtor real do seu projeto
         salas.add(sala);
-        System.out.println("[SalaController] Sala Comum #" + id + " cadastrada (cap.: " + capacidade + ").");
+        System.out.println("[SalaNegocios] Sala Comum #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
@@ -46,7 +46,7 @@ public class SalaController {
         validarCapacidade(capacidade);
         Vip sala = new Vip(id, capacidade);        // construtor real do seu projeto
         salas.add(sala);
-        System.out.println("[SalaController] Sala VIP #" + id + " cadastrada (cap.: " + capacidade + ").");
+        System.out.println("[SalaNegocios] Sala VIP #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
@@ -56,7 +56,7 @@ public class SalaController {
         validarCapacidade(capacidade);
         Imax sala = new Imax(id, capacidade);      // construtor real do seu projeto
         salas.add(sala);
-        System.out.println("[SalaController] Sala IMAX #" + id + " cadastrada (cap.: " + capacidade + ").");
+        System.out.println("[SalaNegocios] Sala IMAX #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
@@ -72,13 +72,13 @@ public class SalaController {
     public void atualizarPreco(Sala sala, double novoPreco) {
         if (novoPreco < 0) throw new IllegalArgumentException("Preço não pode ser negativo.");
         sala.setPreco(novoPreco);
-        System.out.println("[SalaController] Preço da sala #" + sala.getId() + " → R$ " + novoPreco);
+        System.out.println("[SalaNegocios] Preço da sala #" + sala.getId() + " → R$ " + novoPreco);
     }
 
     public void atualizarCapacidade(Sala sala, int novaCapacidade) {
         validarCapacidade(novaCapacidade);
         sala.setCapacidade(novaCapacidade);
-        System.out.println("[SalaController] Capacidade da sala #" + sala.getId() + " → " + novaCapacidade);
+        System.out.println("[SalaNegocios] Capacidade da sala #" + sala.getId() + " → " + novaCapacidade);
     }
 
     // -------------------------------------------------------------------------
@@ -100,7 +100,7 @@ public class SalaController {
 
     public void removerSala(Sala sala) {
         salas.remove(sala);
-        System.out.println("[SalaController] Sala #" + sala.getId() + " removida.");
+        System.out.println("[SalaNegocios] Sala #" + sala.getId() + " removida.");
     }
 
     // -------------------------------------------------------------------------

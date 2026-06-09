@@ -24,7 +24,6 @@ public class Main extends Application {
         );
 
 
-
         Scene sceneAssentos = new Scene(loader1.load());
         sceneAssentos.getStylesheets().add(
                 Main.class.getResource("/br/ufrpe/cine_rural/gui/EstiloAssentos.css")
@@ -127,7 +126,7 @@ public class Main extends Application {
     }
 }
 */
-// Gerenciar Sessões
+/* Gerenciar Sessões
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -178,7 +177,7 @@ public class Main extends Application {
     }
 }
 
-/* Gerenciar Filmes
+// Gerenciar Filmes
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
