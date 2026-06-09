@@ -22,6 +22,6 @@ public class GerenteController {
 
     @FXML
     public void onSairClick(){
-        Platform.exit();
+        ScreenManager.getInstance().showHomeScreen();
     }
 }

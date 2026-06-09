@@ -50,6 +50,13 @@ public class ScreenManager {
             // inicializando cena gerente
             this.gerenteScene = new Scene(gerentePane);
 
+            /*
+            BorderPane filmePane = FXMLLoader.load(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Filme.fxml"));
+            // inicializando cena gerente
+            this.filmesScene = new Scene(filmePane);
+            */
+
         } catch (IOException e) {
             e.printStackTrace();
         }

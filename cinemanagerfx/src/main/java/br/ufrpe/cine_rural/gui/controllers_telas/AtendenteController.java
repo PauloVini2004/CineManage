@@ -5,17 +5,22 @@ import javafx.scene.control.Button;
 
 public class AtendenteController {
     @FXML
-    private Button btnCprProd;
+    public Button btnCprProd;
 
     @FXML
-    private Button btnCprIngr;
+    public Button btnCprIngr;
 
     @FXML
-    private Button btnEncCaix;
+    public Button btnEncCxa;
 
     @FXML
     public void btnCprIngrAction() {
         ScreenManager.getInstance().showFilmesScreen();
+    }
+
+    @FXML
+    public void btnEncCxaAction() {
+        ScreenManager.getInstance().showHomeScreen();
     }
 
 

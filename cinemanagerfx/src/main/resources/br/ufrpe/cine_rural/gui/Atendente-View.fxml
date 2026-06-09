@@ -47,7 +47,7 @@
             <Region prefHeight="282.0" prefWidth="78.0" />
             <Button alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="141.0" scaleX="1.4" scaleY="1.4" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Comprar Produtos" textFill="WHITE" />
             <Region prefHeight="282.0" prefWidth="230.0" HBox.hgrow="ALWAYS" />
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="143.0" scaleX="1.4" scaleY="1.4" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Encerrar Caixa" textFill="WHITE" />
+            <Button fx:id="btnEncCxa" alignment="CENTER" mnemonicParsing="false" onAction="#btnEncCxaAction" prefHeight="26.0" prefWidth="143.0" scaleX="1.4" scaleY="1.4" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Encerrar Caixa" textFill="WHITE" />
             <Region layoutX="148.0" layoutY="10.0" prefHeight="282.0" prefWidth="61.0" />
          </children>
          <opaqueInsets>
