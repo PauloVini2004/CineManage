@@ -17,6 +17,9 @@ import javafx.scene.image.ImageView;
 
 import javafx.stage.Stage;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import javafx.stage.FileChooser;
 import java.io.File;
@@ -90,20 +93,7 @@ public class EditarProdutoController {
 
     private void selecionarImagem() {
 
-        FileChooser fileChooser =
-                new FileChooser();
-
-        fileChooser.setTitle(
-                "Selecionar Imagem"
-        );
-
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(
-                        "Imagens",
-                        "*.png",
-                        "*.jpg"
-                )
-        );
+        FileChooser fileChooser = new FileChooser();
 
         File arquivo =
                 fileChooser.showOpenDialog(
@@ -114,17 +104,42 @@ public class EditarProdutoController {
 
         if (arquivo != null) {
 
-            caminhoImagemSelecionada =
-                    arquivo.getAbsolutePath();
+            try {
 
-            Image img =
-                    new Image(
-                            arquivo.toURI().toString()
-                    );
+                Path pastaDestino =
+                        Path.of("ImagensProdutos");
 
-            imgProduto.setImage(img);
+                Files.createDirectories(pastaDestino);
+
+                Path destino =
+                        pastaDestino.resolve(
+                                arquivo.getName()
+                        );
+
+                Files.copy(
+                        arquivo.toPath(),
+                        destino,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+                caminhoImagemSelecionada =
+                        destino.toString();
+
+                Image img =
+                        new Image(
+                                destino
+                                        .toFile()
+                                        .toURI()
+                                        .toString()
+                        );
+
+                imgProduto.setImage(img);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
         }
-
     }
 
     public void carregarProduto(Produto produto) {
