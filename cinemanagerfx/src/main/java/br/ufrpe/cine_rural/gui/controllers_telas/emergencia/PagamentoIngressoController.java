@@ -1,5 +1,6 @@
 package br.ufrpe.cine_rural.gui.controllers_telas.emergencia;
 
+import br.ufrpe.cine_rural.gui.controllers_telas.AssentoController;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.VendaIngresso;
@@ -131,9 +132,21 @@ public class PagamentoIngressoController {
                 return;
             }
 
+            ArrayList<String> assentosVendidos =
+                    new ArrayList<>();
+
             for (Ingresso ingresso : ingressos) {
-                ingresso.setCliente(cliente);
+                assentosVendidos.add(
+                        ingresso.getAssento().toString()
+                );
             }
+
+            AssentoController.ocuparAssentos(
+                    ingressos.get(0)
+                            .getSessao()
+                            .getHorario(),
+                    assentosVendidos
+            );
 
             VendaIngresso venda = new VendaIngresso(ingressos);
             venda.setFormaPagamento(comboPagamento.getValue());

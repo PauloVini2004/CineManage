@@ -312,4 +312,27 @@ public class AssentoController {
             }
         }
     }
+
+    public static void ocuparAssentos(
+            LocalDateTime horarioSessao,
+            List<String> assentos
+    ) {
+        int[][] layout = layoutsPorSessao.get(horarioSessao);
+
+        if (layout == null) {
+            return;
+        }
+
+        for (String nome : assentos) {
+
+            int linha = nome.charAt(0) - 'A';
+
+            int coluna = Integer.parseInt(
+                    nome.substring(1)
+            ) - 1;
+
+            layout[linha][coluna] = 2;
+        }
+    }
+
 }
