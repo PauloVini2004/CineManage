@@ -38,8 +38,5 @@ build/
 ### Mac OS ###
 .DS_Store
 
-.mvn/
-.mvn/wrapper
-.mvnw
-.mvnw.cmd
-/out
+.idea/
+*.iml
