@@ -1,6 +1,13 @@
 package br.ufrpe.cine_rural.gui;
 
 /* SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
+import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
+import br.ufrpe.cine_rural.gui.controllers_telas.FilmesController;
+import br.ufrpe.cine_rural.model.tiposala.Comum;
+import br.ufrpe.cine_rural.model.tiposala.Imax;
+import br.ufrpe.cine_rural.model.tiposala.Vip;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,52 +16,43 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader loader1 = new FXMLLoader(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/Assentos.fxml")
+        // 1. Repositório de filmes — carrega filmes.csv automaticamente no construtor
+        RepositorioFilmeImpl repositorioFilmes = new RepositorioFilmeImpl();
+
+        // 2. Repositório de salas — salas pré-definidas (referenciadas pelo ID no sessoes.csv)
+        RepositorioSalaImpl repositorioSalas = new RepositorioSalaImpl();
+        repositorioSalas.cadastrar(new Comum(1, 80));   // Sala 1 → Comum
+        repositorioSalas.cadastrar(new Imax(2,  60));   // Sala 2 → Imax
+        repositorioSalas.cadastrar(new Vip(3,   30));   // Sala 3 → Vip
+
+        // 3. Repositório de sessões — carrega sessoes.csv usando os repositórios acima
+        RepositorioSessaoImpl repositorioSessoes =
+                new RepositorioSessaoImpl(repositorioFilmes, repositorioSalas);
+
+        // 4. Carrega a tela de Filmes
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml")
         );
-
-        FXMLLoader loader2 = new FXMLLoader(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml")
-        );
-
-        FXMLLoader loader3 = new FXMLLoader(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml")
-        );
-
-
-
-        Scene sceneAssentos = new Scene(loader1.load());
-        sceneAssentos.getStylesheets().add(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/EstiloAssentos.css")
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(
+                getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
                         .toExternalForm()
         );
 
-        Scene sceneFilmes = new Scene(loader2.load());
-        sceneFilmes.getStylesheets().add(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
-                        .toExternalForm()
-        );
+        // 5. Injeta os repositórios no controller — ele populará a tela a partir dos CSVs
+        FilmesController filmesController = loader.getController();
+        filmesController.setRepositorios(repositorioFilmes, repositorioSessoes);
 
-        Scene scenePagamento = new Scene(loader3.load());
-        scenePagamento.getStylesheets().add(
-                Main.class.getResource("/br/ufrpe/cine_rural/gui/Emergencia/EstiloPagamentoIngresso.css")
-                        .toExternalForm()
-        );
-
-
-
-        Stage stage1 = new Stage();
-        stage1.setTitle("Filmes");
-        stage1.setScene(sceneFilmes);
-        stage1.setResizable(false);
-
-        stage1.show();
+        primaryStage.setTitle("Cinema Rural — Filmes em Cartaz");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
 */
@@ -92,9 +90,41 @@ public class Main extends Application {
 }
 */
 
+/*TELA PAGAMENTO INGRESSO
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
+public class Main extends Application {
 
-//TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml"
+                )
+        );
+
+        Scene scene = new Scene(loader.load());
+
+        stage.setTitle("Listar Produto");
+        stage.setWidth(900);
+        stage.setHeight(700);
+        stage.setResizable(false);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+*/
+
+/*TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -126,10 +156,9 @@ public class Main extends Application {
         launch(args);
     }
 }
+*/
 
-
-// Gerenciar Filmes
-/*
+/* Gerenciar Filmes
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
