@@ -2,7 +2,7 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Idioma;
-import br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoIngressoController;
+import br.ufrpe.cine_rural.gui.controllers_telas.PagamentoIngressoController;
 import br.ufrpe.cine_rural.gui.dto.SalasMapas;
 import br.ufrpe.cine_rural.model.Assento;
 import br.ufrpe.cine_rural.model.Ingresso;

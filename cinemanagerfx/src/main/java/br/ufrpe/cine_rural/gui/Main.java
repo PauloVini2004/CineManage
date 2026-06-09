@@ -103,7 +103,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/br/ufrpe/cine_rural/gui/Emergencia/PagamentoIngresso.fxml"
+                        "/br/ufrpe/cine_rural/gui/TelasProduto/PagamentoIngresso.fxml"
                 )
         );
 

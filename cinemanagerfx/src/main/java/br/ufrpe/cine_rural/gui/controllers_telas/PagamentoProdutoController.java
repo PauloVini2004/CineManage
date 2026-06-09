@@ -1,4 +1,4 @@
-package br.ufrpe.cine_rural.gui.controllers_telas.emergencia;
+package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaLojinhaImpl;

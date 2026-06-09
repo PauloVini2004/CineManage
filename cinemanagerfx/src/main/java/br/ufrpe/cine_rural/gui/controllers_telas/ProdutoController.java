@@ -1,7 +1,6 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
-import br.ufrpe.cine_rural.gui.controllers_telas.emergencia.PagamentoProdutoController;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
@@ -33,7 +32,6 @@ import java.util.Map;
 import javafx.geometry.Pos;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 public class ProdutoController {
 
@@ -356,7 +354,7 @@ public class ProdutoController {
             FXMLLoader loader =
                     new FXMLLoader(
                             getClass().getResource(
-                                    "/br/ufrpe/cine_rural/gui/emergencia/PagamentoProduto.fxml"
+                                    "/br/ufrpe/cine_rural/gui/TelasProduto/PagamentoProduto.fxml"
                             )
                     );
 
