@@ -19,6 +19,11 @@ public class AtendenteController {
     }
 
     @FXML
+    public void btnCprProdAction() {
+        ScreenManager.getInstance().showProdutosScreen();
+    }
+
+    @FXML
     public void btnEncCxaAction() {
         ScreenManager.getInstance().showHomeScreen();
     }

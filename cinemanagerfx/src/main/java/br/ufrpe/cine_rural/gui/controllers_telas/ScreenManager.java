@@ -19,8 +19,7 @@ public class ScreenManager {
     private Scene atendenteScene;
     private Scene gerenteScene;
     private Scene filmesScene;
-    private Scene assentosScene;
-    private Scene pagamentoIngressoScene;
+    private Scene produtosScene;
 
 
     public static ScreenManager getInstance() {
@@ -50,12 +49,16 @@ public class ScreenManager {
             // inicializando cena gerente
             this.gerenteScene = new Scene(gerentePane);
 
-            /*
-            BorderPane filmePane = FXMLLoader.load(getClass().getResource(
-                    "/br/ufrpe/cine_rural/gui/Filme.fxml"));
-            // inicializando cena gerente
+            AnchorPane filmePane = FXMLLoader.load(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
+            // inicializando cena filme
             this.filmesScene = new Scene(filmePane);
-            */
+
+            AnchorPane produtosPane = FXMLLoader.load(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
+            // inicializando cena filme
+            this.produtosScene = new Scene(produtosPane);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,13 +101,8 @@ public class ScreenManager {
         this.mainStage.show();
     }
 
-    public void showAssentosScreen() {
-        this.mainStage.setScene(this.assentosScene);
-        this.mainStage.show();
-    }
-
-    public void showPagamentoIngressoScreen() {
-        this.mainStage.setScene(this.pagamentoIngressoScene);
+    public void showProdutosScreen() {
+        this.mainStage.setScene(this.produtosScene);
         this.mainStage.show();
     }
 }
