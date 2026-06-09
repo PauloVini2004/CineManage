@@ -11,14 +11,17 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+
 <BorderPane prefHeight="720.0"
             prefWidth="1280.0"
             xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.ufrpe.cine_rural.controller.RelatoriosDashboardController">
     <top>
         <VBox spacing="10" styleClass="header">
             <padding>
@@ -36,43 +39,52 @@
             <HBox spacing="20">
                 <VBox spacing="10" styleClass="card" prefWidth="300">
                     <Label text="Filtros"/>
-                    <ComboBox fx:id="cbFilmes" promptText="Selecione um filme"/>
-                    <DatePicker fx:id="dpInicio"/>
-                    <DatePicker fx:id="dpFim"/>
-                    <Button text="Pesquisar" styleClass="primary-button"/>
+                    <ComboBox fx:id="cbFilmes" promptText="Selecione um filme" maxWidth="Infinity"/>
+                    <DatePicker fx:id="dpInicio" maxWidth="Infinity"/>
+                    <DatePicker fx:id="dpFim" maxWidth="Infinity"/>
+                    <Button text="Pesquisar"
+                            styleClass="primary-button"
+                            maxWidth="Infinity"
+                            onAction="#onPesquisar"/>
                 </VBox>
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
                     <Label text="Bilheteria por Filme"/>
-                    <BarChart fx:id="graficoBilheteria">
-                        <xAxis>
-                            <CategoryAxis/>
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis/>
-                        </yAxis>
+                    <BarChart fx:id="graficoBilheteria" prefHeight="220" animated="false" VBox.vgrow="ALWAYS">
+                        <xAxis><CategoryAxis label="Filme"/></xAxis>
+                        <yAxis><NumberAxis label="Sessões"/></yAxis>
                     </BarChart>
-                    <ProgressBar fx:id="barraOcupacao"/>
+                    <ProgressBar fx:id="barraOcupacao" maxWidth="Infinity" progress="0"/>
                     <Label fx:id="lblTaxa" text="Taxa de Ocupação: 0%"/>
                 </VBox>
             </HBox>
             <HBox spacing="20">
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
                     <Label text="Bomboniere"/>
-                    <PieChart fx:id="graficoBomboniere"/>
+                    <PieChart fx:id="graficoBomboniere" prefHeight="220" animated="true"/>
                 </VBox>
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
-                    <Label text="Assentos Mais Ocupados"/>
-                    <TableView fx:id="tbAssentos"/>
+                    <Label text="Assentos Mais Ocupados (Top 10)"/>
+                    <TableView fx:id="tbAssentos" prefHeight="220" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colCodigo"     text="Assento"    prefWidth="160"/>
+                            <TableColumn fx:id="colFrequencia" text="Frequência" prefWidth="110"/>
+                        </columns>
+                        <placeholder><Label text="Nenhum dado disponível"/></placeholder>
+                    </TableView>
                 </VBox>
             </HBox>
             <VBox spacing="10" styleClass="card">
                 <Label text="Alertas e Notificações"/>
-                <ListView fx:id="listaAlertas"/>
+                <ListView fx:id="listaAlertas" prefHeight="120"/>
             </VBox>
             <HBox spacing="10">
-                <Button text="Exportar CSV" styleClass="primary-button"/>
-                <Button text="Atualizar Dashboard"/>
-                <Button text="Enviar E-mail"/>
+                <Button text="Exportar CSV"
+                        styleClass="primary-button"
+                        onAction="#onExportarCSV"/>
+                <Button text="Atualizar Dashboard"
+                        onAction="#onAtualizarDashboard"/>
+                <Button text="Enviar E-mail"
+                        onAction="#onEnviarEmail"/>
             </HBox>
         </VBox>
     </center>
