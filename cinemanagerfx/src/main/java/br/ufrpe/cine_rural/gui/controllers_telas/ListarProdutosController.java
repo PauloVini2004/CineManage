@@ -3,6 +3,8 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,7 +51,11 @@ public class ListarProdutosController {
         btnVoltar.setOnAction(e -> voltarParaGerente());
 
         btnAdicionar.setOnAction(e -> adicionarProduto());
+
+
     }
+
+
 
     private VBox criarCard(Produto produto) {
 
@@ -149,11 +155,33 @@ public class ListarProdutosController {
         ArrayList<Produto> produtos =
                 produtoNegocios.listarProdutos();
 
+        int baixoEstoque = 0;
+
         for (Produto produto : produtos) {
+
+            if(produto.getQtdEstoque() < 5){
+                baixoEstoque++;
+            }
 
             tileProdutos.getChildren().add(
                     criarCard(produto)
             );
+        }
+
+        if (baixoEstoque > 0) { //ou seja, se é verdadeiro
+
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING);
+
+            alert.setTitle("Atenção");
+            alert.setHeaderText("Produtos com baixo estoque");
+
+            alert.setContentText(
+                    "Existem " + baixoEstoque +
+                            " produto(s) com baixo estoque."
+            );
+
+            alert.showAndWait();
         }
     }
 
