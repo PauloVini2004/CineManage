@@ -146,6 +146,15 @@ public class PagamentoProdutoController {
 
     private void realizarPagamento() {
 
+        if (itensVenda == null || itensVenda.isEmpty()) {
+
+            mostrarErro(
+                    "Selecione pelo menos um produto antes de realizar o pagamento."
+            );
+
+            return;
+        }
+
 
         String nome = txtNome.getText().trim();
         String email = txtEmail.getText().trim();
@@ -263,6 +272,8 @@ public class PagamentoProdutoController {
 
             alert.showAndWait();
 
+            limparCampos();
+
         } catch (NumberFormatException e) {
 
             mostrarErro(
@@ -305,5 +316,25 @@ public class PagamentoProdutoController {
             System.out.println("Erro ao tentar voltar para a tela de Produto. Verifique o caminho do FXML.");
             e.printStackTrace();
         }
+    }
+
+    private void limparCampos() {
+
+        txtNome.clear();
+        txtEmail.clear();
+        txtCpf.clear();
+        txtIdade.clear();
+
+        comboPagamento.getSelectionModel().clearSelection();
+
+        txtResumoCompra.clear();
+
+        lblTotal.setText("TOTAL R$ 0,00");
+
+        if (itensVenda != null) {
+            itensVenda.clear();
+        }
+
+        total = 0;
     }
 }

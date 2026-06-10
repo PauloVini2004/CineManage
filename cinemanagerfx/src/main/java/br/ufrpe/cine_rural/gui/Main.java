@@ -64,7 +64,7 @@ public class Main extends Application {
         launch(args);
     }
 }
- */
+*/
 
 /* TELA DASHBOARD
 import javafx.application.Application;
@@ -135,7 +135,6 @@ public class Main extends Application {
 }
 */
 
-
 /*TELA PAGAMENTO INGRESSO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -202,6 +201,7 @@ public class Main extends Application {
         launch(args);
     }
 }
+
 
 //Gerenciar Filmes
 /*
@@ -360,6 +360,7 @@ public class Main extends Application {
     }
 }
 */
+
 
 /* Inicio da Main
 import javafx.application.Application;

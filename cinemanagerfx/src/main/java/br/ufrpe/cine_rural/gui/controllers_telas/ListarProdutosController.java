@@ -3,6 +3,7 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -168,20 +169,23 @@ public class ListarProdutosController {
             );
         }
 
-        if (baixoEstoque > 0) { //ou seja, se é verdadeiro
+        if (baixoEstoque > 0) {
 
-            Alert alert =
-                    new Alert(Alert.AlertType.WARNING);
+            int finalBaixoEstoque = baixoEstoque;
+            Platform.runLater(() -> {
 
-            alert.setTitle("Atenção");
-            alert.setHeaderText("Produtos com baixo estoque");
+                Alert alert = new Alert(Alert.AlertType.WARNING);
 
-            alert.setContentText(
-                    "Existem " + baixoEstoque +
-                            " produto(s) com baixo estoque."
-            );
+                alert.setTitle("Atenção");
+                alert.setHeaderText("Produtos com baixo estoque");
 
-            alert.showAndWait();
+                alert.setContentText(
+                        "Existem " + finalBaixoEstoque +
+                                " produto(s) com baixo estoque."
+                );
+
+                alert.showAndWait();
+            });
         }
     }
 

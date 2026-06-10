@@ -22,7 +22,6 @@ public class PagamentoIngressoController {
     @FXML private TextField txtEmail;
     @FXML private TextField txtCpf;
     @FXML private TextField txtIdade;
-    @FXML private ComboBox<String> comboMeiaEntrada;
     @FXML private ComboBox<String> comboPagamento;
     @FXML private TextArea txtResumoCompra;
     @FXML private Label lblTotal;
@@ -36,17 +35,26 @@ public class PagamentoIngressoController {
     @FXML
     public void initialize() {
         comboPagamento.setItems(FXCollections.observableArrayList("PIX", "Cartão", "Dinheiro"));
-        comboMeiaEntrada.setItems(FXCollections.observableArrayList("Sim", "Não"));
+        btnPagar.setDisable(true);
 
         btnPagar.setOnAction(e -> realizarPagamento());
         btnVoltar.setOnAction(e -> voltarParaAssento());
     }
 
+        public void receberIngressos(
+                ArrayList<Ingresso> ingressos
+        ) {
 
-    public void receberIngressos(ArrayList<Ingresso> ingressos) {
-        this.ingressos = ingressos;
-        atualizarResumo();
-    }
+            this.ingressos = ingressos;
+
+            atualizarResumo();
+
+            btnPagar.setDisable(
+                    ingressos == null ||
+                            ingressos.isEmpty()
+            );
+        }
+
 
     private void atualizarResumo() {
         if (ingressos == null || ingressos.isEmpty()) return;
@@ -79,6 +87,15 @@ public class PagamentoIngressoController {
     }
 
     private void realizarPagamento() {
+
+        if (ingressos == null || ingressos.isEmpty()) {
+
+            mostrarErro(
+                    "Selecione pelo menos um assento antes de realizar o pagamento."
+            );
+
+            return;
+        }
 
         String nome = txtNome.getText().trim();
         String email = txtEmail.getText().trim();
@@ -169,6 +186,7 @@ public class PagamentoIngressoController {
             alert.setHeaderText(null);
             alert.setContentText("Ingresso emitido com sucesso.");
             alert.showAndWait();
+            limparCampos();
 
         } catch (NumberFormatException e) {
             mostrarErro("Idade inválida.");
@@ -196,4 +214,25 @@ public class PagamentoIngressoController {
             e.printStackTrace();
         }
     }
+
+    private void limparCampos() {
+
+        txtNome.clear();
+        txtEmail.clear();
+        txtCpf.clear();
+        txtIdade.clear();
+
+        comboPagamento.getSelectionModel().clearSelection();
+
+        txtResumoCompra.clear();
+
+        lblTotal.setText("TOTAL R$ 0,00");
+
+        ingressos = new ArrayList<>();
+
+        btnPagar.setDisable(true);
+
+        total = 0;
+    }
 }
+//REQ19: Não permitir a venda de ingressos para menores de idade sem acompanhante caso a classificação seja restritiva.
