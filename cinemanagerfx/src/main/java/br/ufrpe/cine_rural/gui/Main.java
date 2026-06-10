@@ -325,9 +325,7 @@ public class Main extends Application {
     }
 }
 */
-
-
-// Teste Formulario/Relatorios
+/* Teste Formulario/Relatorios
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -360,7 +358,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-
+*/
 
 /* Inicio da Main
 import javafx.application.Application;

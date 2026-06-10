@@ -76,7 +76,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
 
     private void carregarCSV() throws IOException {
         File arquivo = new File(
-                "cinemanagefx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
+                "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
         );
 
         if (!arquivo.exists()) return;
@@ -108,7 +108,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
     }
 
     private String resolverCaminhoPoster(String titulo) {
-        String base = "cinemanagefx/br/ufrpe/cine_rural/gui/" + titulo.replace(" ", "_");
+        String base = "cinemanagerfx/br/ufrpe/cine_rural/gui/" + titulo.replace(" ", "_");
 
         if (getClass().getResourceAsStream(base + ".jpg") != null) {
             return base + ".jpg";
@@ -124,7 +124,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         System.out.println("Entrou em salvarCSV (filmes)");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(
-                "src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
+                "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
         ))) {
             for (Filme filme : filmes) {
                 writer.write(
