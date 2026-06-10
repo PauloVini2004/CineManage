@@ -31,22 +31,33 @@ import java.util.stream.Collectors;
  * REQ18 – Confirmação de compra por e-mail         (botão "Enviar E-mail")
  *
  * Todos os dados vêm exclusivamente dos arquivos CSV.
- * Caminhos assumidos na pasta resources (ajuste conforme seu projeto):
- *   filmes.csv   → id;titulo;sinopse;duracao;genero;classificacao
- *   sessoes.csv  → titulo_filme;id_sala;horario;idioma;status
- *   produtos.csv → id;nome;preco;estoque;imagem
+ * Caminhos assumidos na pasta resources:
+ *   filmes.csv         → titulo;tipo;duracao;genero;classificacao;imagem
+ *   sessoes.csv        → titulo_filme;id_sala;horario;idioma;status
+ *   produtos.csv       → id;nome;preco;estoque;imagem
+ *   vendas_ingresso.csv→ DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente
  */
 public class DashboardController {
 
     // ── CSV paths (relativo ao classpath / resources) ────────────────────────
-    private static final String CSV_FILMES   = "filmes.csv";
-    private static final String CSV_SESSOES  = "sessoes.csv";
-    private static final String CSV_PRODUTOS = "produtos.csv";
+    private static final String CSV_FILMES          = "filmes.csv";
+    private static final String CSV_SESSOES         = "sessoes.csv";
+    private static final String CSV_PRODUTOS        = "produtos.csv";
+    private static final String CSV_VENDAS          = "vendas_ingresso.csv";
+
+    // Prefixo do classpath onde os CSVs estão publicados após o build
+    private static final String CLASSPATH_PREFIX = "/br/ufrpe/cine_rural/dados/arquivoscsv/";
+    // Fallback em desenvolvimento — caminhos relativos ao working directory do IntelliJ
+    private static final String DEV_PATH_PREFIX  = "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/";
 
     // Limiar de estoque baixo (REQ17)
     private static final int ESTOQUE_BAIXO = 15;
     // Limiar de sessões para "baixa procura" (REQ16)
     private static final int SESSOES_BAIXA_PROCURA = 1;
+
+    // Formatter flexível: aceita "2026-06-12T19:30" e "2026-06-12T19:30:00"
+    private static final DateTimeFormatter FMT_HORARIO =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss]");
 
     // ── FXML ─────────────────────────────────────────────────────────────────
     @FXML private ComboBox<String>              cbFilmes;
@@ -115,10 +126,26 @@ public class DashboardController {
         }
     }
 
+    /** Venda de ingresso carregada do CSV. */
+    private static class VendaIngresso {
+        final LocalDateTime dataVenda;
+        final String        filme;
+        final String        assento;
+        final double        preco;
+
+        VendaIngresso(LocalDateTime dataVenda, String filme, String assento, double preco) {
+            this.dataVenda = dataVenda;
+            this.filme     = filme;
+            this.assento   = assento;
+            this.preco     = preco;
+        }
+    }
+
     // ── Dados em memória ──────────────────────────────────────────────────────
-    private List<String>     filmes   = new ArrayList<>();
-    private List<SessaoCSV>  sessoes  = new ArrayList<>();
-    private List<Produto>    produtos = new ArrayList<>();
+    private List<String>         filmes   = new ArrayList<>();
+    private List<SessaoCSV>      sessoes  = new ArrayList<>();
+    private List<Produto>        produtos = new ArrayList<>();
+    private List<VendaIngresso>  vendas   = new ArrayList<>();
 
     // ── Capacidade padrão por sala (ajuste conforme seu modelo) ──────────────
     private static final int CAPACIDADE_SALA = 50;
@@ -151,11 +178,12 @@ public class DashboardController {
         filmes   = lerFilmes();
         sessoes  = lerSessoes();
         produtos = lerProdutos();
+        vendas   = lerVendas();
     }
 
     /**
-     * Lê filmes.csv  →  titulo;sinopse;duracao;genero;classificacao
-     * (O campo "titulo" é o primeiro.)
+     * Lê filmes.csv  →  titulo;tipo;duracao;genero;classificacao;imagem
+     * Pega apenas o título (coluna 0).
      */
     private List<String> lerFilmes() {
         List<String> lista = new ArrayList<>();
@@ -176,10 +204,10 @@ public class DashboardController {
 
     /**
      * Lê sessoes.csv  →  titulo_filme;id_sala;horario;idioma;status
+     * Horário aceita formato com ou sem segundos (ex.: "2026-06-12T19:30").
      */
     private List<SessaoCSV> lerSessoes() {
         List<SessaoCSV> lista = new ArrayList<>();
-        DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         try (BufferedReader br = abrirCSV(CSV_SESSOES)) {
             if (br == null) return lista;
             String linha;
@@ -191,11 +219,12 @@ public class DashboardController {
                 try {
                     String        titulo  = p[0].trim();
                     int           sala    = Integer.parseInt(p[1].trim());
-                    LocalDateTime horario = LocalDateTime.parse(p[2].trim(), fmt);
+                    // FMT_HORARIO aceita "HH:mm" e "HH:mm:ss"
+                    LocalDateTime horario = LocalDateTime.parse(p[2].trim(), FMT_HORARIO);
                     String        idioma  = p[3].trim();
                     String        status  = p[4].trim();
                     lista.add(new SessaoCSV(titulo, sala, horario, idioma, status));
-                } catch (Exception ignored) { /* linha malformada */ }
+                } catch (Exception ignored) { /* linha malformada — ignora silenciosamente */ }
             }
         } catch (IOException e) {
             alertaErro("Erro ao ler sessoes.csv: " + e.getMessage());
@@ -222,7 +251,7 @@ public class DashboardController {
                     double preco   = Double.parseDouble(p[2].trim().replace(",", "."));
                     int    estoque = Integer.parseInt(p[3].trim());
                     lista.add(new Produto(id, nome, preco, estoque));
-                } catch (Exception ignored) { /* linha malformada */ }
+                } catch (Exception ignored) { /* linha malformada — ignora silenciosamente */ }
             }
         } catch (IOException e) {
             alertaErro("Erro ao ler produtos.csv: " + e.getMessage());
@@ -231,26 +260,57 @@ public class DashboardController {
     }
 
     /**
-     * Tenta abrir o CSV primeiro como recurso do classpath,
-     * depois como arquivo no diretório de trabalho.
+     * Le vendas_ingresso.csv  ->  DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente
+     * Pula o cabecalho automaticamente.
+     * Formato do horario: 2026-06-09T02:14:02.320962700 (com nanosegundos)
+     */
+    private List<VendaIngresso> lerVendas() {
+        List<VendaIngresso> lista = new ArrayList<>();
+        // Formatter flexivel: aceita segundos com ou sem fracoes (nanosegundos incluidos)
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS][.SSSSSS][.SSS]");
+        try (BufferedReader br = abrirCSV(CSV_VENDAS)) {
+            if (br == null) return lista;
+            String linha;
+            boolean primeiraLinha = true;
+            while ((linha = br.readLine()) != null) {
+                linha = linha.trim();
+                if (linha.isEmpty()) continue;
+                if (primeiraLinha) { primeiraLinha = false; continue; } // pula cabecalho
+                String[] p = linha.split(";", -1);
+                if (p.length < 6) continue;
+                try {
+                    LocalDateTime data   = LocalDateTime.parse(p[0].trim(), fmt);
+                    String        filme  = p[2].trim();
+                    String        assento= p[3].trim();
+                    double        preco  = Double.parseDouble(p[5].trim().replace(",", "."));
+                    lista.add(new VendaIngresso(data, filme, assento, preco));
+                } catch (Exception ignored) { /* linha malformada */ }
+            }
+        } catch (IOException e) {
+            alertaErro("Erro ao ler vendas_ingresso.csv: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    /**
+     * Tenta abrir o CSV em dois locais, nessa ordem:
+     *  1. Classpath: CLASSPATH_PREFIX + arquivo  (JAR / apos build)
+     *  2. DEV_PATH_PREFIX + arquivo              (desenvolvimento via IDE)
      */
     private BufferedReader abrirCSV(String nomeArquivo) {
-        InputStream is = getClass().getResourceAsStream(nomeArquivo);
-        if (is == null)
-            is = getClass().getResourceAsStream("/br/ufrpe/cine_rural/dados/" + nomeArquivo);
+        // 1. Classpath (funciona no JAR apos build)
+        InputStream is = getClass().getResourceAsStream(CLASSPATH_PREFIX + nomeArquivo);
         if (is != null)
             return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
-        // Fallback: arquivo no diretório corrente
-        File f = new File(nomeArquivo);
-        if (!f.exists()) f = new File("src/main/resources/br/ufrpe/cine_rural/dados/" + nomeArquivo);
+        // 2. Filesystem relativo ao working directory (desenvolvimento)
+        File f = new File(DEV_PATH_PREFIX + nomeArquivo);
         if (f.exists()) {
-            try {
-                return new BufferedReader(new InputStreamReader(
-                        new FileInputStream(f), StandardCharsets.UTF_8));
-            } catch (FileNotFoundException ignored) {}
+            try { return new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)); }
+            catch (FileNotFoundException ignored) {}
         }
-        alertaErro("Arquivo não encontrado: " + nomeArquivo);
+
+        alertaErro("Arquivo nao encontrado: " + nomeArquivo);
         return null;
     }
 
@@ -379,30 +439,45 @@ public class DashboardController {
         graficoBilheteria.getData().clear();
         graficoBilheteria.setAnimated(false);
 
-        // Conta sessões por filme (proxy de bilheteria)
-        Map<String, Long> sessoesFilme = sessoesFiltradas.stream()
+        // Filtrar vendas pelo mesmo intervalo de datas e filme selecionados
+        String    filme  = cbFilmes.getValue();
+        LocalDate inicio = dpInicio.getValue();
+        LocalDate fim    = dpFim.getValue();
+
+        List<VendaIngresso> vendasFiltradas = vendas.stream()
+                .filter(v -> filme == null || filme.isBlank()
+                        || v.filme.equalsIgnoreCase(filme))
+                .filter(v -> inicio == null
+                        || !v.dataVenda.toLocalDate().isBefore(inicio))
+                .filter(v -> fim == null
+                        || !v.dataVenda.toLocalDate().isAfter(fim))
+                .collect(Collectors.toList());
+
+        // REQ12: receita real por filme (soma dos precos dos ingressos vendidos)
+        Map<String, Double> receitaFilme = vendasFiltradas.stream()
                 .collect(Collectors.groupingBy(
-                        s -> s.tituloFilme, Collectors.counting()));
+                        v -> v.filme, Collectors.summingDouble(v -> v.preco)));
 
         XYChart.Series<String, Number> serie = new XYChart.Series<>();
-        serie.setName("Sessões");
+        serie.setName("Receita (R$)");
 
-        sessoesFilme.entrySet().stream()
-                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+        receitaFilme.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
                 .forEach(e -> serie.getData().add(
                         new XYChart.Data<>(e.getKey(), e.getValue())));
 
         graficoBilheteria.getData().add(serie);
 
-        // Taxa de ocupação estimada: (sessões × capacidade) / capacidade máxima total
-        int totalSessoes   = sessoesFiltradas.size();
-        int capacidadeTotal = filmes.isEmpty() ? 1 : filmes.size() * CAPACIDADE_SALA;
-        // Considera 60% como ocupação média estimada por sessão
-        double taxa = totalSessoes == 0 ? 0.0
-                : Math.min(1.0, (totalSessoes * CAPACIDADE_SALA * 0.60) / capacidadeTotal);
+        // Taxa de ocupacao real: ingressos vendidos / capacidade total das sessoes filtradas
+        int totalIngressos  = vendasFiltradas.size();
+        int totalCapacidade = sessoesFiltradas.isEmpty() ? 1
+                : sessoesFiltradas.size() * CAPACIDADE_SALA;
+        double taxa = totalIngressos == 0 ? 0.0
+                : Math.min(1.0, (double) totalIngressos / totalCapacidade);
 
         barraOcupacao.setProgress(taxa);
-        lblTaxa.setText(String.format("Taxa de Ocupação: %.1f%%", taxa * 100));
+        lblTaxa.setText(String.format("Taxa de Ocupacao: %.1f%% (%d ingressos / %d lugares)",
+                taxa * 100, totalIngressos, totalCapacidade));
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -412,14 +487,32 @@ public class DashboardController {
     private void carregarBomboniere() {
         ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
 
-        produtos.forEach(p ->
-                dados.add(new PieChart.Data(
-                        p.nome + " (R$" + String.format("%.2f", p.preco) + ")",
-                        p.estoque)));
+        // REQ13: vendas de ingressos por filme no periodo (receita real por filme)
+        LocalDate inicio = dpInicio.getValue();
+        LocalDate fim    = dpFim.getValue();
+
+        Map<String, Double> vendasPorFilme = vendas.stream()
+                .filter(v -> inicio == null || !v.dataVenda.toLocalDate().isBefore(inicio))
+                .filter(v -> fim    == null || !v.dataVenda.toLocalDate().isAfter(fim))
+                .collect(Collectors.groupingBy(v -> v.filme,
+                        Collectors.summingDouble(v -> v.preco)));
+
+        if (vendasPorFilme.isEmpty()) {
+            // Sem vendas no periodo: exibe estoque da bomboniere como fallback
+            produtos.forEach(p -> dados.add(new PieChart.Data(
+                    p.nome + " (estoque: " + p.estoque + ")", p.estoque)));
+            graficoBomboniere.setTitle("Estoque Bomboniere (sem vendas no periodo)");
+        } else {
+            vendasPorFilme.entrySet().stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                    .forEach(e -> dados.add(new PieChart.Data(
+                            e.getKey() + " (R$" + String.format("%.2f", e.getValue()) + ")",
+                            e.getValue())));
+            graficoBomboniere.setTitle("Receita por Filme no Periodo");
+        }
 
         graficoBomboniere.setData(dados);
         graficoBomboniere.setAnimated(true);
-        graficoBomboniere.setTitle("Estoque / Vendas Bomboniere");
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -427,31 +520,25 @@ public class DashboardController {
     // ─────────────────────────────────────────────────────────────────────────
 
     private void carregarAssentos(List<SessaoCSV> sessoesFiltradas) {
-        // Simula frequência de ocupação a partir do número de sessões por sala
-        Map<String, Long> frequencia = sessoesFiltradas.stream()
-                .collect(Collectors.groupingBy(
-                        s -> "Sala " + s.idSala, Collectors.counting()));
+        // REQ15: frequencia real de cada assento a partir das vendas de ingresso
+        String    filme  = cbFilmes.getValue();
+        LocalDate inicio = dpInicio.getValue();
+        LocalDate fim    = dpFim.getValue();
 
-        // Expande por assento (A1–E10) e distribui frequência proporcionalmente
-        List<DashboardController.AssentoResumo> lista = new ArrayList<>();
-        String[] fileiras = {"A", "B", "C", "D", "E"};
-        Random rnd = new Random(42); // seed fixo → resultados determinísticos
+        Map<String, Long> frequencia = vendas.stream()
+                .filter(v -> filme == null || filme.isBlank()
+                        || v.filme.equalsIgnoreCase(filme))
+                .filter(v -> inicio == null
+                        || !v.dataVenda.toLocalDate().isBefore(inicio))
+                .filter(v -> fim == null
+                        || !v.dataVenda.toLocalDate().isAfter(fim))
+                .collect(Collectors.groupingBy(v -> v.assento, Collectors.counting()));
 
-        for (Map.Entry<String, Long> entry : frequencia.entrySet()) {
-            long base = entry.getValue();
-            for (String fil : fileiras) {
-                for (int col = 1; col <= 10; col++) {
-                    int freq = (int) (base + rnd.nextInt(5));
-                    lista.add(new AssentoResumo(fil + col + " (" + entry.getKey() + ")", freq));
-                }
-            }
-        }
-
-        // Exibe os 10 mais ocupados
         ObservableList<AssentoResumo> top10 = FXCollections.observableArrayList(
-                lista.stream()
-                        .sorted(Comparator.comparingInt(AssentoResumo::getFrequencia).reversed())
+                frequencia.entrySet().stream()
+                        .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                         .limit(10)
+                        .map(e -> new AssentoResumo(e.getKey(), e.getValue().intValue()))
                         .collect(Collectors.toList()));
 
         tbAssentos.setItems(top10);
@@ -464,14 +551,18 @@ public class DashboardController {
     private void carregarAlertas() {
         ObservableList<String> alertas = FXCollections.observableArrayList();
 
-        // REQ16 – filmes com baixa procura
+        // REQ16 – filmes com baixa procura: baseado em ingressos vendidos reais
         filmes.forEach(filme -> {
-            long count = sessoes.stream()
+            long ingressos = vendas.stream()
+                    .filter(v -> v.filme.equalsIgnoreCase(filme))
+                    .count();
+            long sessoesCadastradas = sessoes.stream()
                     .filter(s -> s.tituloFilme.equalsIgnoreCase(filme))
                     .count();
-            if (count <= SESSOES_BAIXA_PROCURA) {
+            if (ingressos <= SESSOES_BAIXA_PROCURA) {
                 alertas.add("⚠ Baixa procura: \"" + filme
-                        + "\" — apenas " + count + " sessão(ões) cadastrada(s).");
+                        + "\" — " + ingressos + " ingresso(s) vendido(s) em "
+                        + sessoesCadastradas + " sessão(ões).");
             }
         });
 
