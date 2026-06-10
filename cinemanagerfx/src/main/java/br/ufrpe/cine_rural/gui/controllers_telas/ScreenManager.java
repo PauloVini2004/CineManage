@@ -79,9 +79,6 @@ public class ScreenManager {
                     "/br/ufrpe/cine_rural/gui/TelasProduto/Produto.fxml"));
             this.produtosScene = new Scene(produtosPane);
 
-            // listarProdutosScene é carregada sob demanda em showListarProdutosScreen()
-            // para evitar que o alerta de estoque baixo dispare na inicialização
-
             ScrollPane gerenciarFilmes = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Gerenciar filmes.fxml"));
             this.gerenciarFilmeScene = new Scene(gerenciarFilmes);
