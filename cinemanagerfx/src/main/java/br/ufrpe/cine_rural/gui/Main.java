@@ -2,7 +2,7 @@ package br.ufrpe.cine_rural.gui;
 
 
 // SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
-/*
+
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -64,7 +64,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
+
 /* TELA DASHBOARD
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -257,7 +257,7 @@ public class Main extends Application {
 */
 
 //Gerenciar Sessoes
-
+/*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;

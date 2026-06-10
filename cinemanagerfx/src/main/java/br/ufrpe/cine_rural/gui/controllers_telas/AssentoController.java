@@ -202,7 +202,16 @@ public class AssentoController {
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/br/ufrpe/cine_rural/gui/PagamentoIngresso.fxml")
                 );
+
+
                 Scene scene = new Scene(loader.load());
+
+                scene.getStylesheets().add(
+                        getClass().getResource(
+                                "/br/ufrpe/cine_rural/gui/EstiloPagamentoIngresso.css"
+                        ).toExternalForm()
+                );
+
                 PagamentoIngressoController controller = loader.getController();
 
                 double precoDinamico = 10.0;
@@ -224,12 +233,6 @@ public class AssentoController {
                 }
 
                 controller.receberIngressos(ingressos);
-
-                scene.getStylesheets().add(
-                        getClass().getResource(
-                                "/br/ufrpe/cine_rural/gui/EstiloPagamentoIngresso.css"
-                        ).toExternalForm()
-                );
 
                 Stage stageAtual = (Stage) painel.getScene().getWindow();
                 stageAtual.setTitle("Pagamento");

@@ -1,6 +1,5 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
-
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.negocios.FilmeNegocios;
@@ -131,6 +130,12 @@ public class FilmesController {
                     getClass().getResource("/br/ufrpe/cine_rural/gui/Assentos.fxml")
             );
             Scene scene = new Scene(loader.load());
+
+            scene.getStylesheets().add(
+                    getClass()
+                            .getResource("/br/ufrpe/cine_rural/gui/EstiloAssentos.css")
+                            .toExternalForm()
+            );
 
             AssentoController  controller = loader.getController();
             controller.setNegocios(filmeNegocios, sessaoNegocios);
