@@ -326,8 +326,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Stage mainStage = ScreenManager.getInstance().getMainStage();
-        ScreenManager.getInstance().setMainStage(mainStage);
+        ScreenManager.getInstance().setMainStage(stage);
 
 
         FXMLLoader loader = new FXMLLoader(
