@@ -1,5 +1,40 @@
 package br.ufrpe.cine_rural.gui;
 
+import br.ufrpe.cine_rural.gui.controllers_telas.ScreenManager;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        ScreenManager.getInstance().setMainStage(stage);
+
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/br/ufrpe/cine_rural/gui/home-view.fxml"
+                )
+        );
+
+        Scene scene = new Scene(loader.load());
+
+        stage.resizableProperty().setValue(Boolean.FALSE);
+        stage.setTitle("Home");
+        stage.setWidth(900);
+        stage.setHeight(700);
+        ScreenManager.getInstance().setMainStage(stage);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
 
 // SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
 /*
@@ -187,7 +222,7 @@ public class Main extends Application {
 */
 
 //Gerenciar Filmes
-
+/*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -316,39 +351,7 @@ public class Main extends Application {
 }
 */
 
-//Inicio da Main
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-public class Main extends Application {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        ScreenManager.getInstance().setMainStage(stage);
 
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource(
-                        "/br/ufrpe/cine_rural/gui/home-view.fxml"
-                )
-        );
 
-        Scene scene = new Scene(loader.load());
-
-        stage.resizableProperty().setValue(Boolean.FALSE);
-        stage.setTitle("Home");
-        stage.setWidth(900);
-        stage.setHeight(700);
-        ScreenManager.getInstance().setMainStage(stage);
-
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
 
