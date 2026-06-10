@@ -611,25 +611,7 @@ public class DashboardController {
         a.showAndWait();
     }@FXML
     private void onVoltar() {
-        try {
-
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/br/ufrpe/cine_rural/gui/telas/MenuPrincipal.fxml"));
-
-            Parent root = loader.load();
-
-            Stage stage = (Stage) graficoBilheteria
-                    .getScene()
-                    .getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Menu Principal");
-            stage.show();
-
-        } catch (IOException e) {
-            alertaErro("Erro ao voltar: " + e.getMessage());
-        }
+        ScreenManager.getInstance().showGerenteScreen();
     }
 
 

@@ -29,7 +29,7 @@ public class ScreenManager {
     private Scene gerenciarFilmeScene;
     private Scene gerenciarSessoesScene;
     private Scene relatorioScene;
-    private Scene ingressosScene;
+    private Scene assentosScene;
 
     public static ScreenManager getInstance() {
         if (instance == null) {
@@ -81,6 +81,11 @@ public class ScreenManager {
                     "/br/ufrpe/cine_rural/gui/DashBoard.fxml"));
             // inicializando relatorio
             this.relatorioScene= new Scene(relatorioPane);
+
+            AnchorPane assentosPane = FXMLLoader.load(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Assentos.fxml"));
+            // inicializando relatorio
+            this.assentosScene = new Scene(assentosPane);
 
             //Cena filmes
 
@@ -149,6 +154,11 @@ public class ScreenManager {
 
     public void showRelatorioScreen() {
         this.mainStage.setScene(this.relatorioScene);
+        this.mainStage.show();
+    }
+
+    public void showAssentosScreen() {
+        this.mainStage.setScene(this.assentosScene);
         this.mainStage.show();
     }
 }

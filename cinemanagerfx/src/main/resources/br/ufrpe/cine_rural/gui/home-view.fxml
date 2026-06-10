@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.HomeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.HomeController">
    <center>
-      <Pane fx:id="painelCentral" prefHeight="0.0" prefWidth="600.0" style="-fx-background-color: RED;" BorderPane.alignment="CENTER">
+      <Pane fx:id="painelCentral" prefHeight="509.0" prefWidth="900.0" style="-fx-background-color: RED;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="imageCentral" fitHeight="554.0" fitWidth="900.0" pickOnBounds="true" smooth="false">
                <image>
@@ -40,4 +40,11 @@
          </children>
       </HBox>
    </bottom>
+   <top>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnSair" mnemonicParsing="false" onAction="#btnSairAction" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Fechar" textFill="WHITE" />
+         </children>
+      </HBox>
+   </top>
 </BorderPane>

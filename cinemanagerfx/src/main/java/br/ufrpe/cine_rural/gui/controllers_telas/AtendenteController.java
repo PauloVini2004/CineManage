@@ -18,6 +18,9 @@ public class AtendenteController {
     private Button btnEncCxa;
 
     @FXML
+    private Button btnText;
+
+    @FXML
     public void btnCprIngrAction() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml"));
@@ -73,5 +76,11 @@ public class AtendenteController {
         }
     }
 
+    /*
+    @FXML
+    public void btnTextAction() {
+        ScreenManager.getInstance().showAssentosScreen();
+    }
+    */
 
 }

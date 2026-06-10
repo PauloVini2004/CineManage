@@ -36,6 +36,8 @@ public class HomeController {
     @FXML
     private Button btnAtendente;
 
+    @FXML private Button btnSair;
+
     @FXML
     public void btnGerenteAction() throws IOException {
         TextInputDialog tiDialog = new TextInputDialog();
@@ -82,6 +84,11 @@ public class HomeController {
     public void initialize() {
         imageCentral.fitWidthProperty().bind(painelCentral.widthProperty());
         imageCentral.fitHeightProperty().bind(painelCentral.heightProperty());
+    }
+
+    @FXML
+    public void btnSairAction() throws IOException {
+        Platform.exit();
     }
 
 }

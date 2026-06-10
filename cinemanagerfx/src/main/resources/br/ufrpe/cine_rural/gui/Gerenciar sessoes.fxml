@@ -1,95 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="800.0"
-            prefWidth="1000.0"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.GerenciarSessaoController">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.GerenciarSessaoController">
 
     <children>
 
-        <VBox AnchorPane.bottomAnchor="20.0"
-              AnchorPane.leftAnchor="20.0"
-              AnchorPane.rightAnchor="20.0"
-              AnchorPane.topAnchor="20.0"
-              spacing="20.0">
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
             <children>
+            <Button fx:id="btnSair" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: #b90000; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: white;" text="Voltar" textFill="WHITE" />
 
-                <Label text="Gerenciar Sessões"
-                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #b90000;" text="Gerenciar Sessões" textFill="WHITE" />
 
                 <Separator />
 
                 <GridPane hgap="16.0" vgap="14.0">
 
                     <columnConstraints>
-                        <ColumnConstraints minWidth="100.0"
-                                           prefWidth="120.0" />
-                        <ColumnConstraints hgrow="ALWAYS"
-                                           prefWidth="500.0" />
+                        <ColumnConstraints minWidth="100.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="ALWAYS" prefWidth="500.0" />
                     </columnConstraints>
 
                     <children>
 
-                        <Label text="Filme:"
-                               style="-fx-font-weight: bold;"
-                               GridPane.rowIndex="0"/>
+                        <Label style="-fx-font-weight: bold;" text="Filme:" textFill="WHITE" GridPane.rowIndex="0" />
 
-                        <ComboBox fx:id="cbFilme"
-                                  promptText="Selecione um filme"
-                                  GridPane.columnIndex="1"
-                                  GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="cbFilme" promptText="Selecione um filme" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Sala:"
-                               style="-fx-font-weight: bold;"
-                               GridPane.rowIndex="1"/>
+                        <Label style="-fx-font-weight: bold;" text="Sala:" textFill="WHITE" GridPane.rowIndex="1" />
 
-                        <ComboBox fx:id="cbSala"
-                                  promptText="Selecione uma sala"
-                                  GridPane.columnIndex="1"
-                                  GridPane.rowIndex="1"/>
+                        <ComboBox fx:id="cbSala" promptText="Selecione uma sala" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="Idioma:"
-                               style="-fx-font-weight: bold;"
-                               GridPane.rowIndex="2"/>
+                        <Label style="-fx-font-weight: bold;" text="Idioma:" textFill="WHITE" GridPane.rowIndex="2" />
 
-                        <ComboBox fx:id="cbIdioma"
-                                  promptText="Selecione o idioma"
-                                  GridPane.columnIndex="1"
-                                  GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="cbIdioma" promptText="Selecione o idioma" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label text="Status:"
-                               style="-fx-font-weight: bold;"
-                               GridPane.rowIndex="3"/>
+                        <Label style="-fx-font-weight: bold;" text="Status:" textFill="WHITE" GridPane.rowIndex="3" />
 
-                        <ComboBox fx:id="cbStatus"
-                                  promptText="Selecione o status"
-                                  GridPane.columnIndex="1"
-                                  GridPane.rowIndex="3"/>
+                        <ComboBox fx:id="cbStatus" promptText="Selecione o status" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                        <Label text="Data:"
-                               style="-fx-font-weight: bold;"
-                               GridPane.rowIndex="4"/>
+                        <Label style="-fx-font-weight: bold;" text="Data:" textFill="WHITE" GridPane.rowIndex="4" />
 
-                        <DatePicker fx:id="dpData"
-                                    GridPane.columnIndex="1"
-                                    GridPane.rowIndex="4"/>
+                        <DatePicker fx:id="dpData" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                        <Label text="Hora:"
-                               style="-fx-font-weight: bold;"
-                               GridPane.rowIndex="5"/>
+                        <Label style="-fx-font-weight: bold;" text="Hora:" textFill="WHITE" GridPane.rowIndex="5" />
 
-                        <TextField fx:id="txtHora"
-                                   promptText="Ex: 19:30"
-                                   GridPane.columnIndex="1"
-                                   GridPane.rowIndex="5"/>
+                        <TextField fx:id="txtHora" promptText="Ex: 19:30" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                     </children>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
 
                 </GridPane>
 
@@ -97,13 +78,7 @@
 
                     <children>
 
-                        <Button text="Adicionar Sessão"
-                                onAction="#cadastrarSessao"
-                                style="-fx-background-color: #2ECC71;
-                                       -fx-text-fill: white;
-                                       -fx-font-size: 14px;
-                                       -fx-font-weight: bold;
-                                       -fx-padding: 10px 24px;" />
+                        <Button onAction="#cadastrarSessao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 24px; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: white;" text="Adicionar Sessão" />
 
                     </children>
 
@@ -115,53 +90,35 @@
 
                     <children>
 
-                        <HBox alignment="CENTER_LEFT"
-                              spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
 
                             <children>
 
-                                <Label text="Sessões Cadastradas"
-                                       style="-fx-font-size: 16px;
-                                              -fx-font-weight: bold;
-                                              -fx-text-fill: #2C3E50;" />
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #b90000;" text="Sessões Cadastradas" textFill="WHITE" />
 
-                                <Region HBox.hgrow="ALWAYS"/>
+                                <Region HBox.hgrow="ALWAYS" />
 
-                                <Button text="Editar"
-                                        style="-fx-background-color: #2980B9;
-                                               -fx-text-fill: white;
-                                               -fx-font-weight: bold;
-                                               -fx-padding: 6px 14px;" />
+                                <Button style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6px 14px; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Editar" />
 
-                                <Button text="Remover"
-                                        style="-fx-background-color: #E74C3C;
-                                               -fx-text-fill: white;
-                                               -fx-font-weight: bold;
-                                               -fx-padding: 6px 14px;" />
+                                <Button style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6px 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: white;" text="Remover" />
 
                             </children>
 
                         </HBox>
 
-                        <TableView fx:id="tabelaSessoes"
-                                   prefHeight="350">
+                        <TableView fx:id="tabelaSessoes" prefHeight="350">
 
                             <columns>
 
-                                <TableColumn fx:id="colFilme"
-                                             text="Filme" />
+                                <TableColumn fx:id="colFilme" text="Filme" />
 
-                                <TableColumn fx:id="colSala"
-                                             text="Sala" />
+                                <TableColumn fx:id="colSala" text="Sala" />
 
-                                <TableColumn fx:id="colHorario"
-                                             text="Horário" />
+                                <TableColumn fx:id="colHorario" text="Horário" />
 
-                                <TableColumn fx:id="colIdioma"
-                                             text="Idioma" />
+                                <TableColumn fx:id="colIdioma" text="Idioma" />
 
-                                <TableColumn fx:id="colStatus"
-                                             text="Status" />
+                                <TableColumn fx:id="colStatus" text="Status" />
 
                             </columns>
 

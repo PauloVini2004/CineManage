@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 
 public class GerenciarSessaoController {
 
+    @FXML private Button btnSair;
+
     private final SalaNegocios salaNegocios =
             new SalaNegocios (
                     RepositorioSalaImpl.getInstancia()
@@ -117,5 +119,10 @@ public class GerenciarSessaoController {
         cbStatus.setValue(null);
         dpData.setValue(null);
         txtHora.clear();
+    }
+
+    @FXML
+    public void voltar() {
+        ScreenManager.getInstance().showGerenteScreen();
     }
 }

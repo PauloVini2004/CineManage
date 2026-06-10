@@ -337,6 +337,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
+        stage.resizableProperty().setValue(Boolean.FALSE);
         stage.setTitle("Home");
         stage.setWidth(900);
         stage.setHeight(700);
