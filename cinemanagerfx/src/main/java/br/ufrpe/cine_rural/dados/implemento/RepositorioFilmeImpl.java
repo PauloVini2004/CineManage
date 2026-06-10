@@ -29,7 +29,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         }
     }
 
-    /**
+    /*
      * Cria a pasta "posters/" se não existir e copia para ela as imagens
      * que já estão empacotadas nos resources do projeto, para que fiquem
      * disponíveis pelo mesmo mecanismo das imagens importadas pelo usuário.
@@ -63,9 +63,8 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         }
     }
 
-    // ── Carregamento de imagem portátil ──────────────────────────────────────
-
-    /**
+    // Carregamento de imagem portátil
+    /*
      * Carrega uma imagem a partir de um nome de arquivo (ex: "Odisseia.jpg").
      * Ordem de busca:
      *   1. Pasta "posters/" relativa ao working directory (imagens importadas pelo usuário)
@@ -102,22 +101,14 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         return null;
     }
 
-    /**
-     * Extrai apenas o nome do arquivo de um caminho, seja ele:
-     *   - "Odisseia.jpg"                                  → "Odisseia.jpg"
-     *   - "file:/C:/Users/.../Odisseia.jpg"               → "Odisseia.jpg"
-     *   - "/br/ufrpe/cine_rural/gui/Odisseia.jpg"         → "Odisseia.jpg"
-     *   - "C:\\Users\\...\\Odisseia.jpg"                  → "Odisseia.jpg"
-     */
+
     private static String extrairNomeArquivo(String caminho) {
-        // Remove prefixo file:/ ou file:///
         String s = caminho.replaceFirst("^file:[/\\\\]*", "");
-        // Pega só o nome após a última barra (/ ou \)
         int posSlash = Math.max(s.lastIndexOf('/'), s.lastIndexOf('\\'));
         return posSlash >= 0 ? s.substring(posSlash + 1) : s;
     }
 
-    // ── CRUD ─────────────────────────────────────────────────────────────────
+
 
     @Override
     public void cadastrar(Filme filme) {
