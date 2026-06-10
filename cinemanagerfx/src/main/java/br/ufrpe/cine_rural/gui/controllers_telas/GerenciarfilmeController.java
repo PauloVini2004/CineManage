@@ -33,6 +33,7 @@ public class GerenciarfilmeController {
     @FXML private TextArea txtSinopse;
     @FXML private ComboBox<Genero> cbGenero;
     @FXML private ComboBox<ClassificacaoIndicativa> cbClassificacao;
+    @FXML private Button btnSair;
 
     private File arquivoImagem;
 
@@ -142,5 +143,10 @@ public class GerenciarfilmeController {
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void btnSair_OnAction() {
+        ScreenManager.getInstance().showGerenteScreen();
     }
 }
