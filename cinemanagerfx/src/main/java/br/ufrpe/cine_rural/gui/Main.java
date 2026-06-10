@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/*
 public class Main extends Application {
 
     @Override
@@ -168,7 +169,7 @@ public class Main extends Application {
     }
 }
 */
-
+/*
 //TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -358,40 +359,24 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-}
-*/
+} */
 
 
-/* Inicio da Main
+import br.ufrpe.cine_rural.gui.controllers_telas.ScreenManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource(
-                        "/br/ufrpe/cine_rural/gui/Filmes.fxml"
-                )
-        );
-
-        Scene scene = new Scene(loader.load());
-
-        stage.setTitle("Home");
-        stage.setWidth(900);
-        stage.setHeight(700);
-
-
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) {
+        ScreenManager.getInstance().setMainStage(primaryStage);
+        ScreenManager.getInstance().showHomeScreen();
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }
-*/

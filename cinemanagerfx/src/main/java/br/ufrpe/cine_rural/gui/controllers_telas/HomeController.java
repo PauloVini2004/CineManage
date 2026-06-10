@@ -2,15 +2,21 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
+import javafx.scene.image.Image;
 
 public class HomeController {
     public static String gerenteAtual;
@@ -41,19 +47,19 @@ public class HomeController {
         Optional<String> result = tiDialog.showAndWait();
         if (result.isPresent()) {
             switch (result.get()) {
-                case "1234": this.gerenteAtual = "PAULO!";
+                case "1234": gerenteAtual = "PAULO!";
                     ScreenManager.getInstance().showGerenteScreen();
                     break;
-                case "2345": this.gerenteAtual = "JULIA!";
+                case "2345": gerenteAtual = "JULIA!";
                     ScreenManager.getInstance().showGerenteScreen();
                     break;
-                case "3456": this.gerenteAtual = "ARTHUR!";
+                case "3456": gerenteAtual = "ARTHUR!";
                     ScreenManager.getInstance().showGerenteScreen();
                     break;
-                case "4567": this.gerenteAtual = "GABRIEL!";
+                case "4567": gerenteAtual = "GABRIEL!";
                     ScreenManager.getInstance().showGerenteScreen();
                     break;
-                case "5678": this.gerenteAtual = "GEDEDIAS!";
+                case "5678": gerenteAtual = "GEDEDIAS!";
                     ScreenManager.getInstance().showGerenteScreen();
                     break;
                 default:
@@ -77,4 +83,5 @@ public class HomeController {
         imageCentral.fitWidthProperty().bind(painelCentral.widthProperty());
         imageCentral.fitHeightProperty().bind(painelCentral.heightProperty());
     }
+
 }

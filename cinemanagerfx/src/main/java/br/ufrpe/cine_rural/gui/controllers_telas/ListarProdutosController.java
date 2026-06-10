@@ -49,6 +49,8 @@ public class ListarProdutosController {
 
         carregarProdutos();
 
+        btnVoltar.setOnAction(e -> voltarParaGerente());
+
         btnAdicionar.setOnAction(e -> adicionarProduto());
 
 
@@ -187,7 +189,9 @@ public class ListarProdutosController {
         }
     }
 
-
+    private void voltarParaGerente() {
+        ScreenManager.getInstance().showGerenteScreen();
+    }
 
     private void adicionarProduto() {
 

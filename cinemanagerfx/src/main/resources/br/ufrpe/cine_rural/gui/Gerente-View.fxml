@@ -43,13 +43,13 @@
             <HBox prefHeight="120.0" prefWidth="900.0" style="-fx-background-color: BLACK;">
                <children>
                   <Region layoutX="141.0" layoutY="10.0" prefHeight="60.0" prefWidth="140.0" />
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="138.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Relatorio" textAlignment="RIGHT" textFill="WHITE" />
+                  <Button fx:id="btnRelatorio" alignment="CENTER" mnemonicParsing="false" onAction="#btnRelatorioAction" prefHeight="0.0" prefWidth="138.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Relatorio" textAlignment="RIGHT" textFill="WHITE" />
                   <Region prefHeight="27.0" prefWidth="100.0" />
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="141.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Cinema" textFill="WHITE" />
+                  <Button fx:id="btnGerenciarFilmes" alignment="CENTER" mnemonicParsing="false" onAction="#btnGerenciarFilmesAction" prefHeight="0.0" prefWidth="141.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Filme" textFill="WHITE" />
                   <Region prefHeight="0.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="150.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Produtos" textFill="WHITE" />
+                  <Button fx:id="btnGerenciarSessoes" alignment="CENTER" mnemonicParsing="false" onAction="#btnGerenciarSessoesAction" prefHeight="0.0" prefWidth="143.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Sessoes" textFill="WHITE" />
                   <Region layoutX="148.0" layoutY="10.0" prefHeight="60.0" prefWidth="100.0" />
-                  <Button alignment="CENTER" layoutX="589.0" layoutY="10.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="143.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Clientes" textFill="WHITE" />
+                  <Button fx:id="btnEditProdutos" alignment="CENTER" mnemonicParsing="false" onAction="#btnEditProdutosAction" prefHeight="0.0" prefWidth="150.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerenciar Produtos" textFill="WHITE" />
                   <Region layoutX="722.0" layoutY="10.0" prefHeight="60.0" prefWidth="140.0" />
                </children>
                <opaqueInsets>
@@ -60,7 +60,7 @@
             <HBox prefHeight="166.0" prefWidth="900.0" style="-fx-background-color: BLACK;">
                <children>
                   <Region prefHeight="117.0" prefWidth="804.0" />
-                  <Button fx:id="btnSair" alignment="CENTER" mnemonicParsing="false" onAction="#onSairClick" prefHeight="26.0" prefWidth="143.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Sair" textFill="WHITE" />
+                  <Button fx:id="btnSair" alignment="CENTER" mnemonicParsing="false" onAction="#voltarParaHome" prefHeight="26.0" prefWidth="143.0" scaleX="1.5" scaleY="1.5" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Sair" textFill="WHITE" />
                   <Region prefHeight="106.0" prefWidth="101.0" />
                </children>
             </HBox>
