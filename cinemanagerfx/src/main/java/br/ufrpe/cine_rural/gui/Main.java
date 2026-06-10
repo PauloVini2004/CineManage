@@ -192,6 +192,7 @@ import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.gui.controllers_telas.GerenciarfilmeController;
+import br.ufrpe.cine_rural.gui.controllers_telas.ScreenManager;
 import br.ufrpe.cine_rural.negocios.FilmeNegocios;
 import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.application.Application;
@@ -199,6 +200,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/*
 public class Main extends Application {
 
     @Override
@@ -221,6 +223,7 @@ public class Main extends Application {
         launch(args);
     }
 }
+ */
 
 
 //Gerenciar Sessoes
@@ -312,7 +315,7 @@ public class Main extends Application {
     }
 }
 */
-/*
+
 //Inicio da Main
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -323,10 +326,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        ScreenManager.getInstance().setMainStage(stage);
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/br/ufrpe/cine_rural/gui/Filmes.fxml"
+                        "/br/ufrpe/cine_rural/gui/home-view.fxml"
                 )
         );
 
@@ -335,7 +339,7 @@ public class Main extends Application {
         stage.setTitle("Home");
         stage.setWidth(900);
         stage.setHeight(700);
-
+        ScreenManager.getInstance().setMainStage(stage);
 
         stage.setScene(scene);
         stage.show();
@@ -345,4 +349,4 @@ public class Main extends Application {
         launch(args);
     }
 }
- */
+
