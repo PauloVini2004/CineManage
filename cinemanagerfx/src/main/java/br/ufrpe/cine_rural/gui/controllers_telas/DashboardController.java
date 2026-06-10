@@ -31,22 +31,32 @@ import java.util.stream.Collectors;
  * REQ18 – Confirmação de compra por e-mail         (botão "Enviar E-mail")
  *
  * Todos os dados vêm exclusivamente dos arquivos CSV.
- * Caminhos assumidos na pasta resources (ajuste conforme seu projeto):
- *   filmes.csv   → id;titulo;sinopse;duracao;genero;classificacao
- *   sessoes.csv  → titulo_filme;id_sala;horario;idioma;status
- *   produtos.csv → id;nome;preco;estoque;imagem
+ * Caminhos assumidos na pasta resources:
+ *   filmes.csv         → titulo;tipo;duracao;genero;classificacao;imagem
+ *   sessoes.csv        → titulo_filme;id_sala;horario;idioma;status
+ *   produtos.csv       → id;nome;preco;estoque;imagem
+ *   vendas_ingresso.csv→ DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente
  */
 public class DashboardController {
 
     // ── CSV paths (relativo ao classpath / resources) ────────────────────────
-    private static final String CSV_FILMES   = "filmes.csv";
-    private static final String CSV_SESSOES  = "sessoes.csv";
-    private static final String CSV_PRODUTOS = "produtos.csv";
+    private static final String CSV_FILMES          = "filmes.csv";
+    private static final String CSV_SESSOES         = "sessoes.csv";
+    private static final String CSV_PRODUTOS        = "produtos.csv";
+
+    // Prefixo do classpath onde os CSVs estão publicados após o build
+    private static final String CLASSPATH_PREFIX = "/br/ufrpe/cine_rural/dados/arquivoscsv/";
+    // Fallback em desenvolvimento — caminhos relativos ao working directory do IntelliJ
+    private static final String DEV_PATH_PREFIX  = "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/";
 
     // Limiar de estoque baixo (REQ17)
     private static final int ESTOQUE_BAIXO = 15;
     // Limiar de sessões para "baixa procura" (REQ16)
     private static final int SESSOES_BAIXA_PROCURA = 1;
+
+    // Formatter flexível: aceita "2026-06-12T19:30" e "2026-06-12T19:30:00"
+    private static final DateTimeFormatter FMT_HORARIO =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss]");
 
     // ── FXML ─────────────────────────────────────────────────────────────────
     @FXML private ComboBox<String>              cbFilmes;
@@ -154,8 +164,8 @@ public class DashboardController {
     }
 
     /**
-     * Lê filmes.csv  →  titulo;sinopse;duracao;genero;classificacao
-     * (O campo "titulo" é o primeiro.)
+     * Lê filmes.csv  →  titulo;tipo;duracao;genero;classificacao;imagem
+     * Pega apenas o título (coluna 0).
      */
     private List<String> lerFilmes() {
         List<String> lista = new ArrayList<>();
@@ -176,10 +186,10 @@ public class DashboardController {
 
     /**
      * Lê sessoes.csv  →  titulo_filme;id_sala;horario;idioma;status
+     * Horário aceita formato com ou sem segundos (ex.: "2026-06-12T19:30").
      */
     private List<SessaoCSV> lerSessoes() {
         List<SessaoCSV> lista = new ArrayList<>();
-        DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         try (BufferedReader br = abrirCSV(CSV_SESSOES)) {
             if (br == null) return lista;
             String linha;
@@ -191,11 +201,12 @@ public class DashboardController {
                 try {
                     String        titulo  = p[0].trim();
                     int           sala    = Integer.parseInt(p[1].trim());
-                    LocalDateTime horario = LocalDateTime.parse(p[2].trim(), fmt);
+                    // FMT_HORARIO aceita "HH:mm" e "HH:mm:ss"
+                    LocalDateTime horario = LocalDateTime.parse(p[2].trim(), FMT_HORARIO);
                     String        idioma  = p[3].trim();
                     String        status  = p[4].trim();
                     lista.add(new SessaoCSV(titulo, sala, horario, idioma, status));
-                } catch (Exception ignored) { /* linha malformada */ }
+                } catch (Exception ignored) { /* linha malformada — ignora silenciosamente */ }
             }
         } catch (IOException e) {
             alertaErro("Erro ao ler sessoes.csv: " + e.getMessage());
@@ -222,7 +233,7 @@ public class DashboardController {
                     double preco   = Double.parseDouble(p[2].trim().replace(",", "."));
                     int    estoque = Integer.parseInt(p[3].trim());
                     lista.add(new Produto(id, nome, preco, estoque));
-                } catch (Exception ignored) { /* linha malformada */ }
+                } catch (Exception ignored) { /* linha malformada — ignora silenciosamente */ }
             }
         } catch (IOException e) {
             alertaErro("Erro ao ler produtos.csv: " + e.getMessage());
@@ -231,26 +242,24 @@ public class DashboardController {
     }
 
     /**
-     * Tenta abrir o CSV primeiro como recurso do classpath,
-     * depois como arquivo no diretório de trabalho.
+     * Tenta abrir o CSV em dois locais, nessa ordem:
+     *  1. Classpath: CLASSPATH_PREFIX + arquivo  (JAR / apos build)
+     *  2. DEV_PATH_PREFIX + arquivo              (desenvolvimento via IDE)
      */
     private BufferedReader abrirCSV(String nomeArquivo) {
-        InputStream is = getClass().getResourceAsStream(nomeArquivo);
-        if (is == null)
-            is = getClass().getResourceAsStream("/br/ufrpe/cine_rural/dados/" + nomeArquivo);
+        // 1. Classpath (funciona no JAR apos build)
+        InputStream is = getClass().getResourceAsStream(CLASSPATH_PREFIX + nomeArquivo);
         if (is != null)
             return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
-        // Fallback: arquivo no diretório corrente
-        File f = new File(nomeArquivo);
-        if (!f.exists()) f = new File("src/main/resources/br/ufrpe/cine_rural/dados/" + nomeArquivo);
+        // 2. Filesystem relativo ao working directory (desenvolvimento)
+        File f = new File(DEV_PATH_PREFIX + nomeArquivo);
         if (f.exists()) {
-            try {
-                return new BufferedReader(new InputStreamReader(
-                        new FileInputStream(f), StandardCharsets.UTF_8));
-            } catch (FileNotFoundException ignored) {}
+            try { return new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)); }
+            catch (FileNotFoundException ignored) {}
         }
-        alertaErro("Arquivo não encontrado: " + nomeArquivo);
+
+        alertaErro("Arquivo nao encontrado: " + nomeArquivo);
         return null;
     }
 
@@ -395,7 +404,7 @@ public class DashboardController {
         graficoBilheteria.getData().add(serie);
 
         // Taxa de ocupação estimada: (sessões × capacidade) / capacidade máxima total
-        int totalSessoes   = sessoesFiltradas.size();
+        int totalSessoes    = sessoesFiltradas.size();
         int capacidadeTotal = filmes.isEmpty() ? 1 : filmes.size() * CAPACIDADE_SALA;
         // Considera 60% como ocupação média estimada por sessão
         double taxa = totalSessoes == 0 ? 0.0
