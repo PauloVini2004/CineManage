@@ -85,7 +85,7 @@
 
                         <HBox alignment="TOP_RIGHT">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#clicarBotao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 24px;" text="Adicionar Filme" />
+                                <Button fx:id="btnAdicionarFilme" mnemonicParsing="false" onAction="#clicarBotao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 24px;" text="Adicionar Filme" />
                             </children>
                         </HBox>
 
@@ -96,9 +96,9 @@
                                 <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="837.0" spacing="10.0">
                                     <children>
                                         <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" text="Filmes Cadastrados" textFill="WHITE" />
-                                        <HBox HBox.hgrow="ALWAYS" /> <Button mnemonicParsing="false" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Editar" textFill="WHITE" />
+                                        <HBox HBox.hgrow="ALWAYS" /> <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#editarFilme" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Editar" textFill="WHITE" />
                               <Region prefHeight="59.0" prefWidth="0.0" />
-                                        <Button mnemonicParsing="false" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Remover" textFill="WHITE" />
+                                        <Button fx:id="btnRemover" mnemonicParsing="false" onAction="#removerFilme" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Remover" textFill="WHITE" />
                                     </children>
                                 </HBox>
 

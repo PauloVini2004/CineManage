@@ -9,6 +9,7 @@ import br.ufrpe.cine_rural.model.tiposala.Comum;
 import br.ufrpe.cine_rural.model.tiposala.Imax;
 import br.ufrpe.cine_rural.model.tiposala.Vip;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -66,7 +67,7 @@ public class ScreenManager {
             // Tela Filmes (com estilo)
             FXMLLoader filmesLoader = new FXMLLoader(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
-            AnchorPane filmesPane = filmesLoader.load();
+            Parent filmesPane = filmesLoader.load();
             this.filmesScene = new Scene(filmesPane);
             this.filmesScene.getStylesheets().add(
                     Objects.requireNonNull(
@@ -135,7 +136,7 @@ public class ScreenManager {
         try {
             FXMLLoader filmesLoader = new FXMLLoader(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
-            AnchorPane filmesPane = filmesLoader.load();
+            Parent filmesPane = filmesLoader.load();
             this.filmesScene = new Scene(filmesPane);
             this.filmesScene.getStylesheets().add(
                     Objects.requireNonNull(

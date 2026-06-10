@@ -78,7 +78,7 @@
 
                     <children>
 
-                        <Button onAction="#cadastrarSessao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 24px; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: white;" text="Adicionar Sessão" />
+                        <Button fx:id="btnCadastrar" onAction="#cadastrarSessao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 24px; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: white;" text="Adicionar Sessão" />
 
                     </children>
 
@@ -98,9 +98,9 @@
 
                                 <Region HBox.hgrow="ALWAYS" />
 
-                                <Button style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6px 14px; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Editar" />
+                                <Button fx:id="btnEditar" onAction="#editarSessao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6px 14px; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Editar" />
 
-                                <Button style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6px 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: white;" text="Remover" />
+                                <Button fx:id="btnRemover" onAction="#removerSessao" style="-fx-background-color: #b90000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6px 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: white;" text="Remover" />
 
                             </children>
 

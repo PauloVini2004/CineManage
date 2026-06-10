@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+//Inicio da Main
 public class Main extends Application {
 
     @Override
@@ -30,7 +31,6 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -350,7 +350,6 @@ public class Main extends Application {
     }
 }
 */
-
 
 
 

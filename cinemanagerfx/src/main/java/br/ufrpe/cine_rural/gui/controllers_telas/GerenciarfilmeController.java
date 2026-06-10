@@ -18,8 +18,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-
-
 public class GerenciarfilmeController {
 
     @FXML private TableView<Filme> tabelaFilmes;
@@ -34,18 +32,18 @@ public class GerenciarfilmeController {
     @FXML private ComboBox<Genero> cbGenero;
     @FXML private ComboBox<ClassificacaoIndicativa> cbClassificacao;
     @FXML private Button btnSair;
+    @FXML private Button btnAdicionarFilme;
+    @FXML private Button btnEditar;
+    @FXML private Button btnRemover;
 
     private File arquivoImagem;
+    // Filme sendo editado (null = modo cadastro)
+    private Filme filmeEmEdicao = null;
 
     private final SessaoNegocios sessaoNegocios =
-            new SessaoNegocios(
-                    RepositorioSessaoImpl.getInstancia()
-            );
+            new SessaoNegocios(RepositorioSessaoImpl.getInstancia());
     private final FilmeNegocios filmeNegocios =
-            new FilmeNegocios(
-                    RepositorioFilmeImpl.getInstancia(), sessaoNegocios
-            );
-
+            new FilmeNegocios(RepositorioFilmeImpl.getInstancia(), sessaoNegocios);
 
     @FXML
     public void initialize() {
@@ -57,12 +55,22 @@ public class GerenciarfilmeController {
         colDuracao.setCellValueFactory(new PropertyValueFactory<>("duracao"));
         colClassificacao.setCellValueFactory(new PropertyValueFactory<>("classificacao"));
 
+        // Habilita/desabilita Editar e Remover conforme seleção na tabela
+        btnEditar.setDisable(true);
+        btnRemover.setDisable(true);
+        tabelaFilmes.getSelectionModel().selectedItemProperty().addListener(
+            (obs, antigo, novo) -> {
+                boolean temSelecao = (novo != null);
+                btnEditar.setDisable(!temSelecao);
+                btnRemover.setDisable(!temSelecao);
+            }
+        );
+
         atualizarTabela();
     }
 
     private void atualizarTabela() {
         if (tabelaFilmes == null) return;
-
         ObservableList<Filme> filmesObservaveis =
                 FXCollections.observableArrayList(filmeNegocios.listarFilmes());
         tabelaFilmes.setItems(filmesObservaveis);
@@ -76,15 +84,63 @@ public class GerenciarfilmeController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg")
         );
-
         arquivoImagem = fileChooser.showOpenDialog(null);
-
         if (arquivoImagem != null) {
-            // Só a camada de UI mexe com Image — aqui está correto
             imgPoster.setImage(new Image(arquivoImagem.toURI().toString()));
         }
     }
 
+    // Chamado pelo botão "Editar": carrega o filme selecionado no formulário.
+    @FXML
+    public void editarFilme() {
+        Filme selecionado = tabelaFilmes.getSelectionModel().getSelectedItem();
+        if (selecionado == null) return;
+
+        filmeEmEdicao = selecionado;
+
+        txtTitulo.setText(selecionado.getTitulo());
+        txtSinopse.setText(selecionado.getSinopse());
+        txtDuracao.setText(String.valueOf(selecionado.getDuracao()));
+        cbGenero.setValue(selecionado.getGenero());
+        cbClassificacao.setValue(selecionado.getClassificacao());
+
+        if (selecionado.getCaminhoPoster() != null && !selecionado.getCaminhoPoster().isBlank()) {
+            try {
+                imgPoster.setImage(new Image(selecionado.getCaminhoPoster()));
+            } catch (Exception ignored) {}
+        }
+
+        // Troca o texto do botão para indicar modo edição
+        btnAdicionarFilme.setText("Salvar Edição");
+    }
+
+    // Chamado pelo botão "Remover": remove o filme selecionado após confirmação.
+    @FXML
+    public void removerFilme() {
+        Filme selecionado = tabelaFilmes.getSelectionModel().getSelectedItem();
+        if (selecionado == null) return;
+
+        Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacao.setTitle("Confirmar Remoção");
+        confirmacao.setHeaderText(null);
+        confirmacao.setContentText(
+            "Deseja realmente remover o filme \"" + selecionado.getTitulo() + "\"?"
+        );
+
+        confirmacao.showAndWait().ifPresent(resposta -> {
+            if (resposta == ButtonType.OK) {
+                filmeNegocios.removerFilme(selecionado.getTitulo());
+                atualizarTabela();
+                cancelarEdicao();
+                mostrarAlerta("Filme \"" + selecionado.getTitulo() + "\" removido com sucesso.");
+            }
+        });
+    }
+
+    /*
+     * Cadastra um novo filme OU salva edição dependendo do modo atual.
+     * Acionado pelo botão "Adicionar Filme" / "Salvar Edição".
+     */
     @FXML
     public void clicarBotao() {
         String titulo = txtTitulo.getText().trim();
@@ -92,18 +148,9 @@ public class GerenciarfilmeController {
         Genero genero = cbGenero.getValue();
         ClassificacaoIndicativa classificacao = cbClassificacao.getValue();
 
-        if (titulo.isEmpty()) {
-            mostrarAlerta("Título obrigatório.");
-            return;
-        }
-        if (genero == null) {
-            mostrarAlerta("Selecione um gênero.");
-            return;
-        }
-        if (classificacao == null) {
-            mostrarAlerta("Selecione uma classificação.");
-            return;
-        }
+        if (titulo.isEmpty()) { mostrarAlerta("Título obrigatório."); return; }
+        if (genero == null)   { mostrarAlerta("Selecione um gênero."); return; }
+        if (classificacao == null) { mostrarAlerta("Selecione uma classificação."); return; }
 
         int duracao;
         try {
@@ -113,18 +160,42 @@ public class GerenciarfilmeController {
             return;
         }
 
-        String posterPath = (arquivoImagem != null) ? arquivoImagem.toURI().toString() : null;
+        String posterPath = (arquivoImagem != null)
+                ? arquivoImagem.toURI().toString()
+                : (filmeEmEdicao != null ? filmeEmEdicao.getCaminhoPoster() : null);
 
-        try {
-            filmeNegocios.cadastrarFilme(titulo, sinopse, duracao, genero, classificacao, posterPath);
-            mostrarAlerta("Filme \"" + titulo + "\" cadastrado com sucesso!");
-        } catch (IllegalArgumentException e) {
-            mostrarAlerta("Erro: " + e.getMessage());
-            return;
+        if (filmeEmEdicao != null) {
+            // MODO EDIÇÃO
+            filmeEmEdicao.setTitulo(titulo);
+            filmeEmEdicao.setSinopse(sinopse);
+            filmeEmEdicao.setDuracao(duracao);
+            filmeEmEdicao.setGenero(genero);
+            filmeEmEdicao.setClassificacao(classificacao);
+            filmeEmEdicao.setCaminhoPoster(posterPath);
+            RepositorioFilmeImpl.getInstancia().atualizar(filmeEmEdicao);
+            mostrarAlerta("Filme \"" + titulo + "\" atualizado com sucesso!");
+            cancelarEdicao();
+        } else {
+            // ── MODO CADASTRO ──
+            try {
+                filmeNegocios.cadastrarFilme(titulo, sinopse, duracao, genero, classificacao, posterPath);
+                mostrarAlerta("Filme \"" + titulo + "\" cadastrado com sucesso!");
+            } catch (IllegalArgumentException e) {
+                mostrarAlerta("Erro: " + e.getMessage());
+                return;
+            }
+            limparCampos();
         }
 
         atualizarTabela();
+    }
+
+    // Sai do modo edição, restaura o botão e limpa o formulário.
+    private void cancelarEdicao() {
+        filmeEmEdicao = null;
+        btnAdicionarFilme.setText("Adicionar Filme");
         limparCampos();
+        tabelaFilmes.getSelectionModel().clearSelection();
     }
 
     private void limparCampos() {
