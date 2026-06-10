@@ -44,7 +44,6 @@ public class HomeController {
         tiDialog.setTitle("Informe sua Senha");
         tiDialog.setHeaderText("Informe sua Senha");
         tiDialog.setContentText("Digite sua Senha:");
-        tiDialog.showAndWait();
 
         Optional<String> result = tiDialog.showAndWait();
         if (result.isPresent()) {

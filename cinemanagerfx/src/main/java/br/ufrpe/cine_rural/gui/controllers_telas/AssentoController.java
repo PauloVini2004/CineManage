@@ -1,5 +1,6 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.enums.CategoriaMeiaEntrada;
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Idioma;
@@ -41,7 +42,7 @@ public class AssentoController {
 
     // Mapa: nome do assento → [categoria, idade]
     private final Map<String, CategoriaMeiaEntrada> categoriasPorAssento = new LinkedHashMap<>();
-    private final Map<String, Integer>              idadesPorAssento      = new LinkedHashMap<>();
+    private final Map<String, Integer> idadesPorAssento = new LinkedHashMap<>();
     private final List<String> nomeAssentosSelecionados = new ArrayList<>();
 
     private Sessao sessaoAtual;
@@ -147,17 +148,14 @@ public class AssentoController {
 
     private void exibirPoster() {
         if (posterPath == null || posterPath.isBlank()) return;
-        try {
-            Image imagem = new Image(posterPath);
-            ImageView posterView = new ImageView(imagem);
-            posterView.setFitWidth(210);
-            posterView.setFitHeight(280);
-            posterView.setLayoutX(685);
-            posterView.setLayoutY(65);
-            painel.getChildren().add(posterView);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Image imagem = RepositorioFilmeImpl.carregarImagem(posterPath);
+        if (imagem == null) return;
+        ImageView posterView = new ImageView(imagem);
+        posterView.setFitWidth(200);
+        posterView.setFitHeight(270);
+        posterView.setLayoutX(690);
+        posterView.setLayoutY(55);
+        painel.getChildren().add(posterView);
     }
 
     // Botões
@@ -211,8 +209,8 @@ public class AssentoController {
                     alerta.setHeaderText("Menor de idade sem acompanhante");
                     alerta.setContentText(
                             "Este filme possui classificação indicativa de " + idadeLimite + " anos.\n"
-                            + "Menores de " + idadeLimite + " anos não podem assistir sem um acompanhante maior.\n"
-                            + "Adicione um assento para um acompanhante maior de " + idadeLimite + " anos."
+                                    + "Menores de " + idadeLimite + " anos não podem assistir sem um acompanhante maior.\n"
+                                    + "Adicione um assento para um acompanhante maior de " + idadeLimite + " anos."
                     );
                     alerta.showAndWait();
                     return;

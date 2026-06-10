@@ -17,8 +17,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class GerenciarfilmeController {
+
+    // Pasta de armazenamento de posters
+    static final String PASTA_POSTERS = "posters";
 
     @FXML private TableView<Filme> tabelaFilmes;
     @FXML private TableColumn<Filme, String> colTitulo;
@@ -36,7 +42,8 @@ public class GerenciarfilmeController {
     @FXML private Button btnEditar;
     @FXML private Button btnRemover;
 
-    private File arquivoImagem;
+    // Guarda apenas o NOME do arquivo após a cópia (ex: "Odisseia.jpg")
+    private String nomeArquivoImagemSelecionado;
     // Filme sendo editado (null = modo cadastro)
     private Filme filmeEmEdicao = null;
 
@@ -55,15 +62,14 @@ public class GerenciarfilmeController {
         colDuracao.setCellValueFactory(new PropertyValueFactory<>("duracao"));
         colClassificacao.setCellValueFactory(new PropertyValueFactory<>("classificacao"));
 
-        // Habilita/desabilita Editar e Remover conforme seleção na tabela
         btnEditar.setDisable(true);
         btnRemover.setDisable(true);
         tabelaFilmes.getSelectionModel().selectedItemProperty().addListener(
-            (obs, antigo, novo) -> {
-                boolean temSelecao = (novo != null);
-                btnEditar.setDisable(!temSelecao);
-                btnRemover.setDisable(!temSelecao);
-            }
+                (obs, antigo, novo) -> {
+                    boolean temSelecao = (novo != null);
+                    btnEditar.setDisable(!temSelecao);
+                    btnRemover.setDisable(!temSelecao);
+                }
         );
 
         atualizarTabela();
@@ -84,13 +90,26 @@ public class GerenciarfilmeController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg")
         );
-        arquivoImagem = fileChooser.showOpenDialog(null);
-        if (arquivoImagem != null) {
-            imgPoster.setImage(new Image(arquivoImagem.toURI().toString()));
+        File arquivoOrigem = fileChooser.showOpenDialog(null);
+        if (arquivoOrigem == null) return;
+
+        // Copia o arquivo para a pasta local "posters/" do projeto
+        try {
+            File pastaDestino = new File(PASTA_POSTERS);
+            if (!pastaDestino.exists()) pastaDestino.mkdirs();
+
+            File arquivoDestino = new File(pastaDestino, arquivoOrigem.getName());
+            Files.copy(arquivoOrigem.toPath(), arquivoDestino.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            nomeArquivoImagemSelecionado = arquivoOrigem.getName();
+            imgPoster.setImage(new Image(arquivoDestino.toURI().toString()));
+
+        } catch (IOException e) {
+            mostrarAlerta("Erro ao copiar imagem: " + e.getMessage());
         }
     }
 
-    // Chamado pelo botão "Editar": carrega o filme selecionado no formulário.
     @FXML
     public void editarFilme() {
         Filme selecionado = tabelaFilmes.getSelectionModel().getSelectedItem();
@@ -104,17 +123,17 @@ public class GerenciarfilmeController {
         cbGenero.setValue(selecionado.getGenero());
         cbClassificacao.setValue(selecionado.getClassificacao());
 
-        if (selecionado.getCaminhoPoster() != null && !selecionado.getCaminhoPoster().isBlank()) {
-            try {
-                imgPoster.setImage(new Image(selecionado.getCaminhoPoster()));
-            } catch (Exception ignored) {}
+        // Carrega preview usando o mesmo mecanismo portátil
+        String nomeArquivo = selecionado.getCaminhoPoster();
+        if (nomeArquivo != null && !nomeArquivo.isBlank()) {
+            Image img = RepositorioFilmeImpl.carregarImagem(nomeArquivo);
+            if (img != null) imgPoster.setImage(img);
         }
 
-        // Troca o texto do botão para indicar modo edição
+        nomeArquivoImagemSelecionado = null; // reseta para não sobrescrever se não mudar a imagem
         btnAdicionarFilme.setText("Salvar Edição");
     }
 
-    // Chamado pelo botão "Remover": remove o filme selecionado após confirmação.
     @FXML
     public void removerFilme() {
         Filme selecionado = tabelaFilmes.getSelectionModel().getSelectedItem();
@@ -124,7 +143,7 @@ public class GerenciarfilmeController {
         confirmacao.setTitle("Confirmar Remoção");
         confirmacao.setHeaderText(null);
         confirmacao.setContentText(
-            "Deseja realmente remover o filme \"" + selecionado.getTitulo() + "\"?"
+                "Deseja realmente remover o filme \"" + selecionado.getTitulo() + "\"?"
         );
 
         confirmacao.showAndWait().ifPresent(resposta -> {
@@ -137,10 +156,6 @@ public class GerenciarfilmeController {
         });
     }
 
-    /*
-     * Cadastra um novo filme OU salva edição dependendo do modo atual.
-     * Acionado pelo botão "Adicionar Filme" / "Salvar Edição".
-     */
     @FXML
     public void clicarBotao() {
         String titulo = txtTitulo.getText().trim();
@@ -148,8 +163,8 @@ public class GerenciarfilmeController {
         Genero genero = cbGenero.getValue();
         ClassificacaoIndicativa classificacao = cbClassificacao.getValue();
 
-        if (titulo.isEmpty()) { mostrarAlerta("Título obrigatório."); return; }
-        if (genero == null)   { mostrarAlerta("Selecione um gênero."); return; }
+        if (titulo.isEmpty())      { mostrarAlerta("Título obrigatório."); return; }
+        if (genero == null)        { mostrarAlerta("Selecione um gênero."); return; }
         if (classificacao == null) { mostrarAlerta("Selecione uma classificação."); return; }
 
         int duracao;
@@ -160,25 +175,24 @@ public class GerenciarfilmeController {
             return;
         }
 
-        String posterPath = (arquivoImagem != null)
-                ? arquivoImagem.toURI().toString()
+        // Usa o novo nome de arquivo se foi selecionado, senão mantém o existente
+        String posterNome = (nomeArquivoImagemSelecionado != null)
+                ? nomeArquivoImagemSelecionado
                 : (filmeEmEdicao != null ? filmeEmEdicao.getCaminhoPoster() : null);
 
         if (filmeEmEdicao != null) {
-            // MODO EDIÇÃO
             filmeEmEdicao.setTitulo(titulo);
             filmeEmEdicao.setSinopse(sinopse);
             filmeEmEdicao.setDuracao(duracao);
             filmeEmEdicao.setGenero(genero);
             filmeEmEdicao.setClassificacao(classificacao);
-            filmeEmEdicao.setCaminhoPoster(posterPath);
+            filmeEmEdicao.setCaminhoPoster(posterNome);
             RepositorioFilmeImpl.getInstancia().atualizar(filmeEmEdicao);
             mostrarAlerta("Filme \"" + titulo + "\" atualizado com sucesso!");
             cancelarEdicao();
         } else {
-            // ── MODO CADASTRO ──
             try {
-                filmeNegocios.cadastrarFilme(titulo, sinopse, duracao, genero, classificacao, posterPath);
+                filmeNegocios.cadastrarFilme(titulo, sinopse, duracao, genero, classificacao, posterNome);
                 mostrarAlerta("Filme \"" + titulo + "\" cadastrado com sucesso!");
             } catch (IllegalArgumentException e) {
                 mostrarAlerta("Erro: " + e.getMessage());
@@ -190,9 +204,9 @@ public class GerenciarfilmeController {
         atualizarTabela();
     }
 
-    // Sai do modo edição, restaura o botão e limpa o formulário.
     private void cancelarEdicao() {
         filmeEmEdicao = null;
+        nomeArquivoImagemSelecionado = null;
         btnAdicionarFilme.setText("Adicionar Filme");
         limparCampos();
         tabelaFilmes.getSelectionModel().clearSelection();
@@ -205,7 +219,7 @@ public class GerenciarfilmeController {
         cbGenero.setValue(null);
         cbClassificacao.setValue(null);
         imgPoster.setImage(null);
-        arquivoImagem = null;
+        nomeArquivoImagemSelecionado = null;
     }
 
     private void mostrarAlerta(String mensagem) {

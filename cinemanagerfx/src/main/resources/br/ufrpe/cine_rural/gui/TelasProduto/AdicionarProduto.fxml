@@ -6,14 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" stylesheets="@EstiloAdicionarProduto.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.AdicionarProdutoController">
+<AnchorPane prefHeight="700.0" prefWidth="900.0" stylesheets="@EstiloAdicionarProduto.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.AdicionarProdutoController">
 
     <children>
 
-        <!-- Botão Voltar -->
+
         <Button fx:id="btnVoltar" layoutX="70" layoutY="60" styleClass="btn-voltar" text="Voltar" />
 
-        <!-- Formulário -->
         <VBox layoutX="180" layoutY="100" prefWidth="560" spacing="28">
 
             <children>

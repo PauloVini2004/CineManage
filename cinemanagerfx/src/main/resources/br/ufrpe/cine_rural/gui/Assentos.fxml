@@ -9,27 +9,28 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="painel" prefHeight="700.0" prefWidth="900.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.AssentoController">
+<AnchorPane fx:id="painel" prefHeight="700.0" prefWidth="900.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.AssentoController">
     <children>
-        <SplitPane dividerPositions="0.8492201039861352" layoutX="11.0" layoutY="11.0" orientation="VERTICAL" prefHeight="579.0" prefWidth="668.0">
+        <SplitPane dividerPositions="0.8492201039861352" layoutX="0.0" layoutY="0.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="680.0"
+                   AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="220.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="436.0" prefWidth="656.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="680.0">
                     <children>
-                        <Separator layoutX="-4.0" layoutY="48.0" prefHeight="15.0" prefWidth="674.0" />
+                        <Separator layoutX="-4.0" layoutY="48.0" prefHeight="15.0" prefWidth="700.0" />
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="38.0" layoutX="88.0" layoutY="444.0" stroke="BLACK" strokeType="INSIDE" width="480.0" />
                         <Text layoutX="275.0" layoutY="472.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tela" textAlignment="CENTER" wrappingWidth="115.57421875">
                             <font>
                                 <Font size="24.0" />
                             </font>
                         </Text>
-                        <Text fx:id="textoSessaoInfo" fill="WHITE" layoutX="7.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cinema Rural -     Sessão X     Data X      Horario X" wrappingWidth="622.13671875">
+                        <Text fx:id="textoSessaoInfo" fill="WHITE" layoutX="7.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cinema Rural -     Sessão X     Data X      Horario X" wrappingWidth="650.0">
                             <font>
-                                <Font size="26.0" />
+                                <Font size="16.0" />
                             </font>
                         </Text>
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="64.0" prefWidth="647.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                     <children>
                         <Text fill="WHITE" layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Legenda" wrappingWidth="87.13671875">
                             <font>
@@ -54,34 +55,24 @@
                                 <Font size="14.0" />
                             </font>
                         </Text>
-                    </children></AnchorPane>
+                        <Button fx:id="btnVoltar" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Voltar" />
+                        <Button fx:id="btnIngressos" layoutX="580.0" layoutY="80.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Ingressos" />
+                    </children>
+                </AnchorPane>
             </items>
         </SplitPane>
-        <SplitPane dividerPositions="0.8596187175043327" layoutX="687.0" layoutY="10.0" orientation="VERTICAL" prefHeight="627.0" prefWidth="207.0">
+
+        <SplitPane dividerPositions="0.8596187175043327" layoutX="680.0" layoutY="0.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="220.0"
+                   AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="680.0" AnchorPane.rightAnchor="0.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="297.0" prefWidth="205.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="540.0" prefWidth="220.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="220.0">
                     <children>
-                        <Text fill="WHITE" layoutX="6.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ao clicar em um assento, escolha o tipo de ingresso e informe a idade." wrappingWidth="193.0">
-                            <font>
-                                <Font size="11.0" />
-                            </font>
-                        </Text>
-                        <Text fx:id="textoContador" fill="WHITE" layoutX="6.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N. de cadeiras selecionadas  x00 Ingressos" wrappingWidth="193.57421875">
+                        <Text fx:id="textoContador" fill="WHITE" layoutX="6.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N. de cadeiras selecionadas  x00 Ingressos" wrappingWidth="205.0">
                             <font>
                                 <Font size="15.0" />
                             </font>
                         </Text>
-                    </children></AnchorPane>
-            </items>
-        </SplitPane>
-        <SplitPane dividerPositions="0.027522935779816515" layoutX="14.0" layoutY="639.0" orientation="VERTICAL" prefHeight="111.0" prefWidth="880.0">
-            <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                    <children>
-                        <Button fx:id="btnVoltar" layoutX="14.0" layoutY="39.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Voltar" />
-                        <Button fx:id="btnIngressos" layoutX="798.0" layoutY="39.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Ingressos" />
                     </children>
                 </AnchorPane>
             </items>

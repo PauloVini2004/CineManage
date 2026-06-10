@@ -32,6 +32,9 @@ public class FilmesController {
     @FXML
     private VBox containerFilmes;
 
+    @FXML
+    private Button btnVoltar;
+
     private final SessaoNegocios sessaoNegocios =
             new SessaoNegocios(
                     RepositorioSessaoImpl.getInstancia()
@@ -44,6 +47,11 @@ public class FilmesController {
 
     @FXML
     public void initialize() {carregarFilmes();}
+
+    @FXML
+    private void voltarParaHome() {
+        ScreenManager.getInstance().showAtendenteScreen();
+    }
 
     private void carregarFilmes() {
         Map<String, List<Sessao>> porFilme = new LinkedHashMap<>();
@@ -74,18 +82,8 @@ public class FilmesController {
         String posterPath = filme.getCaminhoPoster();
         ImageView posterView = new ImageView();
         if (posterPath != null && !posterPath.isBlank()) {
-            try {
-                Image img;
-                if (posterPath.startsWith("file:") || posterPath.startsWith("http")) {
-                    img = new Image(posterPath);
-                } else {
-                    var stream = getClass().getResourceAsStream(posterPath);
-                    img = (stream != null) ? new Image(stream) : null;
-                }
-                if (img != null) posterView.setImage(img);
-            } catch (Exception e) {
-                System.err.println("Não foi possível carregar o poster: " + posterPath);
-            }
+            Image img = RepositorioFilmeImpl.carregarImagem(posterPath);
+            if (img != null) posterView.setImage(img);
         }
         posterView.setFitWidth(150);
         posterView.setFitHeight(220);
