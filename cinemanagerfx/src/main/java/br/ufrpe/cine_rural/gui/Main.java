@@ -1,8 +1,8 @@
 package br.ufrpe.cine_rural.gui;
 
 
-/* SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
-
+// SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
+/*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -18,30 +18,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/*
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // 1. Instanciação dos Repositórios (Persistência/Dados)
-        RepositorioFilmeImpl repositorioFilmes = new RepositorioFilmeImpl();
-        RepositorioSalaImpl repositorioSalas = new RepositorioSalaImpl();
+        RepositorioSalaImpl salas = RepositorioSalaImpl.getInstancia();
+        salas.cadastrar(new Comum(1, 20));
+        salas.cadastrar(new Imax(2, 30));
+        salas.cadastrar(new Vip(3, 20));
 
-        // Salas pré-definidas sendo cadastradas no repositório
-        repositorioSalas.cadastrar(new Comum(1, 80));   // Sala 1 → Comum
-        repositorioSalas.cadastrar(new Imax(2,  60));   // Sala 2 → Imax
-        repositorioSalas.cadastrar(new Vip(3,   30));   // Sala 3 → Vip
 
-        RepositorioSessaoImpl repositorioSessoes =
-                new RepositorioSessaoImpl(repositorioFilmes, repositorioSalas);
-
-        // 2. Instanciação da Camada de Negócios (Injeção de Dependência dos Repositórios)
-        SalaNegocios salaNegocios = new SalaNegocios(repositorioSalas);
-        SessaoNegocios sessaoNegocios = new SessaoNegocios(repositorioSessoes);
-        FilmeNegocios filmeNegocios = new FilmeNegocios(repositorioFilmes, sessaoNegocios);
-
-        // 3. Carrega a interface gráfica (Fxml) da tela de Filmes
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml")
         );
@@ -49,11 +36,7 @@ public class Main extends Application {
         scene.getStylesheets().add(
                 getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
                         .toExternalForm()
-        );
-
-        // 4. Injeta as instâncias de NEGÓCIOS no controller em vez dos repositórios
-        FilmesController filmesController = loader.getController();
-        filmesController.setNegocios(filmeNegocios, sessaoNegocios);
+        );;
 
         primaryStage.setTitle("Cinema Rural — Filmes em Cartaz");
         primaryStage.setScene(scene);
@@ -66,7 +49,6 @@ public class Main extends Application {
     }
 }
 */
-
 /* TELA DASHBOARD
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -99,7 +81,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
+
 
 
 
@@ -169,8 +151,8 @@ public class Main extends Application {
     }
 }
 */
-/*
-//TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
+
+/*TELA GERENTE <- TELA LISTARPRODUTOS -> TELA ADICIONARPRODUTO E TELAEDITARPRODUTO
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -202,10 +184,10 @@ public class Main extends Application {
         launch(args);
     }
 }
-
+*/
 
 //Gerenciar Filmes
-/*
+
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
@@ -222,18 +204,6 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        RepositorioFilmeImpl filmes = new RepositorioFilmeImpl();
-        RepositorioSalaImpl salas = new RepositorioSalaImpl();
-
-        RepositorioSessaoImpl sessoes =
-                new RepositorioSessaoImpl(filmes, salas);
-
-        SessaoNegocios sessaoNegocios =
-                new SessaoNegocios(sessoes);
-
-        FilmeNegocios filmeNegocios =
-                new FilmeNegocios(filmes, sessaoNegocios);
-
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
                         "/br/ufrpe/cine_rural/gui/Gerenciar filmes.fxml"
@@ -241,11 +211,6 @@ public class Main extends Application {
         );
 
         Scene scene = new Scene(loader.load());
-
-        GerenciarfilmeController controller =
-                loader.getController();
-
-        controller.setNegocios(filmeNegocios);
 
         stage.setTitle("Gerenciar Filmes");
         stage.setScene(scene);
@@ -256,7 +221,7 @@ public class Main extends Application {
         launch(args);
     }
 }
-*/
+
 
 //Gerenciar Sessoes
 /*
@@ -281,24 +246,10 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        RepositorioFilmeImpl filmes = new RepositorioFilmeImpl();
-        RepositorioSalaImpl salas = new RepositorioSalaImpl();
-
         salas.cadastrar(new Comum(1, 20));
         salas.cadastrar(new Imax(2, 30));
         salas.cadastrar(new Vip(3, 20));
 
-        RepositorioSessaoImpl sessoes =
-                new RepositorioSessaoImpl(filmes, salas);
-
-        SessaoNegocios sessaoNegocios =
-                new SessaoNegocios(sessoes);
-
-        FilmeNegocios filmeNegocios =
-                new FilmeNegocios(filmes, sessaoNegocios);
-
-        SalaNegocios salaNegocios =
-                new SalaNegocios(salas);
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
@@ -359,24 +310,39 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-} */
-
-
-import br.ufrpe.cine_rural.gui.controllers_telas.ScreenManager;
+}
+*/
+/*
+//Inicio da Main
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        ScreenManager.getInstance().setMainStage(primaryStage);
-        ScreenManager.getInstance().showHomeScreen();
-        primaryStage.show();
+    public void start(Stage stage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/br/ufrpe/cine_rural/gui/Filmes.fxml"
+                )
+        );
+
+        Scene scene = new Scene(loader.load());
+
+        stage.setTitle("Home");
+        stage.setWidth(900);
+        stage.setHeight(700);
+
+
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-
 }
+ */

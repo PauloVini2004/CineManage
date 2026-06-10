@@ -1,9 +1,12 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Genero;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.negocios.FilmeNegocios;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,9 +18,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-public class GerenciarfilmeController {
 
-    private FilmeNegocios filmeNegocios;
+
+public class GerenciarfilmeController {
 
     @FXML private TableView<Filme> tabelaFilmes;
     @FXML private TableColumn<Filme, String> colTitulo;
@@ -33,11 +36,15 @@ public class GerenciarfilmeController {
 
     private File arquivoImagem;
 
-    // FilmeNegocios é injetado de fora (quem cria a tela passa o objeto pronto)
-    public void setNegocios(FilmeNegocios filmeNegocios) {
-        this.filmeNegocios = filmeNegocios;
-        atualizarTabela();
-    }
+    private final SessaoNegocios sessaoNegocios =
+            new SessaoNegocios(
+                    RepositorioSessaoImpl.getInstancia()
+            );
+    private final FilmeNegocios filmeNegocios =
+            new FilmeNegocios(
+                    RepositorioFilmeImpl.getInstancia(), sessaoNegocios
+            );
+
 
     @FXML
     public void initialize() {
@@ -48,6 +55,8 @@ public class GerenciarfilmeController {
         colGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
         colDuracao.setCellValueFactory(new PropertyValueFactory<>("duracao"));
         colClassificacao.setCellValueFactory(new PropertyValueFactory<>("classificacao"));
+
+        atualizarTabela();
     }
 
     private void atualizarTabela() {

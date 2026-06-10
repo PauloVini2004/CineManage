@@ -1,8 +1,12 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.negocios.FilmeNegocios;
+import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
 import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,17 +32,18 @@ public class FilmesController {
     @FXML
     private VBox containerFilmes;
 
-    private FilmeNegocios filmeNegocios;
-    private SessaoNegocios sessaoNegocios;
+    private final SessaoNegocios sessaoNegocios =
+            new SessaoNegocios(
+                    RepositorioSessaoImpl.getInstancia()
+            );
+    private final FilmeNegocios filmeNegocios =
+            new FilmeNegocios(
+                    RepositorioFilmeImpl.getInstancia(), sessaoNegocios
+            );
 
-    public void setNegocios(FilmeNegocios filmeNegocios, SessaoNegocios sessaoNegocios) {
-        this.filmeNegocios = filmeNegocios;
-        this.sessaoNegocios = sessaoNegocios;
-        carregarFilmes();
-    }
 
     @FXML
-    public void initialize() {}
+    public void initialize() {carregarFilmes();}
 
     private void carregarFilmes() {
         Map<String, List<Sessao>> porFilme = new LinkedHashMap<>();

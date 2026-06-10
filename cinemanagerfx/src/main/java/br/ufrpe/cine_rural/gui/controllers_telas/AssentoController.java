@@ -177,10 +177,6 @@ public class AssentoController {
                         );
 
                         FilmesController fc = loader.getController();
-                        // ✅ Passa FilmeNegocios e SessaoNegocios, não os repositórios
-                        if (filmeNegocios != null && sessaoNegocios != null) {
-                            fc.setNegocios(filmeNegocios, sessaoNegocios);
-                        }
 
                         Stage stageAtual = (Stage) painel.getScene().getWindow();
                         stageAtual.setTitle("Filmes");

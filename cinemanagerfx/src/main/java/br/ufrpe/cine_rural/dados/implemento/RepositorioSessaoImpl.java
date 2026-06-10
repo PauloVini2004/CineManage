@@ -1,11 +1,11 @@
 package br.ufrpe.cine_rural.dados.implemento;
 
 import br.ufrpe.cine_rural.dados.interfaces.IRepositorioSessao;
-import br.ufrpe.cine_rural.model.Filme;
-import br.ufrpe.cine_rural.model.tiposala.Sala;
 import br.ufrpe.cine_rural.enums.Idioma;
 import br.ufrpe.cine_rural.enums.StatusSessao;
+import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
+import br.ufrpe.cine_rural.model.tiposala.Sala;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -13,16 +13,22 @@ import java.util.ArrayList;
 
 public class RepositorioSessaoImpl implements IRepositorioSessao {
 
+    private static RepositorioSessaoImpl instancia;
+
     private ArrayList<Sessao> sessoes;
 
     private RepositorioFilmeImpl repositorioFilme;
     private RepositorioSalaImpl repositorioSala;
 
-    public RepositorioSessaoImpl(RepositorioFilmeImpl repositorioFilme,
-                                 RepositorioSalaImpl repositorioSala) {
+    private RepositorioSessaoImpl() {
+
         this.sessoes = new ArrayList<>();
-        this.repositorioFilme = repositorioFilme;
-        this.repositorioSala = repositorioSala;
+
+        this.repositorioFilme =
+                RepositorioFilmeImpl.getInstancia();
+
+        this.repositorioSala =
+                RepositorioSalaImpl.getInstancia();
 
         try {
             carregarCSV();
@@ -31,8 +37,18 @@ public class RepositorioSessaoImpl implements IRepositorioSessao {
         }
     }
 
+    public static RepositorioSessaoImpl getInstancia() {
+
+        if (instancia == null) {
+            instancia = new RepositorioSessaoImpl();
+        }
+
+        return instancia;
+    }
+
     @Override
     public void cadastrar(Sessao sessao) {
+
         sessoes.add(sessao);
 
         try {
@@ -44,18 +60,23 @@ public class RepositorioSessaoImpl implements IRepositorioSessao {
 
     @Override
     public Sessao buscar(LocalDateTime horario) {
+
         for (Sessao sessao : sessoes) {
             if (sessao.getHorario().equals(horario)) {
                 return sessao;
             }
         }
+
         return null;
     }
 
     @Override
     public void atualizar(Sessao sessaoAtualizada) {
+
         for (int i = 0; i < sessoes.size(); i++) {
-            if (sessoes.get(i).getHorario().equals(sessaoAtualizada.getHorario())) {
+
+            if (sessoes.get(i).getHorario()
+                    .equals(sessaoAtualizada.getHorario())) {
 
                 sessoes.set(i, sessaoAtualizada);
 
@@ -72,9 +93,11 @@ public class RepositorioSessaoImpl implements IRepositorioSessao {
 
     @Override
     public void remover(LocalDateTime horario) {
+
         Sessao sessao = buscar(horario);
 
         if (sessao != null) {
+
             sessoes.remove(sessao);
 
             try {
@@ -115,7 +138,10 @@ public class RepositorioSessaoImpl implements IRepositorioSessao {
             }
 
             Filme filme = repositorioFilme.buscar(dados[0]);
-            Sala sala = repositorioSala.buscar(Integer.parseInt(dados[1]));
+
+            Sala sala = repositorioSala.buscar(
+                    Integer.parseInt(dados[1])
+            );
 
             if (filme == null || sala == null) {
                 continue;
@@ -146,6 +172,7 @@ public class RepositorioSessaoImpl implements IRepositorioSessao {
         );
 
         for (Sessao sessao : sessoes) {
+
             writer.write(
                     sessao.getFilme().getTitulo() + ";" +
                             sessao.getSala().getId() + ";" +

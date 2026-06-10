@@ -10,10 +10,13 @@ import java.util.ArrayList;
 
 public class RepositorioFilmeImpl implements IRepositorioFilme {
 
+    private static RepositorioFilmeImpl instancia;
+
     private ArrayList<Filme> filmes;
 
-    public RepositorioFilmeImpl() {
+    private RepositorioFilmeImpl() {
         this.filmes = new ArrayList<>();
+
         try {
             carregarCSV();
         } catch (IOException e) {
@@ -108,7 +111,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
     }
 
     private String resolverCaminhoPoster(String titulo) {
-        String base = "cinemanagerfx/br/ufrpe/cine_rural/gui/" + titulo.replace(" ", "_");
+        String base = "br/ufrpe/cine_rural/gui/" + titulo.replace(" ", "_");
 
         if (getClass().getResourceAsStream(base + ".jpg") != null) {
             return base + ".jpg";
@@ -139,4 +142,12 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
             }
         }
     }
+
+    public static RepositorioFilmeImpl getInstancia() {
+        if (instancia == null) {
+            instancia = new RepositorioFilmeImpl();
+        }
+        return instancia;
+    }
+
 }
