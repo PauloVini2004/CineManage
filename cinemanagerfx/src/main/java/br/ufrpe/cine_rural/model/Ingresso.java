@@ -34,7 +34,7 @@ public class Ingresso {
     private double calcularValor(double valor,
                                  CategoriaMeiaEntrada categoria) {
 
-        if (categoria != CategoriaMeiaEntrada.INTEIRA) {
+        if (categoria == CategoriaMeiaEntrada.MEIA_ENTRADA) {
             return valor / 2;
         }
 

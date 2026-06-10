@@ -5,6 +5,9 @@ import java.util.Objects;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
+import br.ufrpe.cine_rural.model.tiposala.Comum;
+import br.ufrpe.cine_rural.model.tiposala.Imax;
+import br.ufrpe.cine_rural.model.tiposala.Vip;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -39,57 +42,64 @@ public class ScreenManager {
     }
 
     private ScreenManager() {
-        // Construtor privado para evitar instanciação
+        // Cadastra as salas uma única vez no repositório compartilhado
+        RepositorioSalaImpl repositorioSala = RepositorioSalaImpl.getInstancia();
+        if (repositorioSala.listar().isEmpty()) {
+            repositorioSala.cadastrar(new Comum(1, 20));
+            repositorioSala.cadastrar(new Imax(2, 30));
+            repositorioSala.cadastrar(new Vip(3, 20));
+        }
 
         try {
             BorderPane homePane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/home-view.fxml"));
-            // inicializando cena home
             this.homeScene = new Scene(homePane);
 
             BorderPane atendentePane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Atendente-View.fxml"));
-            // inicializando cena atendente
             this.atendenteScene = new Scene(atendentePane);
 
             BorderPane gerentePane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Gerente-View.fxml")));
-            // inicializando cena gerente
             this.gerenteScene = new Scene(gerentePane);
+
+            // Tela Filmes (com estilo)
+            FXMLLoader filmesLoader = new FXMLLoader(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
+            AnchorPane filmesPane = filmesLoader.load();
+            this.filmesScene = new Scene(filmesPane);
+            this.filmesScene.getStylesheets().add(
+                    Objects.requireNonNull(
+                            getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
+                    ).toExternalForm()
+            );
 
             AnchorPane produtosPane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/TelasProduto/Produto.fxml"));
-            // inicializando cena produtos
             this.produtosScene = new Scene(produtosPane);
 
             BorderPane listarProdutosPane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/TelasProduto/ListarProdutos.fxml"));
-            // inicializando cena lista produtos
             this.listarProdutosScene = new Scene(listarProdutosPane);
 
             ScrollPane gerenciarFilmes = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Gerenciar filmes.fxml"));
-            // inicializando cena gerenciar filmes
             this.gerenciarFilmeScene = new Scene(gerenciarFilmes);
 
             AnchorPane gerenciarSessoes = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Gerenciar sessoes.fxml"));
-            // inicializando cena gerenciar sessoes
             this.gerenciarSessoesScene = new Scene(gerenciarSessoes);
 
             BorderPane relatorioPane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/DashBoard.fxml"));
-            // inicializando relatorio
-            this.relatorioScene= new Scene(relatorioPane);
+            this.relatorioScene = new Scene(relatorioPane);
 
             AnchorPane assentosPane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Assentos.fxml"));
             // inicializando relatorio
             this.assentosScene = new Scene(assentosPane);
 
-            //Cena filmes
-
-            } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -100,12 +110,8 @@ public class ScreenManager {
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
-
-        // configurando largura e altura do stage.
         mainStage.setWidth(1024);
         mainStage.setHeight(768);
-
-        // configurando título da app
         mainStage.setTitle("Cine Manager");
     }
 
@@ -125,6 +131,20 @@ public class ScreenManager {
     }
 
     public void showFilmesScreen() {
+        // Recarrega a tela sempre que chamada para refletir sessões atualizadas
+        try {
+            FXMLLoader filmesLoader = new FXMLLoader(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
+            AnchorPane filmesPane = filmesLoader.load();
+            this.filmesScene = new Scene(filmesPane);
+            this.filmesScene.getStylesheets().add(
+                    Objects.requireNonNull(
+                            getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
+                    ).toExternalForm()
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.mainStage.setScene(this.filmesScene);
         this.mainStage.show();
     }
@@ -148,6 +168,14 @@ public class ScreenManager {
     }
 
     public void showGerenciarSessoesScreen() {
+        // Recarrega para pegar salas e filmes atualizados
+        try {
+            AnchorPane gerenciarSessoes = FXMLLoader.load(getClass().getResource(
+                    "/br/ufrpe/cine_rural/gui/Gerenciar sessoes.fxml"));
+            this.gerenciarSessoesScene = new Scene(gerenciarSessoes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.mainStage.setScene(this.gerenciarSessoesScene);
         this.mainStage.show();
     }

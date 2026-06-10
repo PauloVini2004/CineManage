@@ -57,6 +57,28 @@ public class GerenciarSessaoController {
         cbIdioma.getItems().setAll(Idioma.values());
         cbStatus.getItems().setAll(StatusSessao.values());
 
+        // Exibe o tipo real da sala (Comum, Imax, Vip) + número no ComboBox
+        javafx.util.Callback<javafx.scene.control.ListView<Sala>, javafx.scene.control.ListCell<Sala>> salaFactory =
+            lv -> new javafx.scene.control.ListCell<>() {
+                @Override protected void updateItem(Sala item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.toString());
+                }
+            };
+        cbSala.setCellFactory(salaFactory);
+        cbSala.setButtonCell(salaFactory.call(null));
+
+        // Exibe o título do filme no ComboBox
+        javafx.util.Callback<javafx.scene.control.ListView<Filme>, javafx.scene.control.ListCell<Filme>> filmeFactory =
+            lv -> new javafx.scene.control.ListCell<>() {
+                @Override protected void updateItem(Filme item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getTitulo());
+                }
+            };
+        cbFilme.setCellFactory(filmeFactory);
+        cbFilme.setButtonCell(filmeFactory.call(null));
+
         colFilme.setCellValueFactory(c ->
                 new javafx.beans.property.SimpleStringProperty(
                         c.getValue().getFilme().getTitulo()

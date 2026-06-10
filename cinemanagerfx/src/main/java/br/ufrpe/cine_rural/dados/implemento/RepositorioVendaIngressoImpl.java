@@ -59,16 +59,18 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
 
             if (arquivoNovo) {
                 pw.println(
-                        "DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente"
+                        "DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente;Idade"
                 );
             }
 
             for (Ingresso ingresso : venda.getIngressos()) {
 
                 String nomeCliente = "";
+                String idadeCliente = "";
 
                 if (ingresso.getCliente() != null) {
-                    nomeCliente = ingresso.getCliente().getNome();
+                    nomeCliente  = ingresso.getCliente().getNome();
+                    idadeCliente = String.valueOf(ingresso.getCliente().getIdade());
                 }
 
                 pw.println(
@@ -78,7 +80,8 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
                                 ingresso.getAssento().getCodigo() + ";" +
                                 ingresso.getCategoria() + ";" +
                                 ingresso.getPreco() + ";" +
-                                nomeCliente
+                                nomeCliente + ";" +
+                                idadeCliente
                 );
             }
 

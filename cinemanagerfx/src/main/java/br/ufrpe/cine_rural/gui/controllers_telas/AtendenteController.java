@@ -22,18 +22,7 @@ public class AtendenteController {
 
     @FXML
     public void btnCprIngrAction() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/Filmes.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) btnCprIngr.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (Exception e) {
-            System.out.println("Erro ao tentar voltar para a tela de Atendente. Verifique o caminho do FXML.");
-            e.printStackTrace();
-        }
+        ScreenManager.getInstance().showFilmesScreen();
     }
 
     @FXML

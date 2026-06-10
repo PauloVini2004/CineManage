@@ -23,48 +23,40 @@ public class SalaNegocios {
         this.repositorioSala = repositorioSala;
     }
 
-    // -------------------------------------------------------------------------
-    // REQ03 / REQ04 – Cadastro por tipo
-    // -------------------------------------------------------------------------
-
-    /** Cadastra uma sala Comum (multiplicador de preço 1.0×). */
+    // Cadastra uma sala Comum.
     public Comum cadastrarSalaComum(int id, int capacidade) {
         validarIdUnico(id);
         validarCapacidade(capacidade);
-        Comum sala = new Comum(id, capacidade);   // construtor real do seu projeto
-        salas.add(sala);
+        Comum sala = new Comum(id, capacidade);
+        repositorioSala.cadastrar(sala);
         System.out.println("[SalaController] Sala Comum #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
-    /** Cadastra uma sala VIP (multiplicador de preço 3.0×). */
+    // Cadastra uma sala VIP.
     public Vip cadastrarSalaVip(int id, int capacidade) {
         validarIdUnico(id);
         validarCapacidade(capacidade);
-        Vip sala = new Vip(id, capacidade);        // construtor real do seu projeto
-        salas.add(sala);
+        Vip sala = new Vip(id, capacidade);
+        repositorioSala.cadastrar(sala);
         System.out.println("[SalaController] Sala VIP #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
-    /** Cadastra uma sala IMAX (multiplicador de preço 2.0×). */
+    // Cadastra uma sala IMAX.
     public Imax cadastrarSalaImax(int id, int capacidade) {
         validarIdUnico(id);
         validarCapacidade(capacidade);
-        Imax sala = new Imax(id, capacidade);      // construtor real do seu projeto
-        salas.add(sala);
+        Imax sala = new Imax(id, capacidade);
+        repositorioSala.cadastrar(sala);
         System.out.println("[SalaController] Sala IMAX #" + id + " cadastrada (cap.: " + capacidade + ").");
         return sala;
     }
 
-    // -------------------------------------------------------------------------
-    // Atualização de dados
-    // -------------------------------------------------------------------------
-
-    /**
+    /*
      * Permite sobrescrever o preço base de uma sala para promoções específicas.
      * Não deve ser chamado enquanto há sessões abertas na sala
-     * (responsabilidade de quem orquestra, ex.: SessaoController).
+     * (responsabilidade de quem manda em tudo, ex.: SessaoController).
      */
     public void atualizarPreco(Sala sala, double novoPreco) {
         if (novoPreco < 0) throw new IllegalArgumentException("Preço não pode ser negativo.");
@@ -78,19 +70,16 @@ public class SalaNegocios {
         System.out.println("[SalaController] Capacidade da sala #" + sala.getId() + " → " + novaCapacidade);
     }
 
-    // -------------------------------------------------------------------------
-    // Consultas
-    // -------------------------------------------------------------------------
 
     public List<Sala> listarSalas() {
         return repositorioSala.listar();
     }
 
     public Sala buscarPorId(int id) {
-        return salas.stream().filter(s -> s.getId() == id).findFirst().orElse(null);
+        return repositorioSala.buscar(id);
     }
 
-    /** Filtra salas por subtipo (Comum.class, Vip.class ou Imax.class). */
+    // Filtra salas por subtipo (Comum.class, Vip.class ou Imax.class).
     public List<Sala> listarPorTipo(Class<? extends Sala> tipo) {
         return salas.stream().filter(tipo::isInstance).toList();
     }
@@ -100,10 +89,7 @@ public class SalaNegocios {
         System.out.println("[SalaController] Sala #" + sala.getId() + " removida.");
     }
 
-    // -------------------------------------------------------------------------
-    // Validações internas
-    // -------------------------------------------------------------------------
-
+    // Verificadores
     private void validarIdUnico(int id) {
         if (buscarPorId(id) != null)
             throw new IllegalArgumentException("Já existe uma sala com ID " + id + ".");

@@ -35,9 +35,6 @@
             <TextField fx:id="txtCpf"
                        promptText="CPF"/>
 
-            <TextField fx:id="txtIdade"
-                       promptText="Idade"/>
-
             <ComboBox fx:id="comboPagamento"
                       promptText="Forma de Pagamento"/>
 

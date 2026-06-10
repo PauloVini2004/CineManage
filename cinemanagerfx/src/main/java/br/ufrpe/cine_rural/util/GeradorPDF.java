@@ -229,13 +229,14 @@ public class GeradorPDF {
             );
 
             Table tabela = new Table(
-                    new float[]{4, 2, 2, 2}
+                    new float[]{4, 2, 2, 2, 1}
             );
 
             tabela.addCell("Filme");
             tabela.addCell("Assento");
             tabela.addCell("Categoria");
             tabela.addCell("Preço");
+            tabela.addCell("Idade");
 
             double total = 0;
 
@@ -263,6 +264,11 @@ public class GeradorPDF {
                                 ingresso.getPreco()
                         )
                 );
+
+                String idadeStr = (ingresso.getCliente() != null)
+                        ? String.valueOf(ingresso.getCliente().getIdade())
+                        : "-";
+                tabela.addCell(idadeStr);
 
                 total += ingresso.getPreco();
             }
@@ -384,6 +390,14 @@ public class GeradorPDF {
                         new Paragraph(
                                 "Cliente: "
                                         + ingresso.getCliente().getNome()
+                        )
+                );
+
+                document.add(
+                        new Paragraph(
+                                "Idade: "
+                                        + ingresso.getCliente().getIdade()
+                                        + " anos"
                         )
                 );
             }

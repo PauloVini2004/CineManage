@@ -62,6 +62,11 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="297.0" prefWidth="205.0">
                     <children>
+                        <Text fill="WHITE" layoutX="6.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ao clicar em um assento, escolha o tipo de ingresso e informe a idade." wrappingWidth="193.0">
+                            <font>
+                                <Font size="11.0" />
+                            </font>
+                        </Text>
                         <Text fx:id="textoContador" fill="WHITE" layoutX="6.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N. de cadeiras selecionadas  x00 Ingressos" wrappingWidth="193.57421875">
                             <font>
                                 <Font size="15.0" />
