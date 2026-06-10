@@ -49,8 +49,6 @@ public class ListarProdutosController {
 
         carregarProdutos();
 
-        btnVoltar.setOnAction(e -> voltarParaGerente());
-
         btnAdicionar.setOnAction(e -> adicionarProduto());
 
 
@@ -189,13 +187,7 @@ public class ListarProdutosController {
         }
     }
 
-    private void voltarParaGerente() {
 
-        trocarTela(
-                "/br/ufrpe/cine_rural/gui/Gerente-View.fxml",
-                btnVoltar
-        );
-    }
 
     private void adicionarProduto() {
 
