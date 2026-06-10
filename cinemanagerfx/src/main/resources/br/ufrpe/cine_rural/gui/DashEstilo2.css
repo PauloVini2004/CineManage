@@ -382,3 +382,21 @@
     -fx-background-color: #555555;
     -fx-background-radius: 10;
 }
+
+.secondary-button {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #555555;
+}
+
+.secondary-button:pressed {
+    -fx-background-color: #222222;
+}

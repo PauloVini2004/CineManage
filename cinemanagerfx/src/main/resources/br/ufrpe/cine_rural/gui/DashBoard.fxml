@@ -28,7 +28,16 @@
             <padding>
                 <Insets top="15" right="20" bottom="15" left="20"/>
             </padding>
-            <Label text="Relatórios e Estatísticas" styleClass="title"/>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="← Voltar"
+                        styleClass="secondary-button"
+                        onAction="#onVoltar"/>
+
+                <Label text="Relatórios e Estatísticas"
+                       styleClass="title"/>
+            </HBox>
+
             <Separator/>
         </VBox>
     </top>

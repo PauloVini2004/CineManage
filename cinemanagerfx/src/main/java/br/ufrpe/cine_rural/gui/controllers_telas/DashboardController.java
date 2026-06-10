@@ -19,6 +19,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 /**
  * Controller do Dashboard de Relatórios e Estatísticas.
  *
@@ -605,5 +609,28 @@ public class DashboardController {
         a.setHeaderText(null);
         a.setContentText(mensagem);
         a.showAndWait();
+    }@FXML
+    private void onVoltar() {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/br/ufrpe/cine_rural/gui/telas/MenuPrincipal.fxml"));
+
+            Parent root = loader.load();
+
+            Stage stage = (Stage) graficoBilheteria
+                    .getScene()
+                    .getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu Principal");
+            stage.show();
+
+        } catch (IOException e) {
+            alertaErro("Erro ao voltar: " + e.getMessage());
+        }
     }
+
+
 }
