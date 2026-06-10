@@ -163,7 +163,9 @@ public class PagamentoIngressoController {
             alert.setHeaderText(null);
             alert.setContentText("Ingresso emitido com sucesso.");
             alert.showAndWait();
+
             limparCampos();
+            ScreenManager.getInstance().showAtendenteScreen();
 
         } catch (Exception e) {
             mostrarErro("Erro ao processar pagamento: " + e.getMessage());
