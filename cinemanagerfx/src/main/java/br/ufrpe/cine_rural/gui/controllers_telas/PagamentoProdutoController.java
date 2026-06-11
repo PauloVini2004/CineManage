@@ -5,6 +5,7 @@ import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaLojinhaImpl;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
 import br.ufrpe.cine_rural.model.loja.VendaLojinha;
+import br.ufrpe.cine_rural.util.EnviadorEmail;
 import br.ufrpe.cine_rural.util.GeradorPDF;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -250,6 +251,26 @@ public class PagamentoProdutoController {
 
             repositorio.cadastrar(venda);
 
+            try {
+
+                String mensagemEmail = gerarResumoEmail();
+
+                EnviadorEmail.enviarEmail(
+                        cliente.getEmail(),
+                        "Compra confirmada - Cine Rural",
+                        mensagemEmail
+                );
+
+            } catch (Exception e) {
+
+                System.out.println(
+                        "Erro ao enviar e-mail: "
+                                + e.getMessage()
+                );
+
+                e.printStackTrace();
+            }
+
 
             Alert alert =
                     new Alert(
@@ -334,5 +355,31 @@ public class PagamentoProdutoController {
         }
 
         total = 0;
+    }
+
+    private String gerarResumoEmail() {
+
+        StringBuilder resumo = new StringBuilder();
+
+        resumo.append("Compra confirmada com sucesso!\n\n");
+
+        resumo.append("Resumo da compra:\n\n");
+
+        for (ItemVenda item : itensVenda) {
+
+            resumo.append(item.getProduto().getNome())
+                    .append(" x")
+                    .append(item.getQuantidade())
+                    .append(" - R$ ")
+                    .append(String.format("%.2f", item.getSubtotal()))
+                    .append("\n");
+        }
+
+        resumo.append("\n");
+
+        resumo.append("Total: R$ ")
+                .append(String.format("%.2f", total));
+
+        return resumo.toString();
     }
 }

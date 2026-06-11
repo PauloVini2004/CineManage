@@ -4,6 +4,8 @@ import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaIngressoImpl;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.VendaIngresso;
+import br.ufrpe.cine_rural.model.loja.ItemVenda;
+import br.ufrpe.cine_rural.util.EnviadorEmail;
 import br.ufrpe.cine_rural.util.GeradorPDF;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -73,22 +75,22 @@ public class PagamentoIngressoController {
         resumo.append("       CINEMA RURAL - RESUMO    \n");
         resumo.append("===============================\n");
         resumo.append("Filme: ")
-              .append(ingressos.get(0).getSessao().getFilme().getTitulo())
-              .append("\n");
+                .append(ingressos.get(0).getSessao().getFilme().getTitulo())
+                .append("\n");
         resumo.append("Sala: ")
-              .append(ingressos.get(0).getSessao().getSala().toString())
-              .append("\n");
+                .append(ingressos.get(0).getSessao().getSala().toString())
+                .append("\n");
         resumo.append("Horário: ")
-              .append(ingressos.get(0).getSessao().getHorario().toString())
-              .append("\n");
+                .append(ingressos.get(0).getSessao().getHorario().toString())
+                .append("\n");
         resumo.append("-------------------------------\n");
         resumo.append("Assentos escolhidos:\n");
 
         for (Ingresso ingresso : ingressos) {
             resumo.append(" -> ").append(ingresso.getAssento().toString());
             resumo.append(" | Valor: R$ ")
-                  .append(String.format("%.2f", ingresso.getPreco()))
-                  .append("\n");
+                    .append(String.format("%.2f", ingresso.getPreco()))
+                    .append("\n");
             total += ingresso.getPreco();
         }
 
@@ -130,29 +132,34 @@ public class PagamentoIngressoController {
         }
 
         try {
-            // Associa cliente a cada ingresso usando a idade informada na tela de assentos
+
+            // Associa cliente a cada ingresso usando a idade informada
             for (Ingresso ingresso : ingressos) {
+
                 String nomeAssento = ingresso.getAssento().getCodigo();
+
                 int idadeCliente = (idadesPorAssento != null
                         && idadesPorAssento.containsKey(nomeAssento))
                         ? idadesPorAssento.get(nomeAssento)
                         : 0;
 
                 Cliente cliente = new Cliente(nome, cpf, idadeCliente, email);
+
                 ingresso.setCliente(cliente);
             }
 
-            // Marca assentos como ocupados no cache em memória
+            // Marca assentos como ocupados
             ArrayList<String> codigosVendidos = new ArrayList<>();
             for (Ingresso ingresso : ingressos) {
                 codigosVendidos.add(ingresso.getAssento().getCodigo());
             }
+
             AssentoController.ocuparAssentos(
                     ingressos.get(0).getSessao().getHorario(),
                     codigosVendidos
             );
 
-            // Persiste no CSV
+            // Persiste venda
             VendaIngresso venda = new VendaIngresso(ingressos);
             venda.setFormaPagamento(comboPagamento.getValue());
 
@@ -160,21 +167,40 @@ public class PagamentoIngressoController {
             RepositorioVendaIngressoImpl.getInstancia().cadastrar(venda);
             System.out.println("DEPOIS DE SALVAR");
 
-            // Gera PDFs (erros aqui não impedem o fluxo)
+            // PDFs
             try {
                 GeradorPDF.gerarNotaFiscalIngresso(venda);
                 for (Ingresso ingresso : ingressos) {
                     GeradorPDF.gerarIngresso(ingresso);
                 }
             } catch (Exception pdfEx) {
-                System.err.println("Aviso: erro ao gerar PDF — " + pdfEx.getMessage());
+                System.err.println("Aviso PDF — " + pdfEx.getMessage());
             }
 
+            // ALERTA
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Pagamento");
             alert.setHeaderText(null);
             alert.setContentText("Ingresso emitido com sucesso.");
             alert.showAndWait();
+
+            // EMAIL (CORRIGIDO)
+            try {
+
+                String mensagemEmail = gerarResumoEmail();
+
+                EnviadorEmail.enviarEmail(
+                        email,
+                        "Compra confirmada - Cine Rural",
+                        mensagemEmail
+                );
+
+                System.out.println("Email enviado com sucesso!");
+
+            } catch (Exception e) {
+                System.out.println("Erro ao enviar e-mail: " + e.getMessage());
+                e.printStackTrace();
+            }
 
             limparCampos();
             navegarParaAtendente();
@@ -254,6 +280,36 @@ public class PagamentoIngressoController {
         ingressos = new ArrayList<>();
         btnPagar.setDisable(true);
         total = 0;
+    }
+
+    private String gerarResumoEmail() {
+
+        StringBuilder resumo = new StringBuilder();
+
+        resumo.append("Compra confirmada com sucesso!\n\n");
+
+        resumo.append("Resumo da compra:\n\n");
+
+        if (ingressos != null && !ingressos.isEmpty()) {
+
+            resumo.append("Filme: ")
+                    .append(ingressos.get(0).getSessao().getFilme().getTitulo())
+                    .append("\n\n");
+
+            for (Ingresso ingresso : ingressos) {
+
+                resumo.append("Assento: ")
+                        .append(ingresso.getAssento().getCodigo())
+                        .append(" - R$ ")
+                        .append(String.format("%.2f", ingresso.getPreco()))
+                        .append("\n");
+            }
+        }
+
+        resumo.append("\nTotal: R$ ")
+                .append(String.format("%.2f", total));
+
+        return resumo.toString();
     }
 }
 // REQ19: Não permitir a venda de ingressos para menores de idade sem acompanhante
