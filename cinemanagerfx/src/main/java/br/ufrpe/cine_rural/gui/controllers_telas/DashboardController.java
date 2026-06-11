@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import java.util.stream.Stream;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -430,51 +431,101 @@ public class DashboardController {
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
             // Cabeçalho
-            pw.println("Data;Tipo;Descricao;Ingressos Vendidos;Receita Ingressos (R$);Produto;Qtd Vendida;Receita Produto (R$)");
+            pw.println("========================================");
+            pw.println("RELATORIO GERAL - CINE RURAL");
+            pw.println("Gerado em: " +
+                    LocalDateTime.now().format(
+                            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            pw.println("========================================");
+            pw.println();
 
-            for (LocalDate dia : todosDias) {
-                // ── Linhas de ingresso: uma por filme com vendas nesse dia ──────────
-                Map<String, List<VendaIngresso>> porFilme =
-                        ingressosPorDiaFilme.getOrDefault(dia, Collections.emptyMap());
+            double totalReceitaIngressos =
+                    vendas.stream()
+                            .mapToDouble(v -> v.preco)
+                            .sum();
 
-                int    totalIngressosDia   = 0;
-                double totalReceitaIngDia  = 0;
+            double totalReceitaLojinha =
+                    vendasLojinha.stream()
+                            .mapToDouble(v -> v.subtotal)
+                            .sum();
 
-                for (Map.Entry<String, List<VendaIngresso>> e :
-                        new TreeMap<>(porFilme).entrySet()) {
-                    int    qtd     = e.getValue().size();
-                    double receita = e.getValue().stream().mapToDouble(v -> v.preco).sum();
-                    totalIngressosDia  += qtd;
-                    totalReceitaIngDia += receita;
-                    pw.printf("%s;Ingresso;%s;%d;%.2f;;;%n",
-                            dia, e.getKey(), qtd, receita);
-                }
+            long totalClientes =
+                    Stream.concat(
+                                    vendas.stream().map(v -> v.cliente),
+                                    vendasLojinha.stream().map(v -> v.cliente)
+                            )
+                            .filter(c -> !c.isBlank())
+                            .distinct()
+                            .count();
 
-                // Linha de total de ingressos do dia
-                if (totalIngressosDia > 0) {
-                    pw.printf("%s;Ingresso – TOTAL DO DIA;;%d;%.2f;;;%n",
-                            dia, totalIngressosDia, totalReceitaIngDia);
-                }
+            pw.println("RESUMO GERAL");
+            pw.println("Indicador;Valor");
 
-                //Linhas da lojinha: uma por produto vendido nesse dia
-                Map<String, int[]> porProduto =
-                        lojinhaPorDiaProduto.getOrDefault(dia, Collections.emptyMap());
+            pw.printf("Receita Ingressos;%.2f%n", totalReceitaIngressos);
+            pw.printf("Receita Lojinha;%.2f%n", totalReceitaLojinha);
+            pw.printf("Receita Total;%.2f%n",
+                    totalReceitaIngressos + totalReceitaLojinha);
 
-                if (!porProduto.isEmpty()) {
-                    int    totalQtd     = 0;
-                    double totalReceita = 0;
-                    for (Map.Entry<String, int[]> e : new TreeMap<>(porProduto).entrySet()) {
-                        int    qtd     = e.getValue()[0];
-                        double receita = e.getValue()[1] / 100.0;
-                        totalQtd     += qtd;
-                        totalReceita += receita;
-                        pw.printf("%s;Lojinha;;;; %s;%d;%.2f%n",
-                                dia, e.getKey(), qtd, receita);
-                    }
-                    pw.printf("%s;Lojinha – TOTAL DO DIA;;;;;%d;%.2f%n",
-                            dia, totalQtd, totalReceita);
-                }
+            pw.printf("Clientes Unicos;%d%n", totalClientes);
+
+            pw.println();
+
+            //filmes
+            pw.println("FILMES");
+            pw.println("Filme;Ingressos Vendidos;Receita");
+
+            Map<String, List<VendaIngresso>> vendasPorFilme =
+                    vendas.stream()
+                            .collect(Collectors.groupingBy(v -> v.filme));
+
+            for (Map.Entry<String, List<VendaIngresso>> entry :
+                    new TreeMap<>(vendasPorFilme).entrySet()) {
+
+                int quantidade = entry.getValue().size();
+
+                double receita = entry.getValue()
+                        .stream()
+                        .mapToDouble(v -> v.preco)
+                        .sum();
+
+                pw.printf("%s;%d;%.2f%n",
+                        entry.getKey(),
+                        quantidade,
+                        receita);
             }
+
+            pw.println();
+
+
+            //Produtos
+            pw.println("PRODUTOS");
+            pw.println("Produto;Quantidade Vendida;Receita");
+
+            Map<String, List<VendaLojinha>> vendasPorProduto =
+                    vendasLojinha.stream()
+                            .collect(Collectors.groupingBy(v -> v.produto));
+
+            for (Map.Entry<String, List<VendaLojinha>> entry :
+                    new TreeMap<>(vendasPorProduto).entrySet()) {
+
+                int quantidade = entry.getValue()
+                        .stream()
+                        .mapToInt(v -> v.quantidade)
+                        .sum();
+
+                double receita = entry.getValue()
+                        .stream()
+                        .mapToDouble(v -> v.subtotal)
+                        .sum();
+
+                pw.printf("%s;%d;%.2f%n",
+                        entry.getKey(),
+                        quantidade,
+                        receita);
+            }
+
+            pw.println();
+
 
 
             // Coleta todos os clientes únicos de ambas as fontes
@@ -490,8 +541,8 @@ public class DashboardController {
 
             if (!todosClientes.isEmpty()) {
                 pw.println(); // linha em branco separando seções
-                pw.println("=== RELATÓRIO DE CLIENTES ===");
-                pw.println("Cliente;Ingressos Comprados;Filmes Assistidos;Gasto Ingressos (R$);Compras Lojinha;Produtos Comprados;Gasto Lojinha (R$);Gasto Total (R$)");
+                pw.println("CLIENTES");
+                pw.println("Cliente;Ingressos Comprados;Compras Lojinha;Gasto Total");
 
                 for (String cliente : todosClientes) {
                     // ── dados de ingresso deste cliente ──────────────────────────
@@ -522,14 +573,10 @@ public class DashboardController {
 
                     double gastoTotal = gastoIngressos + gastoLojinha;
 
-                    pw.printf("%s;%d;%s;%.2f;%d;%s;%.2f;%.2f%n",
+                    pw.printf("%s;%d;%d;%.2f%n",
                             cliente,
                             qtdIngressos,
-                            filmesAssistidos.isEmpty() ? "-" : filmesAssistidos,
-                            gastoIngressos,
                             qtdComprasLojinha,
-                            produtosComprados.isEmpty() ? "-" : produtosComprados,
-                            gastoLojinha,
                             gastoTotal);
                 }
 
@@ -538,23 +585,61 @@ public class DashboardController {
                 double totalGeralIngressos = vendas.stream().mapToDouble(v -> v.preco).sum();
                 double totalGeralLojinha   = vendasLojinha.stream().mapToDouble(vl -> vl.subtotal).sum();
                 pw.println();
-                pw.printf("TOTAL;%d clientes únicos;;;%.2f;;;%.2f;%.2f%n",
-                        totalClientesUnicos,
-                        totalGeralIngressos,
-                        totalGeralLojinha,
+                pw.println();
+                pw.println("TOTAL CLIENTES");
+
+                pw.printf("Clientes Unicos;%d%n",
+                        totalClientesUnicos);
+
+                pw.printf("Receita Ingressos;%.2f%n",
+                        totalGeralIngressos);
+
+                pw.printf("Receita Lojinha;%.2f%n",
+                        totalGeralLojinha);
+
+                pw.printf("Receita Total;%.2f%n",
                         totalGeralIngressos + totalGeralLojinha);
             }
+
+            pw.println();
+            pw.println("ALERTAS");
+            pw.println("Tipo;Descricao");
+
+            //baixa porcura
+            filmes.forEach(filme -> {
+
+                long ingressos = vendas.stream()
+                        .filter(v -> v.filme.equalsIgnoreCase(filme))
+                        .count();
+
+                if (ingressos <= SESSOES_BAIXA_PROCURA) {
+
+                    pw.printf("Baixa Procura;%s%n",
+                            filme);
+                }
+            });
+
+            //estoque biaxo
+
+            produtos.stream()
+                    .filter(p -> p.estoque <= ESTOQUE_BAIXO)
+                    .forEach(p ->
+                            pw.printf("Estoque Baixo;%s (%d unidades)%n",
+                                    p.nome,
+                                    p.estoque));
+
 
             mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
         } catch (IOException e) {
             alertaErro("Erro ao exportar CSV: " + e.getMessage());
         }
+
     }
 
 
     @FXML
     private void onEnviarEmail() {
-        // ── Monta o corpo do e-mail ───────────────────────────────────────────
+
         LocalDate hoje = LocalDate.now();
         StringBuilder corpo = new StringBuilder();
         corpo.append("=== RELATÓRIO DIÁRIO – CINE RURAL ===\n");
