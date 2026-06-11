@@ -6,7 +6,6 @@ import br.ufrpe.cine_rural.enums.StatusSessao;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.model.tiposala.Sala;
-
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

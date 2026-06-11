@@ -3,20 +3,14 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.*;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import javafx.stage.Stage;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;

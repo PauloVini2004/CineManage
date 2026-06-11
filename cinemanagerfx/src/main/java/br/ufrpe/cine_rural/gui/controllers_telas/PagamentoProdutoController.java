@@ -4,12 +4,10 @@ import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaLojinhaImpl;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
-
 import br.ufrpe.cine_rural.model.loja.VendaLojinha;
 import br.ufrpe.cine_rural.util.GeradorPDF;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

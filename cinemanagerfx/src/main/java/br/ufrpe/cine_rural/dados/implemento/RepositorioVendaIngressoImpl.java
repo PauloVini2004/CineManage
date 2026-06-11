@@ -3,7 +3,6 @@ package br.ufrpe.cine_rural.dados.implemento;
 import br.ufrpe.cine_rural.dados.interfaces.IRepositorioVendaIngresso;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.VendaIngresso;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;

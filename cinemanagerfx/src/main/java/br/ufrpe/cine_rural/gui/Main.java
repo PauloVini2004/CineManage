@@ -36,6 +36,13 @@ public class Main extends Application {
     }
 }
 
+
+
+// Testes de Telas Singulares
+
+
+
+
 // SEQUENCIA DE TELAS : SELECIONAR FILME E SESSÃO -> ESCOLHER ASSENTO -> PAGAMENTO
 /*
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;

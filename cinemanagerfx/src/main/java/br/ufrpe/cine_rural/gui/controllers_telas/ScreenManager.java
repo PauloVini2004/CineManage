@@ -2,7 +2,6 @@ package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import java.io.IOException;
 import java.util.Objects;
-
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSalaImpl;
 import br.ufrpe.cine_rural.model.tiposala.Comum;

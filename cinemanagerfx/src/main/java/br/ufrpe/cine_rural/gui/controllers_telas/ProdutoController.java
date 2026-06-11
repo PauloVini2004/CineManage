@@ -4,33 +4,24 @@ import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
 import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.util.ArrayList;
-
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Pos;
-
 import javafx.scene.control.Alert;
 
 public class ProdutoController {

@@ -4,14 +4,11 @@ import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.VendaIngresso;
 import br.ufrpe.cine_rural.model.loja.ItemVenda;
-
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

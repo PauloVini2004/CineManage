@@ -5,10 +5,8 @@ import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Genero;
 import br.ufrpe.cine_rural.model.Filme;
 import javafx.scene.image.Image;
-
 import java.io.*;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class RepositorioFilmeImpl implements IRepositorioFilme {

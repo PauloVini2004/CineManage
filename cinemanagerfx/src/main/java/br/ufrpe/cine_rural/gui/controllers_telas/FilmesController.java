@@ -1,12 +1,10 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
-import br.ufrpe.cine_rural.dados.implemento.RepositorioProdutoImpl;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
 import br.ufrpe.cine_rural.negocios.FilmeNegocios;
-import br.ufrpe.cine_rural.negocios.ProdutoNegocios;
 import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

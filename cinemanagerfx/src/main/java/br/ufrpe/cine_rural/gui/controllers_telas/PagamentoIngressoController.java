@@ -1,16 +1,12 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
-import br.ufrpe.cine_rural.gui.controllers_telas.AssentoController;
 import br.ufrpe.cine_rural.model.Cliente;
 import br.ufrpe.cine_rural.model.Ingresso;
 import br.ufrpe.cine_rural.model.VendaIngresso;
 import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaIngressoImpl;
-
 import br.ufrpe.cine_rural.util.GeradorPDF;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
