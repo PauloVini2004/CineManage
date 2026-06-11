@@ -8,12 +8,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.HomeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.HomeController">
    <center>
-      <Pane fx:id="painelCentral" prefHeight="509.0" prefWidth="900.0" style="-fx-background-color: RED;" BorderPane.alignment="CENTER">
+      <Pane fx:id="painelCentral" prefHeight="504.0" prefWidth="900.0" style="-fx-background-color: RED;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="imageCentral" fitHeight="554.0" fitWidth="900.0" pickOnBounds="true" smooth="false">
+            <ImageView fx:id="imageCentral" fitHeight="517.0" fitWidth="900.0" pickOnBounds="true" smooth="false">
                <image>
                   <Image url="@ImagensProduto/Logo_Final.png" />
                </image>
@@ -22,29 +23,33 @@
       </Pane>
    </center>
    <bottom>
-      <HBox prefHeight="194.0" prefWidth="900.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="182.0" prefWidth="900.0" BorderPane.alignment="CENTER">
          <children>
-            <Region prefHeight="147.0" prefWidth="75.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnAtendente" mnemonicParsing="false" onAction="#btnAtendenteAction" prefHeight="27.0" prefWidth="86.0" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #b90000; -fx-border-color: WHITE; -fx-border-radius: 15; -fx-background-radius: 15;" text="Atendente" textFill="WHITE">
-               <HBox.margin>
-                  <Insets left="12.0" top="25.0" />
-               </HBox.margin>
-            </Button>
-            <Region layoutX="10.0" layoutY="10.0" prefHeight="237.0" prefWidth="367.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnGerente" mnemonicParsing="false" onAction="#btnGerenteAction" prefHeight="27.0" prefWidth="90.0" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerente" textFill="WHITE">
-               <HBox.margin>
-                  <Insets right="12.0" top="25.0" />
-               </HBox.margin>
-            </Button>
-            <Region layoutX="10.0" layoutY="10.0" prefHeight="147.0" prefWidth="77.0" HBox.hgrow="ALWAYS" />
+            <HBox prefHeight="177.0" prefWidth="900.0" style="-fx-background-color: BLACK;">
+               <children>
+                  <Region prefHeight="147.0" prefWidth="75.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnAtendente" mnemonicParsing="false" onAction="#btnAtendenteAction" prefHeight="27.0" prefWidth="86.0" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #b90000; -fx-border-color: WHITE; -fx-border-radius: 15; -fx-background-radius: 15;" text="Atendente" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="12.0" top="25.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Region layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="262.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnGerente" mnemonicParsing="false" onAction="#btnGerenteAction" prefHeight="27.0" prefWidth="90.0" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #b90000; -fx-background-radius: 15; -fx-border-color: WHITE; -fx-border-radius: 15;" text="Gerente" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets right="12.0" top="25.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Region layoutX="10.0" layoutY="10.0" prefHeight="147.0" prefWidth="77.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox prefHeight="86.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="67.0" prefWidth="764.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnSair" mnemonicParsing="false" onAction="#btnSairAction" prefHeight="27.0" prefWidth="101.0" scaleX="1.2" scaleY="1.2" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Fechar" textFill="WHITE" />
+                  <Region prefHeight="78.0" prefWidth="31.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
    </bottom>
-   <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="btnSair" mnemonicParsing="false" onAction="#btnSairAction" style="-fx-background-color: #b90000; -fx-border-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" text="Fechar" textFill="WHITE" />
-         </children>
-      </HBox>
-   </top>
 </BorderPane>

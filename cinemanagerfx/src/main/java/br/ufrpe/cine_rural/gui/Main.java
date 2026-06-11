@@ -4,7 +4,10 @@ import br.ufrpe.cine_rural.gui.controllers_telas.ScreenManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 //Inicio da Main
 public class Main extends Application {
@@ -19,11 +22,15 @@ public class Main extends Application {
                         "/br/ufrpe/cine_rural/gui/home-view.fxml"
                 )
         );
-
         Scene scene = new Scene(loader.load());
 
         stage.resizableProperty().setValue(Boolean.FALSE);
         stage.setTitle("Home");
+
+        Image icon = new Image(getClass().getResourceAsStream(
+                "/br/ufrpe/cine_rural/gui/Icon.png"));
+        stage.getIcons().add(icon);
+
         stage.setWidth(900);
         stage.setHeight(700);
         ScreenManager.getInstance().setMainStage(stage);
