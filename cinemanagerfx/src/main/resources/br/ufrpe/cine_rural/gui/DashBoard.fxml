@@ -69,8 +69,14 @@
             </HBox>
             <HBox spacing="20">
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
-                    <Label text="Bilheteria por Filme (Receita)"/>
-                    <PieChart fx:id="graficoBilheteriaFilme" prefHeight="220" animated="true"/>
+                    <Label text="Receita Total por Filme"/>
+                    <TableView fx:id="tbReceitaFilmes" prefHeight="220" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colFilme"   text="Filme"         prefWidth="200"/>
+                            <TableColumn fx:id="colReceita" text="Receita (R$)"  prefWidth="120"/>
+                        </columns>
+                        <placeholder><Label text="Nenhum dado disponível"/></placeholder>
+                    </TableView>
                 </VBox>
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
                     <Label text="Faturamento Bomboniere por Produto"/>

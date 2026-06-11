@@ -75,7 +75,10 @@ public class DashboardController {
     @FXML private ProgressBar                   barraOcupacao;
     @FXML private Label                         lblTaxa;
 
-    @FXML private PieChart                      graficoBilheteriaFilme;
+    @FXML private TableView<FilmeReceita>        tbReceitaFilmes;
+    @FXML private TableColumn<FilmeReceita, String>  colFilme;
+    @FXML private TableColumn<FilmeReceita, String>  colReceita;
+
     @FXML private PieChart                      graficoBomboniere;
 
     @FXML private TableView<AssentoResumo>      tbAssentos;
@@ -99,6 +102,21 @@ public class DashboardController {
         public int     getFrequencia() { return frequencia.get(); }
         public SimpleStringProperty  codigoProperty()     { return codigo; }
         public SimpleIntegerProperty frequenciaProperty() { return frequencia; }
+    }
+
+    /** Linha da tabela de receita por filme. */
+    public static class FilmeReceita {
+        private final SimpleStringProperty filme;
+        private final SimpleStringProperty receita;
+
+        public FilmeReceita(String filme, double receita) {
+            this.filme   = new SimpleStringProperty(filme);
+            this.receita = new SimpleStringProperty(String.format("R$ %.2f", receita));
+        }
+        public String getFilme()   { return filme.get(); }
+        public String getReceita() { return receita.get(); }
+        public SimpleStringProperty filmeProperty()   { return filme; }
+        public SimpleStringProperty receitaProperty() { return receita; }
     }
 
     /** Produto carregado do CSV. */
@@ -193,6 +211,11 @@ public class DashboardController {
                 c -> c.getValue().codigoProperty());
         colFrequencia.setCellValueFactory(
                 c -> c.getValue().frequenciaProperty().asObject());
+
+        colFilme.setCellValueFactory(
+                c -> c.getValue().filmeProperty());
+        colReceita.setCellValueFactory(
+                c -> c.getValue().receitaProperty());
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -622,7 +645,7 @@ public class DashboardController {
         List<SessaoCSV> sessoesFiltradas = filtrarSessoes();
 
         carregarBilheteria(sessoesFiltradas);   // REQ12
-        carregarBilheteriaFilmePie();           // REQ12 – gráfico pizza por filme
+        carregarReceitaFilmes();                // REQ12 – tabela receita por filme
         carregarBomboniere();                   // REQ13
         carregarAssentos(sessoesFiltradas);     // REQ15
         carregarAlertas();                      // REQ16 + REQ17
@@ -697,9 +720,7 @@ public class DashboardController {
     // REQ13 – Bomboniere: estoque atual por produto
     // ─────────────────────────────────────────────────────────────────────────
 
-    private void carregarBilheteriaFilmePie() {
-        ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
-
+    private void carregarReceitaFilmes() {
         String    filme  = cbFilmes.getValue();
         LocalDate inicio = dpInicio.getValue();
         LocalDate fim    = dpFim.getValue();
@@ -713,23 +734,13 @@ public class DashboardController {
                         v -> v.filme,
                         Collectors.summingDouble(v -> v.preco)));
 
-        if (receitaPorFilme.isEmpty()) {
-            graficoBilheteriaFilme.setData(FXCollections.observableArrayList());
-            graficoBilheteriaFilme.setTitle("Bilheteria por Filme (sem vendas no período)");
-            return;
-        }
+        ObservableList<FilmeReceita> linhas = FXCollections.observableArrayList(
+                receitaPorFilme.entrySet().stream()
+                        .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                        .map(e -> new FilmeReceita(e.getKey(), e.getValue()))
+                        .collect(Collectors.toList()));
 
-        double totalFilmes = receitaPorFilme.values().stream().mapToDouble(Double::doubleValue).sum();
-        receitaPorFilme.entrySet().stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                .forEach(e -> dados.add(new PieChart.Data(
-                        e.getKey() + " (R$" + String.format("%.2f", e.getValue()) + ")",
-                        e.getValue())));
-
-        graficoBilheteriaFilme.setData(dados);
-        graficoBilheteriaFilme.setAnimated(true);
-        graficoBilheteriaFilme.setTitle(String.format(
-                "Bilheteria por Filme – Total: R$ %.2f", totalFilmes));
+        tbReceitaFilmes.setItems(linhas);
     }
 
     private void carregarBomboniere() {
