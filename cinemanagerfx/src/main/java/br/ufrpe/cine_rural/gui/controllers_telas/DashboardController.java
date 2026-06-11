@@ -23,7 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-/**
+/*
  * Controller do Dashboard de Relatórios e Estatísticas.
  *
  * REQ12 – Bilheteria por filme + taxa de ocupação  (BarChart + ProgressBar)
@@ -43,11 +43,12 @@ import javafx.stage.Stage;
  */
 public class DashboardController {
 
-    // ── CSV paths (relativo ao classpath / resources) ────────────────────────
+    // CSV paths (relativo ao classpath / resources)
     private static final String CSV_FILMES          = "filmes.csv";
     private static final String CSV_SESSOES         = "sessoes.csv";
     private static final String CSV_PRODUTOS        = "produtos.csv";
     private static final String CSV_VENDAS          = "vendas_ingresso.csv";
+    private static final String CSV_VENDAS_LOJINHA  = "vendas_lojinha.csv";
 
     // Prefixo do classpath onde os CSVs estão publicados após o build
     private static final String CLASSPATH_PREFIX = "/br/ufrpe/cine_rural/dados/arquivoscsv/";
@@ -63,7 +64,6 @@ public class DashboardController {
     private static final DateTimeFormatter FMT_HORARIO =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss]");
 
-    // ── FXML ─────────────────────────────────────────────────────────────────
     @FXML private ComboBox<String>              cbFilmes;
     @FXML private DatePicker                    dpInicio;
     @FXML private DatePicker                    dpFim;
@@ -80,9 +80,9 @@ public class DashboardController {
 
     @FXML private ListView<String>              listaAlertas;
 
-    // ── Modelos internos ──────────────────────────────────────────────────────
+    // Modelos internos
 
-    /** Linha da tabela de assentos. */
+    // Linha da tabela de assentos.
     public static class AssentoResumo {
         private final SimpleStringProperty  codigo;
         private final SimpleIntegerProperty frequencia;
@@ -97,7 +97,7 @@ public class DashboardController {
         public SimpleIntegerProperty frequenciaProperty() { return frequencia; }
     }
 
-    /** Produto carregado do CSV. */
+    // Produto carregado do CSV.
     private static class Produto {
         final int    id;
         final String nome;
@@ -112,7 +112,7 @@ public class DashboardController {
         }
     }
 
-    /** Sessão carregada do CSV. */
+    // Sessão carregada do CSV.
     private static class SessaoCSV {
         final String        tituloFilme;
         final int           idSala;
@@ -130,7 +130,7 @@ public class DashboardController {
         }
     }
 
-    /** Venda de ingresso carregada do CSV. */
+    // Venda de ingresso carregada do CSV.
     private static class VendaIngresso {
         final LocalDateTime dataVenda;
         final String        filme;
@@ -145,18 +145,30 @@ public class DashboardController {
         }
     }
 
-    // ── Dados em memória ──────────────────────────────────────────────────────
+
+    // Venda de produto da lojinha carregada do CSV.
+    private static class VendaLojinha {
+        final LocalDateTime dataVenda;
+        final String        produto;
+        final int           quantidade;
+        final double        subtotal;
+
+        VendaLojinha(LocalDateTime dataVenda, String produto, int quantidade, double subtotal) {
+            this.dataVenda  = dataVenda;
+            this.produto    = produto;
+            this.quantidade = quantidade;
+            this.subtotal   = subtotal;
+        }
+    }
+
+    // Dados em memória
     private List<String>         filmes   = new ArrayList<>();
     private List<SessaoCSV>      sessoes  = new ArrayList<>();
     private List<Produto>        produtos = new ArrayList<>();
     private List<VendaIngresso>  vendas   = new ArrayList<>();
+    private List<VendaLojinha>   vendasLojinha = new ArrayList<>();
 
-    // ── Capacidade padrão por sala (ajuste conforme seu modelo) ──────────────
     private static final int CAPACIDADE_SALA = 50;
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Inicialização
-    // ─────────────────────────────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
@@ -166,7 +178,7 @@ public class DashboardController {
         atualizarDashboard();
     }
 
-    /** Vincula as colunas da TableView às propriedades do modelo. */
+    // Vincula as colunas da TableView às propriedades do modelo.
     private void configurarTabela() {
         colCodigo.setCellValueFactory(
                 c -> c.getValue().codigoProperty());
@@ -174,21 +186,16 @@ public class DashboardController {
                 c -> c.getValue().frequenciaProperty().asObject());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Leitura dos CSVs
-    // ─────────────────────────────────────────────────────────────────────────
-
     private void carregarCSVs() {
-        filmes   = lerFilmes();
-        sessoes  = lerSessoes();
-        produtos = lerProdutos();
-        vendas   = lerVendas();
+        filmes        = lerFilmes();
+        sessoes       = lerSessoes();
+        produtos      = lerProdutos();
+        vendas        = lerVendas();
+        vendasLojinha = lerVendasLojinha();
     }
 
-    /**
-     * Lê filmes.csv  →  titulo;tipo;duracao;genero;classificacao;imagem
-     * Pega apenas o título (coluna 0).
-     */
+    // Lê filmes.csv  ->  titulo;tipo;duracao;genero;classificacao;imagem
     private List<String> lerFilmes() {
         List<String> lista = new ArrayList<>();
         try (BufferedReader br = abrirCSV(CSV_FILMES)) {
@@ -206,10 +213,7 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Lê sessoes.csv  →  titulo_filme;id_sala;horario;idioma;status
-     * Horário aceita formato com ou sem segundos (ex.: "2026-06-12T19:30").
-     */
+    // Lê sessoes.csv  ->  titulo_filme;id_sala;horario;idioma;status
     private List<SessaoCSV> lerSessoes() {
         List<SessaoCSV> lista = new ArrayList<>();
         try (BufferedReader br = abrirCSV(CSV_SESSOES)) {
@@ -223,7 +227,6 @@ public class DashboardController {
                 try {
                     String        titulo  = p[0].trim();
                     int           sala    = Integer.parseInt(p[1].trim());
-                    // FMT_HORARIO aceita "HH:mm" e "HH:mm:ss"
                     LocalDateTime horario = LocalDateTime.parse(p[2].trim(), FMT_HORARIO);
                     String        idioma  = p[3].trim();
                     String        status  = p[4].trim();
@@ -236,9 +239,7 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Lê produtos.csv  →  id;nome;preco;estoque;imagem
-     */
+    // Lê produtos.csv  ->  id;nome;preco;estoque;imagem
     private List<Produto> lerProdutos() {
         List<Produto> lista = new ArrayList<>();
         try (BufferedReader br = abrirCSV(CSV_PRODUTOS)) {
@@ -263,14 +264,10 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Le vendas_ingresso.csv  ->  DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente
-     * Pula o cabecalho automaticamente.
-     * Formato do horario: 2026-06-09T02:14:02.320962700 (com nanosegundos)
-     */
+    // Le vendas_ingresso.csv  ->  DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente e Pula o cabecalho automaticamente.
     private List<VendaIngresso> lerVendas() {
         List<VendaIngresso> lista = new ArrayList<>();
-        // Formatter flexivel: aceita segundos com ou sem fracoes (nanosegundos incluidos)
+        // Formatter flexivel: aceita segundos com ou sem fracoes
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS][.SSSSSS][.SSS]");
         try (BufferedReader br = abrirCSV(CSV_VENDAS)) {
             if (br == null) return lista;
@@ -279,7 +276,7 @@ public class DashboardController {
             while ((linha = br.readLine()) != null) {
                 linha = linha.trim();
                 if (linha.isEmpty()) continue;
-                if (primeiraLinha) { primeiraLinha = false; continue; } // pula cabecalho
+                if (primeiraLinha) { primeiraLinha = false; continue; }
                 String[] p = linha.split(";", -1);
                 if (p.length < 6) continue;
                 try {
@@ -296,18 +293,40 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Tenta abrir o CSV em dois locais, nessa ordem:
-     *  1. Classpath: CLASSPATH_PREFIX + arquivo  (JAR / apos build)
-     *  2. DEV_PATH_PREFIX + arquivo              (desenvolvimento via IDE)
-     */
+    private List<VendaLojinha> lerVendasLojinha() {
+        List<VendaLojinha> lista = new ArrayList<>();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS][.SSSSSS][.SSS]");
+        try (BufferedReader br = abrirCSV(CSV_VENDAS_LOJINHA)) {
+            if (br == null) return lista;
+            String linha;
+            boolean primeiraLinha = true;
+            while ((linha = br.readLine()) != null) {
+                linha = linha.trim();
+                if (linha.isEmpty()) continue;
+                if (primeiraLinha) { primeiraLinha = false; continue; }
+                String[] p = linha.split(";", -1);
+                if (p.length < 6) continue;
+                try {
+                    LocalDateTime data       = LocalDateTime.parse(p[0].trim(), fmt);
+                    String        produto    = p[3].trim();
+                    int           quantidade = Integer.parseInt(p[4].trim());
+                    double        subtotal   = Double.parseDouble(p[5].trim().replace(",", "."));
+                    lista.add(new VendaLojinha(data, produto, quantidade, subtotal));
+                } catch (Exception ignored) {  }
+            }
+        } catch (IOException e) {
+            alertaErro("Erro ao ler vendas_lojinha.csv: " + e.getMessage());
+        }
+        return lista;
+    }
+
     private BufferedReader abrirCSV(String nomeArquivo) {
-        // 1. Classpath (funciona no JAR apos build)
+
         InputStream is = getClass().getResourceAsStream(CLASSPATH_PREFIX + nomeArquivo);
         if (is != null)
             return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
-        // 2. Filesystem relativo ao working directory (desenvolvimento)
+
         File f = new File(DEV_PATH_PREFIX + nomeArquivo);
         if (f.exists()) {
             try { return new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)); }
@@ -318,17 +337,16 @@ public class DashboardController {
         return null;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Ações dos botões (FXML onAction)
-    // ─────────────────────────────────────────────────────────────────────────
 
-    /** Botão "Pesquisar" – filtra por filme/período selecionados. */
+    // Ações dos botões
+
+    // Botão "Pesquisar" – filtra por filme/período selecionados.
     @FXML
     private void onPesquisar() {
         atualizarDashboard();
     }
 
-    /** Botão "Atualizar Dashboard" – recarrega tudo dos CSVs. */
+    // Botão "Atualizar Dashboard" – recarrega tudo dos CSVs.
     @FXML
     private void onAtualizarDashboard() {
         carregarCSVs();
@@ -336,7 +354,7 @@ public class DashboardController {
         atualizarDashboard();
     }
 
-    /** Botão "Exportar CSV" – REQ14. */
+    // Botão "Exportar CSV" – REQ14.
     @FXML
     private void onExportarCSV() {
         FileChooser fc = new FileChooser();
@@ -348,22 +366,63 @@ public class DashboardController {
         File destino = fc.showSaveDialog(graficoBilheteria.getScene().getWindow());
         if (destino == null) return;
 
-        // Agrupa sessões por data e calcula receita estimada (ingressos × preço médio R$25)
-        Map<LocalDate, Long> sessoesporDia = sessoes.stream()
+        // Ingressos: agrupa por (dia, filme) diretamente das vendas
+        Map<LocalDate, Map<String, List<VendaIngresso>>> ingressosPorDiaFilme = vendas.stream()
                 .collect(Collectors.groupingBy(
-                        s -> s.horario.toLocalDate(), Collectors.counting()));
+                        v -> v.dataVenda.toLocalDate(),
+                        Collectors.groupingBy(v -> v.filme)));
+
+        // Lojinha: agrupa por (dia, produto)
+        Map<LocalDate, Map<String, int[]>> lojinhaPorDiaProduto = new TreeMap<>();
+        for (VendaLojinha vl : vendasLojinha) {
+            LocalDate dia = vl.dataVenda.toLocalDate();
+            lojinhaPorDiaProduto
+                    .computeIfAbsent(dia, d -> new LinkedHashMap<>())
+                    .computeIfAbsent(vl.produto, p -> new int[]{0, 0});
+            int[] acc = lojinhaPorDiaProduto.get(dia).get(vl.produto);
+            acc[0] += vl.quantidade;
+            acc[1]  = (int)(acc[1] + vl.subtotal * 100);
+        }
+
+        // Todos os dias com movimento (ingressos ou lojinha)
+        Set<LocalDate> todosDias = new TreeSet<>();
+        ingressosPorDiaFilme.keySet().forEach(todosDias::add);
+        lojinhaPorDiaProduto.keySet().forEach(todosDias::add);
 
         try (PrintWriter pw = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
-            pw.println("Data;Sessoes;Receita Estimada (R$)");
-            sessoesporDia.entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .forEach(e -> {
-                        double receita = e.getValue() * CAPACIDADE_SALA * 25.0;
-                        pw.printf("%s;%d;%.2f%n",
-                                e.getKey(), e.getValue(), receita);
-                    });
+            // Cabeçalho
+            pw.println("Data;Tipo;Descricao;Ingressos Vendidos;Receita Ingressos (R$);Produto;Qtd Vendida;Receita Produto (R$)");
+
+            for (LocalDate dia : todosDias) {
+                // Linhas de ingresso: uma por filme com vendas nesse dia
+                Map<String, List<VendaIngresso>> porFilme =
+                        ingressosPorDiaFilme.getOrDefault(dia, Collections.emptyMap());
+
+                porFilme.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(e -> {
+                            int    qtd     = e.getValue().size();
+                            double receita = e.getValue().stream()
+                                    .mapToDouble(v -> v.preco).sum();
+                            pw.printf("%s;Ingresso;%s;%d;%.2f;;;%n",
+                                    dia, e.getKey(), qtd, receita);
+                        });
+
+                // Linhas da lojinha: uma por produto vendido nesse dia
+                Map<String, int[]> porProduto =
+                        lojinhaPorDiaProduto.getOrDefault(dia, Collections.emptyMap());
+
+                porProduto.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(e -> {
+                            int    qtd     = e.getValue()[0];
+                            double receita = e.getValue()[1] / 100.0;
+                            pw.printf("%s;Lojinha;;;; %s;%d;%.2f%n",
+                                    dia, e.getKey(), qtd, receita);
+                        });
+            }
 
             mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
         } catch (IOException e) {
@@ -371,7 +430,7 @@ public class DashboardController {
         }
     }
 
-    /** Botão "Enviar E-mail" – REQ18: exibe resumo para confirmação. */
+    // Botão "Enviar E-mail" – REQ18: exibe resumo para confirmação.
     @FXML
     private void onEnviarEmail() {
         StringBuilder sb = new StringBuilder();
@@ -406,9 +465,7 @@ public class DashboardController {
         alert.showAndWait();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Atualização central do dashboard
-    // ─────────────────────────────────────────────────────────────────────────
 
     public void atualizarDashboard() {
         List<SessaoCSV> sessoesFiltradas = filtrarSessoes();
@@ -419,7 +476,7 @@ public class DashboardController {
         carregarAlertas();                      // REQ16 + REQ17
     }
 
-    /** Aplica filtros de filme e intervalo de datas às sessões. */
+    // Aplica filtros de filme e intervalo de datas às sessões.
     private List<SessaoCSV> filtrarSessoes() {
         String     filme   = cbFilmes.getValue();
         LocalDate  inicio  = dpInicio.getValue();
@@ -435,9 +492,7 @@ public class DashboardController {
                 .collect(Collectors.toList());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // REQ12 – Bilheteria por filme + taxa de ocupação
-    // ─────────────────────────────────────────────────────────────────────────
 
     private void carregarBilheteria(List<SessaoCSV> sessoesFiltradas) {
         graficoBilheteria.getData().clear();
@@ -484,10 +539,7 @@ public class DashboardController {
                 taxa * 100, totalIngressos, totalCapacidade));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // REQ13 – Bomboniere: estoque atual por produto
-    // ─────────────────────────────────────────────────────────────────────────
-
     private void carregarBomboniere() {
         ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
 
@@ -519,10 +571,7 @@ public class DashboardController {
         graficoBomboniere.setAnimated(true);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // REQ15 – Assentos com maior frequência de ocupação
-    // ─────────────────────────────────────────────────────────────────────────
-
     private void carregarAssentos(List<SessaoCSV> sessoesFiltradas) {
         // REQ15: frequencia real de cada assento a partir das vendas de ingresso
         String    filme  = cbFilmes.getValue();
@@ -548,10 +597,7 @@ public class DashboardController {
         tbAssentos.setItems(top10);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ16 + REQ17 – Alertas
-    // ─────────────────────────────────────────────────────────────────────────
-
+    // REQ16 + REQ17 / Alertas
     private void carregarAlertas() {
         ObservableList<String> alertas = FXCollections.observableArrayList();
 
@@ -575,22 +621,21 @@ public class DashboardController {
                 .filter(p -> p.estoque <= ESTOQUE_BAIXO)
                 .sorted(Comparator.comparingInt(p -> p.estoque))
                 .forEach(p -> alertas.add(
-                        "🔴 Estoque baixo: " + p.nome
+                        " Estoque baixo: " + p.nome
                                 + " — " + p.estoque + " unidade(s) restante(s)."));
 
         if (alertas.isEmpty())
-            alertas.add("✅ Nenhum alerta no momento.");
+            alertas.add(" Nenhum alerta no momento.");
 
         listaAlertas.setItems(alertas);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+
     // Auxiliares
-    // ─────────────────────────────────────────────────────────────────────────
 
     private void popularComboFilmes() {
         ObservableList<String> opcoes = FXCollections.observableArrayList();
-        opcoes.add(""); // opção "todos"
+        opcoes.add("");
         opcoes.addAll(filmes);
         cbFilmes.setItems(opcoes);
     }
