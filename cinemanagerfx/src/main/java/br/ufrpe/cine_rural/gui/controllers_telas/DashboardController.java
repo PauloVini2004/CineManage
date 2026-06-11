@@ -939,7 +939,7 @@ public class DashboardController {
                             e.getKey() + " (R$" + String.format("%.2f", e.getValue()) + ")",
                             e.getValue())));
             graficoBomboniere.setTitle(String.format(
-                    "Faturamento Bomboniere no Período – Total: R$ %.2f", totalLojinha));
+                    "Total: R$ %.2f", totalLojinha));
         }
 
         graficoBomboniere.setData(dados);
