@@ -69,7 +69,11 @@
             </HBox>
             <HBox spacing="20">
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
-                    <Label text="Bomboniere"/>
+                    <Label text="Bilheteria por Filme (Receita)"/>
+                    <PieChart fx:id="graficoBilheteriaFilme" prefHeight="220" animated="true"/>
+                </VBox>
+                <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
+                    <Label text="Faturamento Bomboniere por Produto"/>
                     <PieChart fx:id="graficoBomboniere" prefHeight="220" animated="true"/>
                 </VBox>
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
