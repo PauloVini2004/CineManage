@@ -391,7 +391,7 @@ public class DashboardController {
         atualizarDashboard();
     }
 
-    // Botão "Exportar CSV"
+    // Botão Exportar CSV
     @FXML
     private void onExportarCSV() {
         FileChooser fc = new FileChooser();
@@ -430,6 +430,8 @@ public class DashboardController {
         try (PrintWriter pw = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
+            LocalDate hoje = LocalDate.now();
+
             // Cabeçalho
             pw.println("========================================");
             pw.println("RELATORIO GERAL - CINE RURAL");
@@ -441,18 +443,25 @@ public class DashboardController {
 
             double totalReceitaIngressos =
                     vendas.stream()
+                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                             .mapToDouble(v -> v.preco)
                             .sum();
 
             double totalReceitaLojinha =
                     vendasLojinha.stream()
+                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                             .mapToDouble(v -> v.subtotal)
                             .sum();
 
             long totalClientes =
                     Stream.concat(
-                                    vendas.stream().map(v -> v.cliente),
-                                    vendasLojinha.stream().map(v -> v.cliente)
+                                    vendas.stream()
+                                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                                            .map(v -> v.cliente),
+
+                                    vendasLojinha.stream()
+                                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                                            .map(v -> v.cliente)
                             )
                             .filter(c -> !c.isBlank())
                             .distinct()
@@ -476,6 +485,7 @@ public class DashboardController {
 
             Map<String, List<VendaIngresso>> vendasPorFilme =
                     vendas.stream()
+                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                             .collect(Collectors.groupingBy(v -> v.filme));
 
             for (Map.Entry<String, List<VendaIngresso>> entry :
@@ -503,6 +513,7 @@ public class DashboardController {
 
             Map<String, List<VendaLojinha>> vendasPorProduto =
                     vendasLojinha.stream()
+                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                             .collect(Collectors.groupingBy(v -> v.produto));
 
             for (Map.Entry<String, List<VendaLojinha>> entry :
@@ -530,11 +541,15 @@ public class DashboardController {
 
             // Coleta todos os clientes únicos de ambas as fontes
             Set<String> todosClientes = new TreeSet<>();
+
             vendas.stream()
+                    .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                     .filter(v -> !v.cliente.isBlank())
                     .map(v -> v.cliente)
                     .forEach(todosClientes::add);
+
             vendasLojinha.stream()
+                    .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
                     .filter(vl -> !vl.cliente.isBlank())
                     .map(vl -> vl.cliente)
                     .forEach(todosClientes::add);
@@ -545,9 +560,11 @@ public class DashboardController {
                 pw.println("Cliente;Ingressos Comprados;Compras Lojinha;Gasto Total");
 
                 for (String cliente : todosClientes) {
-                    // ── dados de ingresso deste cliente ──────────────────────────
+
+
                     List<VendaIngresso> ingCliente = vendas.stream()
                             .filter(v -> v.cliente.equalsIgnoreCase(cliente))
+                            .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                             .collect(Collectors.toList());
 
                     int    qtdIngressos   = ingCliente.size();
@@ -561,6 +578,7 @@ public class DashboardController {
 
                     List<VendaLojinha> lojCliente = vendasLojinha.stream()
                             .filter(vl -> vl.cliente.equalsIgnoreCase(cliente))
+                            .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
                             .collect(Collectors.toList());
 
                     int    qtdComprasLojinha = lojCliente.size();
@@ -582,8 +600,17 @@ public class DashboardController {
 
 
                 long   totalClientesUnicos = todosClientes.size();
-                double totalGeralIngressos = vendas.stream().mapToDouble(v -> v.preco).sum();
-                double totalGeralLojinha   = vendasLojinha.stream().mapToDouble(vl -> vl.subtotal).sum();
+                double totalGeralIngressos =
+                        vendas.stream()
+                                .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                                .mapToDouble(v -> v.preco)
+                                .sum();
+
+                double totalGeralLojinha =
+                        vendasLojinha.stream()
+                                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                                .mapToDouble(vl -> vl.subtotal)
+                                .sum();
                 pw.println();
                 pw.println();
                 pw.println("TOTAL CLIENTES");
