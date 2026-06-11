@@ -4,6 +4,7 @@ module br.ufrpe.cine_rural {
 
     requires kernel;
     requires layout;
+    requires jakarta.mail;
 
     exports br.ufrpe.cine_rural.gui;
 
