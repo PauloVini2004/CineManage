@@ -19,8 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import jakarta.mail.Authenticator;
-import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import javafx.fxml.FXMLLoader;
@@ -560,16 +558,16 @@ public class DashboardController {
         // ── Envia via SMTP Gmail ──────────────────────────────────────────────
         try {
             Properties cfg = new Properties();
-            InputStream cfgStream = getClass().getResourceAsStream(
-                    CLASSPATH_PREFIX.replace("arquivoscsv/", "") + "email.properties");
+            // Procura o email.properties na mesma pasta dos recursos da GUI
+            InputStream cfgStream = getClass().getResourceAsStream("/br/ufrpe/cine_rural/gui/email.properties");
             if (cfgStream == null) {
-                // fallback desenvolvimento
-                File cfgFile = new File("cinemanagerfx/src/main/resources/br/ufrpe/cine_rural/email.properties");
+                // fallback desenvolvimento — caminho relativo ao working directory
+                File cfgFile = new File("cinemanagerfx/src/main/resources/br/ufrpe/cine_rural/gui/email.properties");
                 if (cfgFile.exists()) cfgStream = new FileInputStream(cfgFile);
             }
             if (cfgStream == null) {
                 alertaErro("Arquivo email.properties não encontrado.\n"
-                        + "Crie-o em src/main/resources/br/ufrpe/cine_rural/");
+                        + "Crie-o em src/main/resources/br/ufrpe/cine_rural/gui/");
                 return;
             }
             cfg.load(new InputStreamReader(cfgStream, StandardCharsets.UTF_8));
@@ -584,7 +582,7 @@ public class DashboardController {
             smtp.put("mail.smtp.auth",            "true");
             smtp.put("mail.smtp.starttls.enable", "true");
 
-            Session session = Session.getInstance(smtp, new jakarta.mail.Authenticator() {
+            Session session = Session.getInstance(smtp, new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(remetente, senha);
@@ -595,7 +593,7 @@ public class DashboardController {
             msg.setFrom(new InternetAddress(remetente, "Cine Rural – Sistema"));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             msg.setSubject("Relatório Diário – " + hoje);
-            msg.setText(corpoFinal);
+            msg.setText(corpoFinal + "UTF-8");
             Transport.send(msg);
 
             mostrarInfo("E-mail enviado com sucesso para:\n" + destinatario);
@@ -813,6 +811,5 @@ public class DashboardController {
     private void onVoltar() {
         ScreenManager.getInstance().showGerenteScreen();
     }
-
 
 }
