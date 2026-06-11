@@ -49,8 +49,8 @@
                     fitToWidth="true"
                     hbarPolicy="NEVER"
                     vbarPolicy="AS_NEEDED"
-                    prefWidth="700"
-                    prefHeight="450"
+                    prefWidth="800"
+                    prefHeight="500"
                     styleClass="scroll-pane">
 
                 <content>
