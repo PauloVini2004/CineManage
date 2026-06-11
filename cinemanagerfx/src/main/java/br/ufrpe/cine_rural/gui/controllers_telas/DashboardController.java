@@ -158,12 +158,14 @@ public class DashboardController {
         final String        filme;
         final String        assento;
         final double        preco;
+        final String        cliente;
 
-        VendaIngresso(LocalDateTime dataVenda, String filme, String assento, double preco) {
+        VendaIngresso(LocalDateTime dataVenda, String filme, String assento, double preco, String cliente) {
             this.dataVenda = dataVenda;
             this.filme     = filme;
             this.assento   = assento;
             this.preco     = preco;
+            this.cliente   = cliente;
         }
     }
 
@@ -174,12 +176,14 @@ public class DashboardController {
         final String        produto;
         final int           quantidade;
         final double        subtotal;
+        final String        cliente;
 
-        VendaLojinha(LocalDateTime dataVenda, String produto, int quantidade, double subtotal) {
+        VendaLojinha(LocalDateTime dataVenda, String produto, int quantidade, double subtotal, String cliente) {
             this.dataVenda  = dataVenda;
             this.produto    = produto;
             this.quantidade = quantidade;
             this.subtotal   = subtotal;
+            this.cliente    = cliente;
         }
     }
 
@@ -328,11 +332,12 @@ public class DashboardController {
                 String[] p = linha.split(";", -1);
                 if (p.length < 6) continue;
                 try {
-                    LocalDateTime data   = LocalDateTime.parse(p[0].trim(), fmt);
-                    String        filme  = p[2].trim();
-                    String        assento= p[3].trim();
-                    double        preco  = Double.parseDouble(p[5].trim().replace(",", "."));
-                    lista.add(new VendaIngresso(data, filme, assento, preco));
+                    LocalDateTime data    = LocalDateTime.parse(p[0].trim(), fmt);
+                    String        filme   = p[2].trim();
+                    String        assento = p[3].trim();
+                    double        preco   = Double.parseDouble(p[5].trim().replace(",", "."));
+                    String        cliente = p.length > 6 ? p[6].trim() : "";
+                    lista.add(new VendaIngresso(data, filme, assento, preco, cliente));
                 } catch (Exception ignored) { /* linha malformada */ }
             }
         } catch (IOException e) {
@@ -360,10 +365,11 @@ public class DashboardController {
                 if (p.length < 6) continue;
                 try {
                     LocalDateTime data       = LocalDateTime.parse(p[0].trim(), fmt);
+                    String        cliente    = p[2].trim();
                     String        produto    = p[3].trim();
                     int           quantidade = Integer.parseInt(p[4].trim());
                     double        subtotal   = Double.parseDouble(p[5].trim().replace(",", "."));
-                    lista.add(new VendaLojinha(data, produto, quantidade, subtotal));
+                    lista.add(new VendaLojinha(data, produto, quantidade, subtotal, cliente));
                 } catch (Exception ignored) { /* linha malformada */ }
             }
         } catch (IOException e) {
@@ -496,6 +502,75 @@ public class DashboardController {
                     pw.printf("%s;Lojinha – TOTAL DO DIA;;;;;%d;%.2f%n",
                             dia, totalQtd, totalReceita);
                 }
+            }
+
+            // ── Seção de Clientes ────────────────────────────────────────────────
+            // Coleta todos os clientes únicos de ambas as fontes
+            Set<String> todosClientes = new TreeSet<>();
+            vendas.stream()
+                    .filter(v -> !v.cliente.isBlank())
+                    .map(v -> v.cliente)
+                    .forEach(todosClientes::add);
+            vendasLojinha.stream()
+                    .filter(vl -> !vl.cliente.isBlank())
+                    .map(vl -> vl.cliente)
+                    .forEach(todosClientes::add);
+
+            if (!todosClientes.isEmpty()) {
+                pw.println(); // linha em branco separando seções
+                pw.println("=== RELATÓRIO DE CLIENTES ===");
+                pw.println("Cliente;Ingressos Comprados;Filmes Assistidos;Gasto Ingressos (R$);Compras Lojinha;Produtos Comprados;Gasto Lojinha (R$);Gasto Total (R$)");
+
+                for (String cliente : todosClientes) {
+                    // ── dados de ingresso deste cliente ──────────────────────────
+                    List<VendaIngresso> ingCliente = vendas.stream()
+                            .filter(v -> v.cliente.equalsIgnoreCase(cliente))
+                            .collect(Collectors.toList());
+
+                    int    qtdIngressos   = ingCliente.size();
+                    double gastoIngressos = ingCliente.stream().mapToDouble(v -> v.preco).sum();
+                    String filmesAssistidos = ingCliente.stream()
+                            .map(v -> v.filme)
+                            .distinct()
+                            .sorted()
+                            .collect(Collectors.joining(" | "));
+
+                    // ── dados de lojinha deste cliente ───────────────────────────
+                    List<VendaLojinha> lojCliente = vendasLojinha.stream()
+                            .filter(vl -> vl.cliente.equalsIgnoreCase(cliente))
+                            .collect(Collectors.toList());
+
+                    int    qtdComprasLojinha = lojCliente.size();
+                    double gastoLojinha      = lojCliente.stream().mapToDouble(vl -> vl.subtotal).sum();
+                    String produtosComprados = lojCliente.stream()
+                            .map(vl -> vl.produto)
+                            .distinct()
+                            .sorted()
+                            .collect(Collectors.joining(" | "));
+
+                    double gastoTotal = gastoIngressos + gastoLojinha;
+
+                    pw.printf("%s;%d;%s;%.2f;%d;%s;%.2f;%.2f%n",
+                            cliente,
+                            qtdIngressos,
+                            filmesAssistidos.isEmpty() ? "-" : filmesAssistidos,
+                            gastoIngressos,
+                            qtdComprasLojinha,
+                            produtosComprados.isEmpty() ? "-" : produtosComprados,
+                            gastoLojinha,
+                            gastoTotal);
+                }
+
+                // Totalizador geral
+                long   totalClientesUnicos = todosClientes.size();
+                double totalGeralIngressos = vendas.stream().mapToDouble(v -> v.preco).sum();
+                double totalGeralLojinha   = vendasLojinha.stream().mapToDouble(vl -> vl.subtotal).sum();
+                pw.println();
+                pw.printf("TOTAL;%d clientes únicos;;;%.2f;;;%.2f;%.2f%n",
+                        totalClientesUnicos,
+                        totalGeralIngressos,
+                        totalGeralLojinha,
+                        totalGeralIngressos + totalGeralLojinha);
             }
 
             mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
