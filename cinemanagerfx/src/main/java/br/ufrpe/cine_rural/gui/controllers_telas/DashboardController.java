@@ -45,21 +45,21 @@ import javafx.stage.Stage;
  */
 public class DashboardController {
 
-    // ── CSV paths (relativo ao classpath / resources) ────────────────────────
+
     private static final String CSV_FILMES          = "filmes.csv";
     private static final String CSV_SESSOES         = "sessoes.csv";
     private static final String CSV_PRODUTOS        = "produtos.csv";
     private static final String CSV_VENDAS          = "vendas_ingresso.csv";
     private static final String CSV_VENDAS_LOJINHA  = "vendas_lojinha.csv";
 
-    // Prefixo do classpath onde os CSVs estão publicados após o build
+
     private static final String CLASSPATH_PREFIX = "/br/ufrpe/cine_rural/dados/arquivoscsv/";
-    // Fallback em desenvolvimento — caminhos relativos ao working directory do IntelliJ
+
     private static final String DEV_PATH_PREFIX  = "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/";
 
-    // Limiar de estoque baixo (REQ17)
+
     private static final int ESTOQUE_BAIXO = 15;
-    // Limiar de sessões para "baixa procura" (REQ16)
+
     private static final int SESSOES_BAIXA_PROCURA = 1;
 
     // Formatter flexível: aceita "2026-06-12T19:30" e "2026-06-12T19:30:00"
@@ -87,9 +87,9 @@ public class DashboardController {
 
     @FXML private ListView<String>              listaAlertas;
 
-    // ── Modelos internos ──────────────────────────────────────────────────────
 
-    /** Linha da tabela de assentos. */
+
+
     public static class AssentoResumo {
         private final SimpleStringProperty  codigo;
         private final SimpleIntegerProperty frequencia;
@@ -104,7 +104,7 @@ public class DashboardController {
         public SimpleIntegerProperty frequenciaProperty() { return frequencia; }
     }
 
-    /** Linha da tabela de receita por filme. */
+
     public static class FilmeReceita {
         private final SimpleStringProperty filme;
         private final SimpleStringProperty receita;
@@ -119,7 +119,7 @@ public class DashboardController {
         public SimpleStringProperty receitaProperty() { return receita; }
     }
 
-    /** Produto carregado do CSV. */
+
     private static class Produto {
         final int    id;
         final String nome;
@@ -134,7 +134,7 @@ public class DashboardController {
         }
     }
 
-    /** Sessão carregada do CSV. */
+
     private static class SessaoCSV {
         final String        tituloFilme;
         final int           idSala;
@@ -152,7 +152,7 @@ public class DashboardController {
         }
     }
 
-    /** Venda de ingresso carregada do CSV. */
+
     private static class VendaIngresso {
         final LocalDateTime dataVenda;
         final String        filme;
@@ -170,7 +170,7 @@ public class DashboardController {
     }
 
 
-    /** Venda de produto da lojinha carregada do CSV. */
+
     private static class VendaLojinha {
         final LocalDateTime dataVenda;
         final String        produto;
@@ -187,19 +187,15 @@ public class DashboardController {
         }
     }
 
-    // ── Dados em memória ──────────────────────────────────────────────────────
+
     private List<String>         filmes   = new ArrayList<>();
     private List<SessaoCSV>      sessoes  = new ArrayList<>();
     private List<Produto>        produtos = new ArrayList<>();
     private List<VendaIngresso>  vendas   = new ArrayList<>();
     private List<VendaLojinha>   vendasLojinha = new ArrayList<>();
 
-    // ── Capacidade padrão por sala (ajuste conforme seu modelo) ──────────────
-    private static final int CAPACIDADE_SALA = 50;
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Inicialização
-    // ─────────────────────────────────────────────────────────────────────────
+    private static final int CAPACIDADE_SALA = 50;
 
     @FXML
     public void initialize() {
@@ -209,7 +205,7 @@ public class DashboardController {
         atualizarDashboard();
     }
 
-    /** Vincula as colunas da TableView às propriedades do modelo. */
+
     private void configurarTabela() {
         colCodigo.setCellValueFactory(
                 c -> c.getValue().codigoProperty());
@@ -222,9 +218,7 @@ public class DashboardController {
                 c -> c.getValue().receitaProperty());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Leitura dos CSVs
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     private void carregarCSVs() {
         filmes        = lerFilmes();
@@ -234,10 +228,7 @@ public class DashboardController {
         vendasLojinha = lerVendasLojinha();
     }
 
-    /**
-     * Lê filmes.csv  →  titulo;tipo;duracao;genero;classificacao;imagem
-     * Pega apenas o título (coluna 0).
-     */
+
     private List<String> lerFilmes() {
         List<String> lista = new ArrayList<>();
         try (BufferedReader br = abrirCSV(CSV_FILMES)) {
@@ -255,10 +246,7 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Lê sessoes.csv  →  titulo_filme;id_sala;horario;idioma;status
-     * Horário aceita formato com ou sem segundos (ex.: "2026-06-12T19:30").
-     */
+
     private List<SessaoCSV> lerSessoes() {
         List<SessaoCSV> lista = new ArrayList<>();
         try (BufferedReader br = abrirCSV(CSV_SESSOES)) {
@@ -285,9 +273,7 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Lê produtos.csv  →  id;nome;preco;estoque;imagem
-     */
+
     private List<Produto> lerProdutos() {
         List<Produto> lista = new ArrayList<>();
         try (BufferedReader br = abrirCSV(CSV_PRODUTOS)) {
@@ -312,11 +298,7 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Le vendas_ingresso.csv  ->  DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente
-     * Pula o cabecalho automaticamente.
-     * Formato do horario: 2026-06-09T02:14:02.320962700 (com nanosegundos)
-     */
+
     private List<VendaIngresso> lerVendas() {
         List<VendaIngresso> lista = new ArrayList<>();
         // Formatter flexivel: aceita segundos com ou sem fracoes (nanosegundos incluidos)
@@ -346,10 +328,7 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Lê vendas_lojinha.csv  →  DataVenda;FormaPagamento;Cliente;Produto;Quantidade;Subtotal
-     * Pula o cabeçalho automaticamente.
-     */
+
     private List<VendaLojinha> lerVendasLojinha() {
         List<VendaLojinha> lista = new ArrayList<>();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS][.SSSSSS][.SSS]");
@@ -378,18 +357,14 @@ public class DashboardController {
         return lista;
     }
 
-    /**
-     * Tenta abrir o CSV em dois locais, nessa ordem:
-     *  1. Classpath: CLASSPATH_PREFIX + arquivo  (JAR / apos build)
-     *  2. DEV_PATH_PREFIX + arquivo              (desenvolvimento via IDE)
-     */
+
     private BufferedReader abrirCSV(String nomeArquivo) {
-        // 1. Classpath (funciona no JAR apos build)
+
         InputStream is = getClass().getResourceAsStream(CLASSPATH_PREFIX + nomeArquivo);
         if (is != null)
             return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
-        // 2. Filesystem relativo ao working directory (desenvolvimento)
+
         File f = new File(DEV_PATH_PREFIX + nomeArquivo);
         if (f.exists()) {
             try { return new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)); }
@@ -400,17 +375,14 @@ public class DashboardController {
         return null;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Ações dos botões (FXML onAction)
-    // ─────────────────────────────────────────────────────────────────────────
 
-    /** Botão "Pesquisar" – filtra por filme/período selecionados. */
+
     @FXML
     private void onPesquisar() {
         atualizarDashboard();
     }
 
-    /** Botão "Atualizar Dashboard" – recarrega tudo dos CSVs. */
+
     @FXML
     private void onAtualizarDashboard() {
         carregarCSVs();
@@ -418,7 +390,7 @@ public class DashboardController {
         atualizarDashboard();
     }
 
-    /** Botão "Exportar CSV" – REQ14. */
+    // Botão "Exportar CSV"
     @FXML
     private void onExportarCSV() {
         FileChooser fc = new FileChooser();
@@ -430,14 +402,14 @@ public class DashboardController {
         File destino = fc.showSaveDialog(graficoBilheteria.getScene().getWindow());
         if (destino == null) return;
 
-        // ── Ingressos: agrupa por (dia, filme) diretamente das vendas ─────────────
+
         // Não depende de bater com sessoes.csv (nomes e datas podem divergir)
         Map<LocalDate, Map<String, List<VendaIngresso>>> ingressosPorDiaFilme = vendas.stream()
                 .collect(Collectors.groupingBy(
                         v -> v.dataVenda.toLocalDate(),
                         Collectors.groupingBy(v -> v.filme)));
 
-        // ── Lojinha: agrupa por (dia, produto) ───────────────────────────────────
+
         Map<LocalDate, Map<String, int[]>> lojinhaPorDiaProduto = new TreeMap<>();
         for (VendaLojinha vl : vendasLojinha) {
             LocalDate dia = vl.dataVenda.toLocalDate();
@@ -449,7 +421,7 @@ public class DashboardController {
             acc[1]  = (int)(acc[1] + vl.subtotal * 100);  // centavos para evitar float
         }
 
-        // Todos os dias com movimento (ingressos ou lojinha)
+
         Set<LocalDate> todosDias = new TreeSet<>();
         ingressosPorDiaFilme.keySet().forEach(todosDias::add);
         lojinhaPorDiaProduto.keySet().forEach(todosDias::add);
@@ -484,7 +456,7 @@ public class DashboardController {
                             dia, totalIngressosDia, totalReceitaIngDia);
                 }
 
-                // ── Linhas da lojinha: uma por produto vendido nesse dia ─────────
+                //Linhas da lojinha: uma por produto vendido nesse dia
                 Map<String, int[]> porProduto =
                         lojinhaPorDiaProduto.getOrDefault(dia, Collections.emptyMap());
 
@@ -504,7 +476,7 @@ public class DashboardController {
                 }
             }
 
-            // ── Seção de Clientes ────────────────────────────────────────────────
+
             // Coleta todos os clientes únicos de ambas as fontes
             Set<String> todosClientes = new TreeSet<>();
             vendas.stream()
@@ -535,7 +507,7 @@ public class DashboardController {
                             .sorted()
                             .collect(Collectors.joining(" | "));
 
-                    // ── dados de lojinha deste cliente ───────────────────────────
+
                     List<VendaLojinha> lojCliente = vendasLojinha.stream()
                             .filter(vl -> vl.cliente.equalsIgnoreCase(cliente))
                             .collect(Collectors.toList());
@@ -561,7 +533,7 @@ public class DashboardController {
                             gastoTotal);
                 }
 
-                // Totalizador geral
+
                 long   totalClientesUnicos = todosClientes.size();
                 double totalGeralIngressos = vendas.stream().mapToDouble(v -> v.preco).sum();
                 double totalGeralLojinha   = vendasLojinha.stream().mapToDouble(vl -> vl.subtotal).sum();
@@ -579,7 +551,7 @@ public class DashboardController {
         }
     }
 
-    /** Botão "Enviar E-mail" – REQ18: monta resumo e envia via SMTP Gmail. */
+
     @FXML
     private void onEnviarEmail() {
         // ── Monta o corpo do e-mail ───────────────────────────────────────────
@@ -650,7 +622,7 @@ public class DashboardController {
 
         String corpoFinal = corpo.toString();
 
-        // ── Exibe prévia e pede confirmação ──────────────────────────────────
+
         Alert preview = new Alert(Alert.AlertType.CONFIRMATION);
         preview.setTitle("Confirmar Envio de E-mail");
         preview.setHeaderText("Revise o relatório antes de enviar:");
@@ -663,7 +635,7 @@ public class DashboardController {
         Optional<ButtonType> resultado = preview.showAndWait();
         if (resultado.isEmpty() || resultado.get() != ButtonType.OK) return;
 
-        // ── Envia via SMTP Gmail ──────────────────────────────────────────────
+
         try {
             Properties cfg = new Properties();
             // Procura o email.properties na mesma pasta dos recursos da GUI
@@ -712,10 +684,6 @@ public class DashboardController {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Atualização central do dashboard
-    // ─────────────────────────────────────────────────────────────────────────
-
     public void atualizarDashboard() {
         List<SessaoCSV> sessoesFiltradas = filtrarSessoes();
 
@@ -726,7 +694,7 @@ public class DashboardController {
         carregarAlertas();                      // REQ16 + REQ17
     }
 
-    /** Aplica filtros de filme e intervalo de datas às sessões. */
+
     private List<SessaoCSV> filtrarSessoes() {
         String     filme   = cbFilmes.getValue();
         LocalDate  inicio  = dpInicio.getValue();
@@ -742,9 +710,7 @@ public class DashboardController {
                 .collect(Collectors.toList());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ12 – Bilheteria por filme + taxa de ocupação
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     private void carregarBilheteria(List<SessaoCSV> sessoesFiltradas) {
         graficoBilheteria.getData().clear();
@@ -791,9 +757,7 @@ public class DashboardController {
                 taxa * 100, totalIngressos, totalCapacidade));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ13 – Bomboniere: estoque atual por produto
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     private void carregarReceitaFilmes() {
         String    filme  = cbFilmes.getValue();
@@ -853,9 +817,7 @@ public class DashboardController {
         graficoBomboniere.setAnimated(true);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ15 – Assentos com maior frequência de ocupação
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     private void carregarAssentos(List<SessaoCSV> sessoesFiltradas) {
         // REQ15: frequencia real de cada assento a partir das vendas de ingresso
@@ -882,9 +844,6 @@ public class DashboardController {
         tbAssentos.setItems(top10);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ16 + REQ17 – Alertas
-    // ─────────────────────────────────────────────────────────────────────────
 
     private void carregarAlertas() {
         ObservableList<String> alertas = FXCollections.observableArrayList();
@@ -918,9 +877,6 @@ public class DashboardController {
         listaAlertas.setItems(alertas);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Auxiliares
-    // ─────────────────────────────────────────────────────────────────────────
 
     private void popularComboFilmes() {
         ObservableList<String> opcoes = FXCollections.observableArrayList();
