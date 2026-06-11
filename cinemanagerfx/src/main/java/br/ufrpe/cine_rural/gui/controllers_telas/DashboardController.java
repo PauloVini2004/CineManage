@@ -640,7 +640,24 @@ public class DashboardController {
     @FXML
     private void onEnviarEmail() {
 
+        carregarCSVs(); // recarrega os CSVs antes de gerar o relatório
+
+        System.out.println("===== DEBUG LOJINHA =====");
+        System.out.println("Quantidade de vendas carregadas: "
+                + vendasLojinha.size());
+
+        for (VendaLojinha vl : vendasLojinha) {
+            System.out.println(
+                    vl.dataVenda + " | " +
+                            vl.produto + " | " +
+                            vl.quantidade + " | " +
+                            vl.subtotal);
+        }
+
+        System.out.println("=========================");
+
         LocalDate hoje = LocalDate.now();
+
         StringBuilder corpo = new StringBuilder();
         corpo.append("=== RELATÓRIO DIÁRIO – CINE RURAL ===\n");
         corpo.append("Data: ").append(hoje).append("\n\n");
