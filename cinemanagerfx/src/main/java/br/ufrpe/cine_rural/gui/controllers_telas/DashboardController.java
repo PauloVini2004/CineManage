@@ -48,6 +48,7 @@ public class DashboardController {
     private static final String CSV_SESSOES         = "sessoes.csv";
     private static final String CSV_PRODUTOS        = "produtos.csv";
     private static final String CSV_VENDAS          = "vendas_ingresso.csv";
+    private static final String CSV_VENDAS_LOJINHA  = "vendas_lojinha.csv";
 
     // Prefixo do classpath onde os CSVs estão publicados após o build
     private static final String CLASSPATH_PREFIX = "/br/ufrpe/cine_rural/dados/arquivoscsv/";
@@ -145,11 +146,28 @@ public class DashboardController {
         }
     }
 
+
+    /** Venda de produto da lojinha carregada do CSV. */
+    private static class VendaLojinha {
+        final LocalDateTime dataVenda;
+        final String        produto;
+        final int           quantidade;
+        final double        subtotal;
+
+        VendaLojinha(LocalDateTime dataVenda, String produto, int quantidade, double subtotal) {
+            this.dataVenda  = dataVenda;
+            this.produto    = produto;
+            this.quantidade = quantidade;
+            this.subtotal   = subtotal;
+        }
+    }
+
     // ── Dados em memória ──────────────────────────────────────────────────────
     private List<String>         filmes   = new ArrayList<>();
     private List<SessaoCSV>      sessoes  = new ArrayList<>();
     private List<Produto>        produtos = new ArrayList<>();
     private List<VendaIngresso>  vendas   = new ArrayList<>();
+    private List<VendaLojinha>   vendasLojinha = new ArrayList<>();
 
     // ── Capacidade padrão por sala (ajuste conforme seu modelo) ──────────────
     private static final int CAPACIDADE_SALA = 50;
@@ -179,10 +197,11 @@ public class DashboardController {
     // ─────────────────────────────────────────────────────────────────────────
 
     private void carregarCSVs() {
-        filmes   = lerFilmes();
-        sessoes  = lerSessoes();
-        produtos = lerProdutos();
-        vendas   = lerVendas();
+        filmes        = lerFilmes();
+        sessoes       = lerSessoes();
+        produtos      = lerProdutos();
+        vendas        = lerVendas();
+        vendasLojinha = lerVendasLojinha();
     }
 
     /**
@@ -297,6 +316,37 @@ public class DashboardController {
     }
 
     /**
+     * Lê vendas_lojinha.csv  →  DataVenda;FormaPagamento;Cliente;Produto;Quantidade;Subtotal
+     * Pula o cabeçalho automaticamente.
+     */
+    private List<VendaLojinha> lerVendasLojinha() {
+        List<VendaLojinha> lista = new ArrayList<>();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS][.SSSSSS][.SSS]");
+        try (BufferedReader br = abrirCSV(CSV_VENDAS_LOJINHA)) {
+            if (br == null) return lista;
+            String linha;
+            boolean primeiraLinha = true;
+            while ((linha = br.readLine()) != null) {
+                linha = linha.trim();
+                if (linha.isEmpty()) continue;
+                if (primeiraLinha) { primeiraLinha = false; continue; }
+                String[] p = linha.split(";", -1);
+                if (p.length < 6) continue;
+                try {
+                    LocalDateTime data       = LocalDateTime.parse(p[0].trim(), fmt);
+                    String        produto    = p[3].trim();
+                    int           quantidade = Integer.parseInt(p[4].trim());
+                    double        subtotal   = Double.parseDouble(p[5].trim().replace(",", "."));
+                    lista.add(new VendaLojinha(data, produto, quantidade, subtotal));
+                } catch (Exception ignored) { /* linha malformada */ }
+            }
+        } catch (IOException e) {
+            alertaErro("Erro ao ler vendas_lojinha.csv: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    /**
      * Tenta abrir o CSV em dois locais, nessa ordem:
      *  1. Classpath: CLASSPATH_PREFIX + arquivo  (JAR / apos build)
      *  2. DEV_PATH_PREFIX + arquivo              (desenvolvimento via IDE)
@@ -348,22 +398,64 @@ public class DashboardController {
         File destino = fc.showSaveDialog(graficoBilheteria.getScene().getWindow());
         if (destino == null) return;
 
-        // Agrupa sessões por data e calcula receita estimada (ingressos × preço médio R$25)
-        Map<LocalDate, Long> sessoesporDia = sessoes.stream()
+        // ── Ingressos: agrupa por (dia, filme) diretamente das vendas ─────────────
+        // Não depende de bater com sessoes.csv (nomes e datas podem divergir)
+        Map<LocalDate, Map<String, List<VendaIngresso>>> ingressosPorDiaFilme = vendas.stream()
                 .collect(Collectors.groupingBy(
-                        s -> s.horario.toLocalDate(), Collectors.counting()));
+                        v -> v.dataVenda.toLocalDate(),
+                        Collectors.groupingBy(v -> v.filme)));
+
+        // ── Lojinha: agrupa por (dia, produto) ───────────────────────────────────
+        Map<LocalDate, Map<String, int[]>> lojinhaPorDiaProduto = new TreeMap<>();
+        for (VendaLojinha vl : vendasLojinha) {
+            LocalDate dia = vl.dataVenda.toLocalDate();
+            lojinhaPorDiaProduto
+                    .computeIfAbsent(dia, d -> new LinkedHashMap<>())
+                    .computeIfAbsent(vl.produto, p -> new int[]{0, 0});
+            int[] acc = lojinhaPorDiaProduto.get(dia).get(vl.produto);
+            acc[0] += vl.quantidade;                       // total de unidades
+            acc[1]  = (int)(acc[1] + vl.subtotal * 100);  // centavos para evitar float
+        }
+
+        // Todos os dias com movimento (ingressos ou lojinha)
+        Set<LocalDate> todosDias = new TreeSet<>();
+        ingressosPorDiaFilme.keySet().forEach(todosDias::add);
+        lojinhaPorDiaProduto.keySet().forEach(todosDias::add);
 
         try (PrintWriter pw = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
-            pw.println("Data;Sessoes;Receita Estimada (R$)");
-            sessoesporDia.entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .forEach(e -> {
-                        double receita = e.getValue() * CAPACIDADE_SALA * 25.0;
-                        pw.printf("%s;%d;%.2f%n",
-                                e.getKey(), e.getValue(), receita);
-                    });
+            // Cabeçalho
+            pw.println("Data;Tipo;Descricao;Ingressos Vendidos;Receita Ingressos (R$);Produto;Qtd Vendida;Receita Produto (R$)");
+
+            for (LocalDate dia : todosDias) {
+                // ── Linhas de ingresso: uma por filme com vendas nesse dia ──────────
+                Map<String, List<VendaIngresso>> porFilme =
+                        ingressosPorDiaFilme.getOrDefault(dia, Collections.emptyMap());
+
+                porFilme.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(e -> {
+                            int    qtd     = e.getValue().size();
+                            double receita = e.getValue().stream()
+                                    .mapToDouble(v -> v.preco).sum();
+                            pw.printf("%s;Ingresso;%s;%d;%.2f;;;%n",
+                                    dia, e.getKey(), qtd, receita);
+                        });
+
+                // ── Linhas da lojinha: uma por produto vendido nesse dia ─────────
+                Map<String, int[]> porProduto =
+                        lojinhaPorDiaProduto.getOrDefault(dia, Collections.emptyMap());
+
+                porProduto.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(e -> {
+                            int    qtd     = e.getValue()[0];
+                            double receita = e.getValue()[1] / 100.0;
+                            pw.printf("%s;Lojinha;;;; %s;%d;%.2f%n",
+                                    dia, e.getKey(), qtd, receita);
+                        });
+            }
 
             mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
         } catch (IOException e) {
