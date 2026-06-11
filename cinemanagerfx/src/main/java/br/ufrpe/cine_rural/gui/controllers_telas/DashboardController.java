@@ -606,9 +606,7 @@ public class DashboardController {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Atualização central do dashboard
-    // ─────────────────────────────────────────────────────────────────────────
 
     public void atualizarDashboard() {
         List<SessaoCSV> sessoesFiltradas = filtrarSessoes();
@@ -619,7 +617,7 @@ public class DashboardController {
         carregarAlertas();                      // REQ16 + REQ17
     }
 
-    /** Aplica filtros de filme e intervalo de datas às sessões. */
+    // Aplica filtros de filme e intervalo de datas às sessões.
     private List<SessaoCSV> filtrarSessoes() {
         String     filme   = cbFilmes.getValue();
         LocalDate  inicio  = dpInicio.getValue();
@@ -635,10 +633,7 @@ public class DashboardController {
                 .collect(Collectors.toList());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // REQ12 – Bilheteria por filme + taxa de ocupação
-    // ─────────────────────────────────────────────────────────────────────────
-
     private void carregarBilheteria(List<SessaoCSV> sessoesFiltradas) {
         graficoBilheteria.getData().clear();
         graficoBilheteria.setAnimated(false);
@@ -684,10 +679,8 @@ public class DashboardController {
                 taxa * 100, totalIngressos, totalCapacidade));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ13 – Bomboniere: estoque atual por produto
-    // ─────────────────────────────────────────────────────────────────────────
 
+    // REQ13 – Bomboniere: estoque atual por produto.
     private void carregarBomboniere() {
         ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
 
@@ -719,10 +712,8 @@ public class DashboardController {
         graficoBomboniere.setAnimated(true);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ15 – Assentos com maior frequência de ocupação
-    // ─────────────────────────────────────────────────────────────────────────
 
+    // REQ15 – Assentos com maior frequência de ocupação
     private void carregarAssentos(List<SessaoCSV> sessoesFiltradas) {
         // REQ15: frequencia real de cada assento a partir das vendas de ingresso
         String    filme  = cbFilmes.getValue();
@@ -748,10 +739,8 @@ public class DashboardController {
         tbAssentos.setItems(top10);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REQ16 + REQ17 – Alertas
-    // ─────────────────────────────────────────────────────────────────────────
 
+    // REQ16 + REQ17 – Alertas
     private void carregarAlertas() {
         ObservableList<String> alertas = FXCollections.observableArrayList();
 
@@ -775,19 +764,17 @@ public class DashboardController {
                 .filter(p -> p.estoque <= ESTOQUE_BAIXO)
                 .sorted(Comparator.comparingInt(p -> p.estoque))
                 .forEach(p -> alertas.add(
-                        "🔴 Estoque baixo: " + p.nome
+                        "Estoque baixo: " + p.nome
                                 + " — " + p.estoque + " unidade(s) restante(s)."));
 
         if (alertas.isEmpty())
-            alertas.add("✅ Nenhum alerta no momento.");
+            alertas.add("Nenhum alerta no momento.");
 
         listaAlertas.setItems(alertas);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Auxiliares
-    // ─────────────────────────────────────────────────────────────────────────
 
+    // Auxiliares
     private void popularComboFilmes() {
         ObservableList<String> opcoes = FXCollections.observableArrayList();
         opcoes.add(""); // opção "todos"

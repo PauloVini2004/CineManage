@@ -1,6 +1,7 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
 import br.ufrpe.cine_rural.dados.implemento.RepositorioFilmeImpl;
+import br.ufrpe.cine_rural.dados.implemento.RepositorioVendaIngressoImpl;
 import br.ufrpe.cine_rural.enums.CategoriaMeiaEntrada;
 import br.ufrpe.cine_rural.enums.ClassificacaoIndicativa;
 import br.ufrpe.cine_rural.enums.Idioma;
@@ -26,10 +27,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class AssentoController {
+
+    // Cache em memória — chave: horário da sessão.
+    // Garante que dentro de uma mesma execução o layout não seja recriado.
+    // A persistência entre execuções é feita via CSV (veja carregarOcupadosDoCSV).
 
     private static final Map<LocalDateTime, int[][]> layoutsPorSessao = new HashMap<>();
 
@@ -39,10 +45,10 @@ public class AssentoController {
     @FXML private Button btnVoltar;
     @FXML private Button btnIngressos;
 
-    // Mapa: nome do assento → [categoria, idade]
+    // Mapa: código do assento -> categoria/idade do cliente
     private final Map<String, CategoriaMeiaEntrada> categoriasPorAssento = new LinkedHashMap<>();
-    private final Map<String, Integer> idadesPorAssento = new LinkedHashMap<>();
-    private final List<String> nomeAssentosSelecionados = new ArrayList<>();
+    private final Map<String, Integer>              idadesPorAssento      = new LinkedHashMap<>();
+    private final List<String>                      nomeAssentosSelecionados = new ArrayList<>();
 
     private Sessao sessaoAtual;
     private int heranca;
@@ -92,11 +98,15 @@ public class AssentoController {
         this.tituloFilme   = tituloFilme;
 
         LocalDateTime chave = sessao.getHorario();
+
         if (layoutsPorSessao.containsKey(chave)) {
+            // Layout já existe em memória nesta execução — reutiliza.
             layoutAtual = layoutsPorSessao.get(chave);
         } else {
+            // Primeira vez que esta sessão é aberta nesta execução:
+            // cria o layout limpo e aplica os assentos já vendidos no CSV.
             layoutAtual = criarLayoutBase(heranca);
-            ocuparAssentosAleatorios();
+            carregarOcupadosDoCSV(chave);
             layoutsPorSessao.put(chave, layoutAtual);
         }
 
@@ -114,6 +124,32 @@ public class AssentoController {
         configurarBotaoIngressos();
     }
 
+    // Persistência: lê o CSV e marca como ocupados (valor 2) os assentos
+    // que já foram vendidos para esta sessão.
+
+
+    private void carregarOcupadosDoCSV(LocalDateTime horarioSessao) {
+        Set<String> ocupados = RepositorioVendaIngressoImpl
+                .getInstancia()
+                .carregarAssentosOcupados(horarioSessao);
+
+        for (String codigo : ocupados) {
+            if (codigo == null || codigo.length() < 2) continue;
+            try {
+                int linha  = Character.toUpperCase(codigo.charAt(0)) - 'A';
+                int coluna = Integer.parseInt(codigo.substring(1)) - 1;
+
+                if (linha  >= 0 && linha  < layoutAtual.length &&
+                    coluna >= 0 && coluna < layoutAtual[linha].length &&
+                    layoutAtual[linha][coluna] != 0) {
+                    layoutAtual[linha][coluna] = 2;
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Código de assento inválido no CSV: " + codigo);
+            }
+        }
+    }
+
     // Layouts
 
     private int[][] criarLayoutBase(int heranca) {
@@ -124,26 +160,7 @@ public class AssentoController {
         };
     }
 
-    private void ocuparAssentosAleatorios() {
-        Random random = new Random();
-        int totalAssentos = 0;
-
-        for (int[] linha : layoutAtual)
-            for (int a : linha)
-                if (a == 1) totalAssentos++;
-
-        int quantidade = (int) (totalAssentos * (0.1 + random.nextDouble() * 0.2));
-        int ocupados   = 0;
-
-        while (ocupados < quantidade) {
-            int i = random.nextInt(layoutAtual.length);
-            int j = random.nextInt(layoutAtual[i].length);
-            if (layoutAtual[i][j] == 1) {
-                layoutAtual[i][j] = 2;
-                ocupados++;
-            }
-        }
-    }
+    // Poster
 
     private void exibirPoster() {
         if (posterPath == null || posterPath.isBlank()) return;
@@ -189,11 +206,11 @@ public class AssentoController {
         btnIngressos.setOnAction(event -> {
             if (nomeAssentosSelecionados.isEmpty()) return;
 
-            // verificação de menor desacompanhado
+            // Verificação de menor desacompanhado
             int idadeLimite = getIdadeLimiteClassificacao(classificacao);
 
             if (idadeLimite > 0) {
-                boolean temMenor    = false;
+                boolean temMenor        = false;
                 boolean temMaiorOuIgual = false;
 
                 for (String nome : nomeAssentosSelecionados) {
@@ -216,7 +233,7 @@ public class AssentoController {
                 }
             }
 
-            // montar ingressos com categoria/idade de cada assento
+            // Montar ingressos com categoria/idade de cada assento
             try {
                 PagamentoIngressoController.cenaAnterior = painel.getScene();
                 FXMLLoader loader = new FXMLLoader(
@@ -243,7 +260,6 @@ public class AssentoController {
                     CategoriaMeiaEntrada cat = categoriasPorAssento
                             .getOrDefault(nomeAssento, CategoriaMeiaEntrada.INTEIRA);
 
-                    // calcularValor() é chamado dentro do construtor de Ingresso
                     Ingresso ingresso = new Ingresso(
                             sessaoAtual,
                             objetoAssento,
@@ -301,14 +317,14 @@ public class AssentoController {
                     boolean estaSelecionado = botao.getStyle().equals(azul);
 
                     if (estaSelecionado) {
-                        // desselecionar
+                        // Desselecionar
                         botao.setStyle(verde);
                         assentosSelecionados--;
                         nomeAssentosSelecionados.remove(botao.getText());
                         categoriasPorAssento.remove(botao.getText());
                         idadesPorAssento.remove(botao.getText());
                     } else {
-                        // abrir diálogo de categoria/idade
+                        // Abrir diálogo de categoria/idade
                         boolean confirmado = abrirDialogoCategoria(botao.getText());
                         if (confirmado) {
                             botao.setStyle(azul);
@@ -330,23 +346,21 @@ public class AssentoController {
     }
 
     // Diálogo de categoria / idade
+
     /*
      * Exibe um diálogo modal pedindo a categoria (Inteira / Meia Entrada)
      * e a idade do cliente para o assento informado.
-     *
-     * @return true se o usuário confirmou, false se cancelou.
      */
+
     private boolean abrirDialogoCategoria(String nomeAssento) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Assento " + nomeAssento + " — Tipo de Ingresso");
         dialog.setResizable(false);
 
-        // título
         Label lblTitulo = new Label("Assento: " + nomeAssento);
         lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-        // ComboBox de categoria
         Label lblCategoria = new Label("Tipo de ingresso:");
         ComboBox<CategoriaMeiaEntrada> comboCategoria = new ComboBox<>(
                 FXCollections.observableArrayList(CategoriaMeiaEntrada.INTEIRA, CategoriaMeiaEntrada.MEIA_ENTRADA)
@@ -354,7 +368,6 @@ public class AssentoController {
         comboCategoria.setValue(CategoriaMeiaEntrada.INTEIRA);
         comboCategoria.setMaxWidth(Double.MAX_VALUE);
 
-        // descrição amigável
         comboCategoria.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(CategoriaMeiaEntrada item, boolean empty) {
                 super.updateItem(item, empty);
@@ -368,13 +381,11 @@ public class AssentoController {
             }
         });
 
-        // Campo de idade
         Label lblIdade = new Label("Idade do espectador:");
         TextField txtIdade = new TextField();
         txtIdade.setPromptText("Ex: 25");
         txtIdade.setMaxWidth(Double.MAX_VALUE);
 
-        // preço dinâmico informativo
         double preco = (sessaoAtual != null && sessaoAtual.getSala() != null)
                 ? sessaoAtual.getSala().getPreco()
                 : 10.0;
@@ -389,7 +400,6 @@ public class AssentoController {
                     + (cat == CategoriaMeiaEntrada.MEIA_ENTRADA ? "  (Meia Entrada)" : "  (Inteira)"));
         });
 
-        // --- Botões ---
         Button btnConfirmar = new Button("Confirmar");
         btnConfirmar.setStyle("-fx-background-color: #2962ff; -fx-text-fill: white; -fx-font-weight: bold;");
         Button btnCancelar = new Button("Cancelar");
@@ -441,7 +451,8 @@ public class AssentoController {
         return resultado[0];
     }
 
-    // Retorna rótulo amigável para cada categoria.
+    // Utilitários
+
     private String labelCategoria(CategoriaMeiaEntrada cat) {
         return switch (cat) {
             case INTEIRA      -> "Inteira";
@@ -449,11 +460,8 @@ public class AssentoController {
         };
     }
 
-    // Classificação indicativa → idade mínima
-    /*
-     * Retorna a idade mínima exigida pela classificação indicativa.
-     * Retorna 0 para LIVRE (sem restrição).
-     */
+    // Retorna a idade mínima exigida pela classificação indicativa.
+
     private int getIdadeLimiteClassificacao(ClassificacaoIndicativa cl) {
         if (cl == null) return 0;
         return switch (cl) {
@@ -466,15 +474,25 @@ public class AssentoController {
         };
     }
 
-    // API pública para ocupar assentos após pagamento.
+
     public static void ocuparAssentos(LocalDateTime horarioSessao, List<String> assentos) {
         int[][] layout = layoutsPorSessao.get(horarioSessao);
         if (layout == null) return;
 
         for (String nome : assentos) {
-            int linha  = nome.charAt(0) - 'A';
-            int coluna = Integer.parseInt(nome.substring(1)) - 1;
-            layout[linha][coluna] = 2;
+            if (nome == null || nome.length() < 2) continue;
+            try {
+                int linha  = Character.toUpperCase(nome.charAt(0)) - 'A';
+                int coluna = Integer.parseInt(nome.substring(1)) - 1;
+
+                if (linha  >= 0 && linha  < layout.length &&
+                    coluna >= 0 && coluna < layout[linha].length &&
+                    layout[linha][coluna] != 0) {
+                    layout[linha][coluna] = 2;
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Código de assento inválido: " + nome);
+            }
         }
     }
 }
