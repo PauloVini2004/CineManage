@@ -75,6 +75,7 @@ public class DashboardController {
     @FXML private ProgressBar                   barraOcupacao;
     @FXML private Label                         lblTaxa;
 
+    @FXML private PieChart                      graficoBilheteriaFilme;
     @FXML private PieChart                      graficoBomboniere;
 
     @FXML private TableView<AssentoResumo>      tbAssentos;
@@ -428,22 +429,31 @@ public class DashboardController {
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
             // Cabeçalho
-            pw.println("Data;Tipo;Descricao;Ingressos Vendidos;Receita Ingressos (R$);Produto;Qtd Vendida;Receita Produto (R$);Total Dia (R$)");
+            pw.println("Data;Tipo;Descricao;Ingressos Vendidos;Receita Ingressos (R$);Produto;Qtd Vendida;Receita Produto (R$)");
 
             for (LocalDate dia : todosDias) {
                 // ── Linhas de ingresso: uma por filme com vendas nesse dia ──────────
                 Map<String, List<VendaIngresso>> porFilme =
                         ingressosPorDiaFilme.getOrDefault(dia, Collections.emptyMap());
 
-                porFilme.entrySet().stream()
-                        .sorted(Map.Entry.comparingByKey())
-                        .forEach(e -> {
-                            int    qtd     = e.getValue().size();
-                            double receita = e.getValue().stream()
-                                    .mapToDouble(v -> v.preco).sum();
-                            pw.printf("%s;Ingresso;%s;%d;%.2f;;;;%n",
-                                    dia, e.getKey(), qtd, receita);
-                        });
+                int    totalIngressosDia   = 0;
+                double totalReceitaIngDia  = 0;
+
+                for (Map.Entry<String, List<VendaIngresso>> e :
+                        new TreeMap<>(porFilme).entrySet()) {
+                    int    qtd     = e.getValue().size();
+                    double receita = e.getValue().stream().mapToDouble(v -> v.preco).sum();
+                    totalIngressosDia  += qtd;
+                    totalReceitaIngDia += receita;
+                    pw.printf("%s;Ingresso;%s;%d;%.2f;;;%n",
+                            dia, e.getKey(), qtd, receita);
+                }
+
+                // Linha de total de ingressos do dia
+                if (totalIngressosDia > 0) {
+                    pw.printf("%s;Ingresso – TOTAL DO DIA;;%d;%.2f;;;%n",
+                            dia, totalIngressosDia, totalReceitaIngDia);
+                }
 
                 // ── Linhas da lojinha: uma por produto vendido nesse dia ─────────
                 Map<String, int[]> porProduto =
@@ -457,11 +467,11 @@ public class DashboardController {
                         double receita = e.getValue()[1] / 100.0;
                         totalQtd     += qtd;
                         totalReceita += receita;
-                        pw.printf("%s;Lojinha;;;; %s;%d;%.2f;%n",
+                        pw.printf("%s;Lojinha;;;; %s;%d;%.2f%n",
                                 dia, e.getKey(), qtd, receita);
                     }
-                    pw.printf("%s;Lojinha – TOTAL DO DIA;;;;;%d;%.2f;%.2f%n",
-                            dia, totalQtd, totalReceita, totalReceita);
+                    pw.printf("%s;Lojinha – TOTAL DO DIA;;;;;%d;%.2f%n",
+                            dia, totalQtd, totalReceita);
                 }
             }
 
@@ -604,18 +614,21 @@ public class DashboardController {
         }
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
     // Atualização central do dashboard
+    // ─────────────────────────────────────────────────────────────────────────
 
     public void atualizarDashboard() {
         List<SessaoCSV> sessoesFiltradas = filtrarSessoes();
 
         carregarBilheteria(sessoesFiltradas);   // REQ12
+        carregarBilheteriaFilmePie();           // REQ12 – gráfico pizza por filme
         carregarBomboniere();                   // REQ13
         carregarAssentos(sessoesFiltradas);     // REQ15
         carregarAlertas();                      // REQ16 + REQ17
     }
 
-    // Aplica filtros de filme e intervalo de datas às sessões.
+    /** Aplica filtros de filme e intervalo de datas às sessões. */
     private List<SessaoCSV> filtrarSessoes() {
         String     filme   = cbFilmes.getValue();
         LocalDate  inicio  = dpInicio.getValue();
@@ -631,7 +644,10 @@ public class DashboardController {
                 .collect(Collectors.toList());
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
     // REQ12 – Bilheteria por filme + taxa de ocupação
+    // ─────────────────────────────────────────────────────────────────────────
+
     private void carregarBilheteria(List<SessaoCSV> sessoesFiltradas) {
         graficoBilheteria.getData().clear();
         graficoBilheteria.setAnimated(false);
@@ -677,41 +693,84 @@ public class DashboardController {
                 taxa * 100, totalIngressos, totalCapacidade));
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // REQ13 – Bomboniere: estoque atual por produto
+    // ─────────────────────────────────────────────────────────────────────────
 
-    // REQ13 – Bomboniere: estoque atual por produto.
-    private void carregarBomboniere() {
+    private void carregarBilheteriaFilmePie() {
         ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
 
-        // REQ13: vendas de ingressos por filme no periodo (receita real por filme)
+        String    filme  = cbFilmes.getValue();
         LocalDate inicio = dpInicio.getValue();
         LocalDate fim    = dpFim.getValue();
 
-        Map<String, Double> vendasPorFilme = vendas.stream()
+        Map<String, Double> receitaPorFilme = vendas.stream()
+                .filter(v -> filme == null || filme.isBlank()
+                        || v.filme.equalsIgnoreCase(filme))
                 .filter(v -> inicio == null || !v.dataVenda.toLocalDate().isBefore(inicio))
                 .filter(v -> fim    == null || !v.dataVenda.toLocalDate().isAfter(fim))
-                .collect(Collectors.groupingBy(v -> v.filme,
+                .collect(Collectors.groupingBy(
+                        v -> v.filme,
                         Collectors.summingDouble(v -> v.preco)));
 
-        if (vendasPorFilme.isEmpty()) {
-            // Sem vendas no periodo: exibe estoque da bomboniere como fallback
+        if (receitaPorFilme.isEmpty()) {
+            graficoBilheteriaFilme.setData(FXCollections.observableArrayList());
+            graficoBilheteriaFilme.setTitle("Bilheteria por Filme (sem vendas no período)");
+            return;
+        }
+
+        double totalFilmes = receitaPorFilme.values().stream().mapToDouble(Double::doubleValue).sum();
+        receitaPorFilme.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .forEach(e -> dados.add(new PieChart.Data(
+                        e.getKey() + " (R$" + String.format("%.2f", e.getValue()) + ")",
+                        e.getValue())));
+
+        graficoBilheteriaFilme.setData(dados);
+        graficoBilheteriaFilme.setAnimated(true);
+        graficoBilheteriaFilme.setTitle(String.format(
+                "Bilheteria por Filme – Total: R$ %.2f", totalFilmes));
+    }
+
+    private void carregarBomboniere() {
+        ObservableList<PieChart.Data> dados = FXCollections.observableArrayList();
+
+        LocalDate inicio = dpInicio.getValue();
+        LocalDate fim    = dpFim.getValue();
+
+        // REQ13: receita real por produto da lojinha no período
+        Map<String, Double> receitaPorProduto = vendasLojinha.stream()
+                .filter(vl -> inicio == null || !vl.dataVenda.toLocalDate().isBefore(inicio))
+                .filter(vl -> fim    == null || !vl.dataVenda.toLocalDate().isAfter(fim))
+                .collect(Collectors.groupingBy(
+                        vl -> vl.produto,
+                        Collectors.summingDouble(vl -> vl.subtotal)));
+
+        if (receitaPorProduto.isEmpty()) {
+            // Sem vendas no período: exibe estoque como fallback
             produtos.forEach(p -> dados.add(new PieChart.Data(
                     p.nome + " (estoque: " + p.estoque + ")", p.estoque)));
             graficoBomboniere.setTitle("Estoque Bomboniere (sem vendas no periodo)");
         } else {
-            vendasPorFilme.entrySet().stream()
+            double totalLojinha = receitaPorProduto.values().stream()
+                    .mapToDouble(Double::doubleValue).sum();
+            receitaPorProduto.entrySet().stream()
                     .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
                     .forEach(e -> dados.add(new PieChart.Data(
                             e.getKey() + " (R$" + String.format("%.2f", e.getValue()) + ")",
                             e.getValue())));
-            graficoBomboniere.setTitle("Receita por Filme no Periodo");
+            graficoBomboniere.setTitle(String.format(
+                    "Faturamento Bomboniere no Período – Total: R$ %.2f", totalLojinha));
         }
 
         graficoBomboniere.setData(dados);
         graficoBomboniere.setAnimated(true);
     }
 
-
+    // ─────────────────────────────────────────────────────────────────────────
     // REQ15 – Assentos com maior frequência de ocupação
+    // ─────────────────────────────────────────────────────────────────────────
+
     private void carregarAssentos(List<SessaoCSV> sessoesFiltradas) {
         // REQ15: frequencia real de cada assento a partir das vendas de ingresso
         String    filme  = cbFilmes.getValue();
@@ -737,8 +796,10 @@ public class DashboardController {
         tbAssentos.setItems(top10);
     }
 
-
+    // ─────────────────────────────────────────────────────────────────────────
     // REQ16 + REQ17 – Alertas
+    // ─────────────────────────────────────────────────────────────────────────
+
     private void carregarAlertas() {
         ObservableList<String> alertas = FXCollections.observableArrayList();
 
@@ -762,17 +823,19 @@ public class DashboardController {
                 .filter(p -> p.estoque <= ESTOQUE_BAIXO)
                 .sorted(Comparator.comparingInt(p -> p.estoque))
                 .forEach(p -> alertas.add(
-                        "Estoque baixo: " + p.nome
+                        "🔴 Estoque baixo: " + p.nome
                                 + " — " + p.estoque + " unidade(s) restante(s)."));
 
         if (alertas.isEmpty())
-            alertas.add("Nenhum alerta no momento.");
+            alertas.add("✅ Nenhum alerta no momento.");
 
         listaAlertas.setItems(alertas);
     }
 
-
+    // ─────────────────────────────────────────────────────────────────────────
     // Auxiliares
+    // ─────────────────────────────────────────────────────────────────────────
+
     private void popularComboFilmes() {
         ObservableList<String> opcoes = FXCollections.observableArrayList();
         opcoes.add(""); // opção "todos"
@@ -798,5 +861,6 @@ public class DashboardController {
     private void onVoltar() {
         ScreenManager.getInstance().showGerenteScreen();
     }
+
 
 }
