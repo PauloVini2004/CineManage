@@ -17,7 +17,6 @@ public class Ingresso {
                     CategoriaMeiaEntrada categoria) {
 
         if (assento.getStatus() == TipoAssento.OCUPADO) {
-
             throw new IllegalArgumentException(
                     "Assento ja ocupado."
             );
@@ -28,7 +27,6 @@ public class Ingresso {
         this.preco = calcularValor(valor, categoria);
         this.categoria = categoria;
 
-        assento.ocupar();
     }
 
     private double calcularValor(double valor,

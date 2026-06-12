@@ -24,12 +24,19 @@ public class IngressoNegocios {
         if (!cliente.podeAssistir(sessao.getFilme(), acompanhante))
             throw new IllegalStateException(
                     "Venda negada: cliente com " + cliente.getIdade()
-                            + " anos nao pode assistir a este filme sem acompanhante. (REQ19)");
+                            + " anos nao pode assistir a este filme sem acompanhante.)");
 
         Ingresso ingresso = new Ingresso(sessao, assento, precoBase, categoria);
         ingresso.setCliente(cliente);
 
-        sessaoNegocios.adicionarIngresso(sessao.getHorario(), ingresso);
+        // Faltou adicionar o try catch da ocupação ou não ocupação do assento (Ainda bem deu tempo de corrigir)
+        assento.ocupar();
+        try {
+            sessaoNegocios.adicionarIngresso(sessao.getHorario(), ingresso);
+        } catch (Exception e) {
+            assento.liberar();
+            throw e;
+        }
 
         System.out.println("[IngressoNegocios] Ingresso vendido | Assento: "
                 + assento.getCodigo()
@@ -44,7 +51,7 @@ public class IngressoNegocios {
     public void cancelarIngresso(Sessao sessao, Ingresso ingresso) {
         if (sessaoNegocios.sessaoJaIniciou(sessao.getHorario()))
             throw new IllegalStateException(
-                    "Cancelamento nao permitido apos o inicio da sessao. (REQ23)");
+                    "Cancelamento nao permitido apos o inicio da sessao.");
 
         sessao.getIngressos().remove(ingresso);
         ingresso.getAssento().liberar();

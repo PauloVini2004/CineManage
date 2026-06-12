@@ -35,6 +35,14 @@ public class Sessao {
 
     // Métodos de negócio para Ingressos
     public void adicionarIngressos(Ingresso ingresso) {
+        String codigoNovo = ingresso.getAssento().getCodigo();
+        boolean assentoJaReservado = ingressos.stream()
+                .anyMatch(i -> i.getAssento().getCodigo().equals(codigoNovo));
+        if (assentoJaReservado) {
+            throw new IllegalStateException(
+                    "Assento '" + codigoNovo + "' já reservado nesta sessão. "
+            );
+        }
         ingressos.add(ingresso);
     }
 
