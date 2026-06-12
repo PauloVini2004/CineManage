@@ -65,17 +65,12 @@ public class ProdutoNegocios{
         repositorioProduto.atualizar(produto);
     }
 
-    /**
-     * Remove produto pelo ID.
-     */
+
     public void removerProduto(int id) {
         buscarProduto(id); // garante existência
         repositorioProduto.remover(id);
     }
 
-    /**
-     * Lista todos os produtos cadastrados.
-     */
     public ArrayList<Produto> listarProdutos() {
         return repositorioProduto.listar();
     }
@@ -94,7 +89,7 @@ public class ProdutoNegocios{
         }
     }
 
-    // Verifica se o estoque está vazio
+
     public boolean isEstoqueVazio() {
         return this.listarProdutos().isEmpty();
     }
@@ -111,7 +106,7 @@ public class ProdutoNegocios{
             }
         }
 
-        // Chamada ao notificacaoController removida daqui
+
         return alertas;
     }
 }

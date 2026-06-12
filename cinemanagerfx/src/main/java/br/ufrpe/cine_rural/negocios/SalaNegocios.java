@@ -53,11 +53,7 @@ public class SalaNegocios {
         return sala;
     }
 
-    /*
-     * Permite sobrescrever o preço base de uma sala para promoções específicas.
-     * Não deve ser chamado enquanto há sessões abertas na sala
-     * (responsabilidade de quem manda em tudo, ex.: SessaoController).
-     */
+
     public void atualizarPreco(Sala sala, double novoPreco) {
         if (novoPreco < 0) throw new IllegalArgumentException("Preço não pode ser negativo.");
         sala.setPreco(novoPreco);
