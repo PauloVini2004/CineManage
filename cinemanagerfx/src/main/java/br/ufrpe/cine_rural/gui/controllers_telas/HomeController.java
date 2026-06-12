@@ -61,7 +61,7 @@ public class HomeController {
                     alert.setTitle("Erro");
                     alert.setHeaderText("Senha Invalida");
                     alert.showAndWait();
-                    Platform.exit();
+                    ScreenManager.getInstance().showHomeScreen();
                     break;
             }
         }
