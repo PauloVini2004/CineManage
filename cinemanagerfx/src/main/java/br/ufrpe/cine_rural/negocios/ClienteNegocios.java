@@ -43,14 +43,6 @@ public class ClienteNegocios {
 
     public void enviarConfirmacaoCompra(Cliente cliente, Ingresso ingresso) {
 
-        /*
-        notificacaoService.enviarEmail(
-             cliente.getEmail(),
-             "Confirmação CineManager",
-             "Assento: " + ingresso.getAssento() + " | R$ " + ingresso.getPreco()
-         );
-
-         */
 
         System.out.println("Confirmação de compra para "
                 + cliente.getNome()
