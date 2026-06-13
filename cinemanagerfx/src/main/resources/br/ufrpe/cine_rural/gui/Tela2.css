@@ -1,0 +1,240 @@
+/* ==========================================
+   RELATÓRIO DA BOMBONIERE
+   ========================================== */
+
+.root {
+    -fx-background-color: #1A1A1A;
+    -fx-font-family: "Segoe UI";
+}
+
+/* TÍTULOS */
+
+.page-title {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-text-fill: #A5A5A5;
+    -fx-font-size: 13px;
+}
+
+/* FILTRO */
+
+.filter-pane {
+
+    -fx-background-color: #242424;
+
+    -fx-padding: 15;
+
+    -fx-background-radius: 12;
+
+    -fx-border-color: #333333;
+    -fx-border-radius: 12;
+}
+
+/* DATE PICKER */
+
+.date-picker {
+
+    -fx-background-color: #2D2D2D;
+
+    -fx-background-radius: 8;
+
+    -fx-border-color: #444444;
+    -fx-border-radius: 8;
+
+    -fx-text-fill: white;
+}
+
+.date-picker:focused {
+
+    -fx-border-color: #D72638;
+    -fx-border-width: 2;
+}
+
+/* CARD DE FATURAMENTO */
+
+.revenue-card {
+
+    -fx-background-color: #242424;
+
+    -fx-background-radius: 15;
+
+    -fx-border-color: #D72638;
+    -fx-border-radius: 15;
+
+    -fx-padding: 20;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.5),
+        15,
+        0,
+        0,
+        4
+    );
+}
+
+.revenue-label {
+
+    -fx-text-fill: #A5A5A5;
+    -fx-font-size: 14px;
+}
+
+.revenue-value {
+
+    -fx-text-fill: #D72638;
+
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+}
+
+/* GRÁFICOS */
+
+.chart {
+
+    -fx-background-color: #242424;
+
+    -fx-background-radius: 15;
+
+    -fx-padding: 15;
+}
+
+.chart-title {
+    -fx-text-fill: white;
+}
+
+.axis {
+    -fx-tick-label-fill: white;
+}
+
+.axis-label {
+    -fx-text-fill: white;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item .label {
+    -fx-text-fill: #D72638;
+}
+
+/* BARRAS */
+
+.default-color0.chart-bar {
+    -fx-bar-fill: #D72638;
+}
+
+.default-color1.chart-bar {
+    -fx-bar-fill: #FF5A5A;
+}
+
+.default-color2.chart-bar {
+    -fx-bar-fill: #A61B29;
+}
+
+.default-color3.chart-bar {
+    -fx-bar-fill: #7A101D;
+}
+
+/* TABLEVIEW */
+
+.table-view {
+
+    -fx-background-color: #2D2D2D;
+
+    -fx-background-radius: 10;
+
+    -fx-border-color: #444444;
+    -fx-border-radius: 10;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #111111;
+}
+
+.table-view .column-header {
+    -fx-background-color: #111111;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: #2D2D2D;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #262626;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #D72638;
+}
+
+.table-view .cell {
+    -fx-text-fill: white;
+}
+
+/* BOTÕES */
+
+.button {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    -fx-padding: 10 18;
+
+    -fx-cursor: hand;
+}
+
+/* Atualizar */
+
+.primary-button {
+    -fx-background-color: #D72638;
+}
+
+.primary-button:hover {
+    -fx-background-color: #F44336;
+}
+
+/* Voltar */
+
+.secondary-button {
+    -fx-background-color: #B71C1C;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #D32F2F;
+}
+
+/* Exportar */
+
+.export-button {
+    -fx-background-color: #8B0000;
+}
+
+.export-button:hover {
+    -fx-background-color: #A00000;
+}
+
+/* SCROLLBAR */
+
+.scroll-bar {
+    -fx-background-color: #222222;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #555555;
+    -fx-background-radius: 10;
+}

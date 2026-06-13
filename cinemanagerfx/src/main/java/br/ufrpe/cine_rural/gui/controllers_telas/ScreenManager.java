@@ -23,7 +23,6 @@ public class ScreenManager {
     private static RepositorioFilmeImpl filmes;
     private Stage mainStage;
 
-    //listagem das telas principais
     private Scene homeScene;
     private Scene atendenteScene;
     private Scene gerenteScene;
@@ -32,7 +31,8 @@ public class ScreenManager {
     private Scene listarProdutosScene;
     private Scene gerenciarFilmeScene;
     private Scene gerenciarSessoesScene;
-    private Scene relatorioScene;
+    private Scene relatorioFilmesScene;
+    private Scene relatorioBomboniereScene;
     private Scene assentosScene;
 
     public static ScreenManager getInstance() {
@@ -43,7 +43,6 @@ public class ScreenManager {
     }
 
     private ScreenManager() {
-        // Cadastra as salas uma única vez no repositório compartilhado
         RepositorioSalaImpl repositorioSala = RepositorioSalaImpl.getInstancia();
         if (repositorioSala.listar().isEmpty()) {
             repositorioSala.cadastrar(new Comum(1, 20));
@@ -64,7 +63,6 @@ public class ScreenManager {
                     "/br/ufrpe/cine_rural/gui/Gerente-View.fxml")));
             this.gerenteScene = new Scene(gerentePane);
 
-            // Tela Filmes (com estilo)
             FXMLLoader filmesLoader = new FXMLLoader(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
             Parent filmesPane = filmesLoader.load();
@@ -72,8 +70,7 @@ public class ScreenManager {
             this.filmesScene.getStylesheets().add(
                     Objects.requireNonNull(
                             getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
-                    ).toExternalForm()
-            );
+                    ).toExternalForm());
 
             AnchorPane produtosPane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/TelasProduto/Produto.fxml"));
@@ -87,13 +84,22 @@ public class ScreenManager {
                     "/br/ufrpe/cine_rural/gui/Gerenciar sessoes.fxml"));
             this.gerenciarSessoesScene = new Scene(gerenciarSessoes);
 
-            BorderPane relatorioPane = FXMLLoader.load(getClass().getResource(
-                    "/br/ufrpe/cine_rural/gui/DashBoard.fxml"));
-            this.relatorioScene = new Scene(relatorioPane);
+            // Tela 1 — Relatório de Bilheteria (REQ12 + REQ15 + REQ16)
+            BorderPane relatorioFilmesPane = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource(
+                            "/br/ufrpe/cine_rural/gui/TelaRelatorio1.fxml"),
+                    "TelaRelatorio1.fxml não encontrado em resources/br/ufrpe/cine_rural/gui/"));
+            this.relatorioFilmesScene = new Scene(relatorioFilmesPane);
+
+            // Tela 2 — Relatório da Bomboniere (REQ13 + REQ14 + REQ17)
+            BorderPane relatorioBombonierePane = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource(
+                            "/br/ufrpe/cine_rural/gui/TelaRelatorio2.fxml"),
+                    "TelaRelatorio2.fxml não encontrado em resources/br/ufrpe/cine_rural/gui/"));
+            this.relatorioBomboniereScene = new Scene(relatorioBombonierePane);
 
             AnchorPane assentosPane = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Assentos.fxml"));
-            // inicializando relatorio
             this.assentosScene = new Scene(assentosPane);
 
         } catch (IOException e) {
@@ -101,9 +107,7 @@ public class ScreenManager {
         }
     }
 
-    public Stage getMainStage() {
-        return mainStage;
-    }
+    public Stage getMainStage() { return mainStage; }
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
@@ -128,7 +132,6 @@ public class ScreenManager {
     }
 
     public void showFilmesScreen() {
-        // Recarrega a tela sempre que chamada para refletir sessões atualizadas
         try {
             FXMLLoader filmesLoader = new FXMLLoader(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Filmes.fxml"));
@@ -137,8 +140,7 @@ public class ScreenManager {
             this.filmesScene.getStylesheets().add(
                     Objects.requireNonNull(
                             getClass().getResource("/br/ufrpe/cine_rural/gui/EstiloFilmes.css")
-                    ).toExternalForm()
-            );
+                    ).toExternalForm());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -149,9 +151,6 @@ public class ScreenManager {
     public void showProdutosScreen() {
         this.mainStage.setScene(this.produtosScene);
         this.mainStage.show();
-        System.out.println(
-                getClass().getResource("/br/ufrpe/cine_rural/gui/TelasProduto/EstiloProduto.css")
-        );
     }
 
     public void showListarProdutosScreen() {
@@ -172,7 +171,6 @@ public class ScreenManager {
     }
 
     public void showGerenciarSessoesScreen() {
-        // Recarrega para pegar salas e filmes atualizados
         try {
             AnchorPane gerenciarSessoes = FXMLLoader.load(getClass().getResource(
                     "/br/ufrpe/cine_rural/gui/Gerenciar sessoes.fxml"));
@@ -184,13 +182,51 @@ public class ScreenManager {
         this.mainStage.show();
     }
 
-    public void showRelatorioScreen() {
-        this.mainStage.setScene(this.relatorioScene);
-        this.mainStage.show();
-    }
-
     public void showAssentosScreen() {
         this.mainStage.setScene(this.assentosScene);
         this.mainStage.show();
     }
+
+    // ── Relatórios ────────────────────────────────────────────────────────
+
+    /**
+     * Tela 1 — Relatório de Bilheteria por Filme (REQ12 + REQ15 + REQ16).
+     * Recarrega sempre para refletir dados atualizados dos CSVs.
+     */
+    public void showRelatorioFilmesScreen() {
+        try {
+            BorderPane pane = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource(
+                            "/br/ufrpe/cine_rural/gui/TelaRelatorio1.fxml")));
+            this.relatorioFilmesScene = new Scene(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.mainStage.setScene(this.relatorioFilmesScene);
+        this.mainStage.show();
+    }
+
+    /**
+     * Tela 2 — Relatório da Bomboniere (REQ13 + REQ14 + REQ17).
+     * Recarrega sempre para refletir dados atualizados dos CSVs.
+     */
+    public void showRelatorioBomboniereScreen() {
+        try {
+            BorderPane pane = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource(
+                            "/br/ufrpe/cine_rural/gui/TelaRelatorio2.fxml")));
+            this.relatorioBomboniereScene = new Scene(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.mainStage.setScene(this.relatorioBomboniereScene);
+        this.mainStage.show();
+    }
+
+    public void showRelatorioScreen() {
+        this.mainStage.setScene(this.relatorioFilmesScene);
+        this.mainStage.show();
+    }
+
+
 }
