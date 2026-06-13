@@ -92,7 +92,7 @@
 
             <VBox spacing="6" styleClass="card">
                 <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
-                <Label text="Alertas — Filmes com Baixa Procura"/>
+                <Label text="Filmes com Baixa Procura"/>
                 <ListView fx:id="listaAlertasFilmes" prefHeight="100"/>
             </VBox>
 
@@ -104,7 +104,7 @@
         <HBox spacing="12" alignment="CENTER_LEFT">
             <padding><Insets top="10" right="20" bottom="14" left="20"/></padding>
 
-            <Button text=" Voltar"
+            <Button text="Voltar"
                     styleClass="secondary-button"
                     onAction="#onVoltar"/>
 

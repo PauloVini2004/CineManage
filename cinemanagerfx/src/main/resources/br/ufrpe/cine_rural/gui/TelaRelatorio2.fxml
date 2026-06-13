@@ -86,7 +86,7 @@
 
             <VBox spacing="6" styleClass="card">
                 <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
-                <Label text="Alertas — Estoque Baixo"/>
+                <Label text="Estoque Baixo"/>
                 <ListView fx:id="listaAlertasEstoque" prefHeight="95"/>
             </VBox>
 
