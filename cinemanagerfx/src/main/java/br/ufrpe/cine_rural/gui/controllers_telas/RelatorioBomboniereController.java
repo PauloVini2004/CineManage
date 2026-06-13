@@ -104,10 +104,10 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
             DateTimeFormatter fmtExib =
                     DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-            pw.println("========================================");
-            pw.println("RELATORIO DE PRODUTOS - CINE RURAL");
-            pw.println("Gerado em: " + LocalDateTime.now().format(fmtExib));
-            pw.println("========================================");
+
+            pw.println("RELATORIO DE PRODUTOS CINEMANAGER");
+            pw.println( LocalDateTime.now().format(fmtExib));
+
             pw.println();
 
 
@@ -124,7 +124,7 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
             pw.println("FATURAMENTO DIARIO TOTAL");
             pw.printf("Data;%s%n", hoje);
             pw.printf("Faturamento Ingressos;%.2f%n", totalIngressosDia);
-            pw.printf("Faturamento Lojinha;%.2f%n",   totalLojinhaDia);
+            pw.printf("Faturamento Loja;%.2f%n",   totalLojinhaDia);
             pw.printf("Faturamento Total Geral;%.2f%n",
                     totalIngressosDia + totalLojinhaDia);
             pw.println();
@@ -154,7 +154,7 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
                     .forEach(clientesLojinha::add);
 
             if (!clientesLojinha.isEmpty()) {
-                pw.printf("CLIENTES — LOJINHA (%s a %s)%n", periodoInicio, periodoFim);
+                pw.printf("CLIENTES %n", periodoInicio, periodoFim);
                 pw.println("Cliente;Compras no Periodo;Gasto Total");
                 for (String cliente : clientesLojinha) {
                     List<VendaLojinha> compras = vendasLojinha.stream()
@@ -169,7 +169,7 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
             }
 
 
-            pw.println("ALERTAS — ESTOQUE BAIXO (limiar: " + ESTOQUE_BAIXO + " unidades)");
+            pw.println("ALERTA de ESTOQUE BAIXO");
             pw.println("Produto;Estoque Atual");
             boolean algumAlerta = false;
             for (Produto p : produtos) {
@@ -263,7 +263,7 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
                 .filter(p -> p.estoque <= ESTOQUE_BAIXO)
                 .sorted(Comparator.comparingInt(p -> p.estoque))
                 .forEach(p -> alertas.add(
-                        "🔴 Estoque baixo: " + p.nome
+                        " Estoque baixo: " + p.nome
                                 + " — " + p.estoque + " unidade(s) restante(s)."));
 
         if (alertas.isEmpty())

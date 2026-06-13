@@ -143,7 +143,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             pw.println();
 
 
-            pw.println("ALERTAS — BAIXA PROCURA ");
+            pw.println("ALERTA de BAIXA PROCURA ");
             pw.println("Filme;Total Historico de Ingressos");
             filmes.forEach(filme -> {
                 long total = vendas.stream()
