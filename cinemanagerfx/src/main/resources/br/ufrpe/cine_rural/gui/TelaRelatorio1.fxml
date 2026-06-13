@@ -21,7 +21,7 @@
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.RelatorioFilmesController">
 
-    <!-- ══ TOPO ══════════════════════════════════════════════════════════ -->
+
     <top>
         <VBox spacing="8" styleClass="header">
             <padding><Insets top="15" right="20" bottom="12" left="20"/></padding>
@@ -41,12 +41,12 @@
         </VBox>
     </top>
 
-    <!-- ══ CENTRO ════════════════════════════════════════════════════════ -->
+
     <center>
         <VBox spacing="16">
             <padding><Insets top="16" right="20" bottom="10" left="20"/></padding>
 
-            <!-- Métricas REQ12 -->
+
             <HBox spacing="16">
 
                 <VBox styleClass="card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6">
@@ -72,7 +72,7 @@
 
             </HBox>
 
-            <!-- Assentos mais ocupados REQ15 -->
+
             <VBox spacing="8" styleClass="card" VBox.vgrow="ALWAYS">
                 <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
                 <Label text="Assentos Mais Ocupados (Top 10)"/>
@@ -89,7 +89,7 @@
                 </TableView>
             </VBox>
 
-            <!-- Alertas REQ16 -->
+
             <VBox spacing="6" styleClass="card">
                 <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
                 <Label text="Alertas — Filmes com Baixa Procura"/>
@@ -99,12 +99,12 @@
         </VBox>
     </center>
 
-    <!-- ══ RODAPÉ ════════════════════════════════════════════════════════ -->
+
     <bottom>
         <HBox spacing="12" alignment="CENTER_LEFT">
             <padding><Insets top="10" right="20" bottom="14" left="20"/></padding>
 
-            <Button text="← Voltar"
+            <Button text=" Voltar"
                     styleClass="secondary-button"
                     onAction="#onVoltar"/>
 
@@ -118,7 +118,7 @@
 
             <HBox HBox.hgrow="ALWAYS"/>
 
-            <Button text="Próximo →"
+            <Button text="Seguir "
                     styleClass="primary-button"
                     onAction="#onProximo"/>
         </HBox>

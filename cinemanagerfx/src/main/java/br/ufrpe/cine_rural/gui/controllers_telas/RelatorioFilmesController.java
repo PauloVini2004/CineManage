@@ -216,7 +216,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         }
 
 
-        corpo.append("\n── ALERTAS ──\n");
+        corpo.append("\n ALERTAS \n");
         long baixaProcura = filmes.stream()
                 .filter(f -> vendas.stream()
                         .filter(v -> v.filme.equalsIgnoreCase(f))

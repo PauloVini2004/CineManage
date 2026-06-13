@@ -23,7 +23,7 @@
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="br.ufrpe.cine_rural.gui.controllers_telas.RelatorioBomboniereController">
 
-    <!-- ══ TOPO ══════════════════════════════════════════════════════════ -->
+
     <top>
         <VBox spacing="8" styleClass="header">
             <padding><Insets top="15" right="20" bottom="12" left="20"/></padding>
@@ -45,12 +45,12 @@
         </VBox>
     </top>
 
-    <!-- ══ CENTRO ════════════════════════════════════════════════════════ -->
+
     <center>
         <VBox spacing="16">
             <padding><Insets top="16" right="20" bottom="10" left="20"/></padding>
 
-            <!-- Gráfico de barras REQ13 -->
+
             <VBox spacing="6" styleClass="card" VBox.vgrow="ALWAYS">
                 <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
                 <Label text="Faturamento por Produto no Período"/>
@@ -63,7 +63,7 @@
                 </BarChart>
             </VBox>
 
-            <!-- Tabela: Produto | Quantidade | Faturamento  REQ13 -->
+
             <VBox spacing="6" styleClass="card">
                 <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
                 <Label text="Detalhamento por Produto"/>
@@ -83,7 +83,7 @@
                 </TableView>
             </VBox>
 
-            <!-- Alertas REQ17 -->
+
             <VBox spacing="6" styleClass="card">
                 <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
                 <Label text="Alertas — Estoque Baixo"/>
@@ -93,12 +93,12 @@
         </VBox>
     </center>
 
-    <!-- ══ RODAPÉ ════════════════════════════════════════════════════════ -->
+
     <bottom>
         <HBox spacing="12" alignment="CENTER_LEFT">
             <padding><Insets top="10" right="20" bottom="14" left="20"/></padding>
 
-            <Button text="← Voltar"
+            <Button text="Voltar"
                     styleClass="secondary-button"
                     onAction="#onVoltar"/>
 
