@@ -272,7 +272,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         atualizarAlertasFilmes();                               // REQ16
     }
 
-    // REQ12 — métricas de bilheteria
+
     private void atualizarMetricas(List<VendaIngresso> vendasFiltradas,
                                    List<SessaoCSV> sessoesFiltradas) {
         int    totalIngressos  = vendasFiltradas.size();
