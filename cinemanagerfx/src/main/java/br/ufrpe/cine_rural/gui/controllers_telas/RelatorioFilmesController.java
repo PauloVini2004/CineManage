@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class RelatorioFilmesController extends RelatorioBaseController{
-    // ── FXML ─────────────────────────────────────────────────────────────
+
     @FXML private ComboBox<String>               cbFilmes;
 
     @FXML private Label                          lblTotalIngressos;
@@ -34,7 +34,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
 
     @FXML private ListView<String>               listaAlertasFilmes;
 
-    // ── Modelo de linha ──────────────────────────────────────────────────
+
 
     public static class AssentoResumo {
         private final SimpleStringProperty  codigo;
@@ -50,7 +50,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         public SimpleIntegerProperty frequenciaProperty() { return frequencia; }
     }
 
-    // ── Inicialização ────────────────────────────────────────────────────
+
 
     @FXML
     public void initialize() {
@@ -72,7 +72,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         cbFilmes.setItems(opcoes);
     }
 
-    // ── Handlers ─────────────────────────────────────────────────────────
+
 
     @FXML
     private void onAtualizar() {
@@ -91,7 +91,6 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         ScreenManager.getInstance().showRelatorioBomboniereScreen();
     }
 
-    // ── REQ14 — Exportar CSV de filmes ───────────────────────────────────
 
     @FXML
     private void onExportarCSV() {
@@ -117,7 +116,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             pw.println("========================================");
             pw.println();
 
-            // Faturamento diário total de ingressos
+
             double totalDia = vendas.stream()
                     .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                     .mapToDouble(v -> v.preco)
@@ -127,7 +126,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             pw.printf("Faturamento Total (Ingressos);%.2f%n", totalDia);
             pw.println();
 
-            // Faturamento por filme no dia
+
             pw.println("FATURAMENTO DIARIO POR FILME");
             pw.println("Filme;Ingressos Vendidos;Faturamento");
 
@@ -143,7 +142,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
 
             pw.println();
 
-            // Alertas REQ16
+
             pw.println("ALERTAS — BAIXA PROCURA (limiar: " + LIMIAR_BAIXA_PROCURA + " ingressos)");
             pw.println("Filme;Total Historico de Ingressos");
             filmes.forEach(filme -> {
@@ -161,19 +160,19 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         }
     }
 
-    // ── REQ18 — Envio de e-mail ───────────────────────────────────────────
+
 
     @FXML
     private void onEnviarEmail() {
         carregarCSVs();
         LocalDate hoje = LocalDate.now();
 
-        // Monta corpo idêntico ao DashboardController original
+
         StringBuilder corpo = new StringBuilder();
         corpo.append("=== RELATÓRIO DIÁRIO – CINE RURAL ===\n");
         corpo.append("Data: ").append(hoje).append("\n\n");
 
-        // Bilheteria
+
         corpo.append("── BILHETERIA DO DIA ──\n");
         Map<String, List<VendaIngresso>> ingressosHoje = vendas.stream()
                 .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
@@ -193,7 +192,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             corpo.append(String.format("  TOTAL INGRESSOS: R$ %.2f%n", totalIngressos));
         }
 
-        // Lojinha
+
         corpo.append("\n── LOJINHA DO DIA ──\n");
         Map<String, int[]> produtosHoje = new LinkedHashMap<>();
         for (VendaLojinha vl : vendasLojinha) {
@@ -216,7 +215,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             corpo.append(String.format("  TOTAL LOJINHA: R$ %.2f%n", totalLojinha));
         }
 
-        // Alertas
+
         corpo.append("\n── ALERTAS ──\n");
         long baixaProcura = filmes.stream()
                 .filter(f -> vendas.stream()
@@ -289,7 +288,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         barraOcupacao.setProgress(taxa);
     }
 
-    // REQ15 — top 10 assentos por frequência
+
     private void atualizarTabelaAssentos(List<VendaIngresso> vendasFiltradas) {
         Map<String, Long> frequencia = vendasFiltradas.stream()
                 .collect(Collectors.groupingBy(v -> v.assento, Collectors.counting()));
@@ -304,7 +303,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         tbAssentos.setItems(top10);
     }
 
-    // REQ16 — alertas de baixa procura
+
     private void atualizarAlertasFilmes() {
         ObservableList<String> alertas = FXCollections.observableArrayList();
 
@@ -327,7 +326,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         listaAlertasFilmes.setItems(alertas);
     }
 
-    // ── Envio SMTP ───────────────────────────────────────────────────────
+
 
     private void enviarEmailSMTP(String corpoFinal, String dataLabel) {
         try {
