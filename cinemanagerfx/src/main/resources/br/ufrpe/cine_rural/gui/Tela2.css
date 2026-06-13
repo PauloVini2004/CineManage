@@ -7,111 +7,106 @@
     -fx-font-family: "Segoe UI";
 }
 
-/* TÍTULOS */
+/* CONFIGURAÇÃO GLOBAL DE TEXTOS (LABELS) */
+.label {
+    -fx-text-fill: #FFFFFF !important;
+}
 
+/* TÍTULOS */
 .page-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #FFFFFF !important;
     -fx-font-size: 28px;
     -fx-font-weight: bold;
 }
 
 .page-subtitle {
-    -fx-text-fill: #A5A5A5;
-    -fx-font-size: 13px;
+    -fx-text-fill: #E0E0E0 !important;
+    -fx-font-size: 14px;
 }
 
 /* FILTRO */
-
 .filter-pane {
-
     -fx-background-color: #242424;
-
     -fx-padding: 15;
-
     -fx-background-radius: 12;
-
     -fx-border-color: #333333;
     -fx-border-radius: 12;
 }
 
-/* DATE PICKER */
-
+/* ==========================================
+   DATE PICKER (TEXTO PRETO COMPLETO)
+   ========================================== */
 .date-picker {
-
     -fx-background-color: #2D2D2D;
-
     -fx-background-radius: 8;
-
     -fx-border-color: #444444;
     -fx-border-radius: 8;
-
-    -fx-text-fill: white;
 }
 
 .date-picker:focused {
-
     -fx-border-color: #D72638;
     -fx-border-width: 2;
 }
 
-/* CARD DE FATURAMENTO */
+/* Caixa de texto do DatePicker com escrita preta */
+.date-picker .text-field {
+    -fx-text-fill: #000000 !important;
+}
 
+/* Dias dentro do calendário aberto em preto */
+.date-picker-popup .date-cell {
+    -fx-text-fill: #000000 !important;
+}
+
+/* Força o fundo do calendário a ficar branco para dar leitura ao texto preto */
+.date-picker-popup .month-year-pane,
+.date-picker-popup .calendar-grid {
+    -fx-background-color: #FFFFFF !important;
+}
+
+/* ==========================================
+   CARD DE FATURAMENTO
+   ========================================== */
 .revenue-card {
-
     -fx-background-color: #242424;
-
     -fx-background-radius: 15;
-
     -fx-border-color: #D72638;
     -fx-border-radius: 15;
-
     -fx-padding: 20;
-
-    -fx-effect: dropshadow(
-        gaussian,
-        rgba(0,0,0,0.5),
-        15,
-        0,
-        0,
-        4
-    );
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0, 0, 4);
 }
 
 .revenue-label {
-
-    -fx-text-fill: #A5A5A5;
+    -fx-text-fill: #E0E0E0 !important;
     -fx-font-size: 14px;
 }
 
 .revenue-value {
-
-    -fx-text-fill: #D72638;
-
+    -fx-text-fill: #D72638 !important;
     -fx-font-size: 34px;
     -fx-font-weight: bold;
 }
 
-/* GRÁFICOS */
-
+/* ==========================================
+   GRÁFICOS (TEXTOS EM BRANCO)
+   ========================================== */
 .chart {
-
     -fx-background-color: #242424;
-
     -fx-background-radius: 15;
-
     -fx-padding: 15;
 }
 
 .chart-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #FFFFFF !important;
+    -fx-font-weight: bold;
 }
 
 .axis {
-    -fx-tick-label-fill: white;
+    -fx-tick-label-fill: #FFFFFF !important;
 }
 
 .axis-label {
-    -fx-text-fill: white;
+    -fx-text-fill: #FFFFFF !important;
 }
 
 .chart-legend {
@@ -119,35 +114,21 @@
 }
 
 .chart-legend-item .label {
-    -fx-text-fill: #D72638;
+    -fx-text-fill: #FFFFFF !important;
 }
 
-/* BARRAS */
+/* BARRAS DO GRÁFICO */
+.default-color0.chart-bar { -fx-bar-fill: #D72638; }
+.default-color1.chart-bar { -fx-bar-fill: #FF5A5A; }
+.default-color2.chart-bar { -fx-bar-fill: #A61B29; }
+.default-color3.chart-bar { -fx-bar-fill: #7A101D; }
 
-.default-color0.chart-bar {
-    -fx-bar-fill: #D72638;
-}
-
-.default-color1.chart-bar {
-    -fx-bar-fill: #FF5A5A;
-}
-
-.default-color2.chart-bar {
-    -fx-bar-fill: #A61B29;
-}
-
-.default-color3.chart-bar {
-    -fx-bar-fill: #7A101D;
-}
-
-/* TABLEVIEW */
-
+/* ==========================================
+   TABLEVIEW (TEXTOS BRANCOS)
+   ========================================== */
 .table-view {
-
     -fx-background-color: #2D2D2D;
-
     -fx-background-radius: 10;
-
     -fx-border-color: #444444;
     -fx-border-radius: 10;
 }
@@ -161,7 +142,7 @@
 }
 
 .table-view .column-header .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #FFFFFF !important;
     -fx-font-weight: bold;
 }
 
@@ -177,59 +158,38 @@
     -fx-background-color: #D72638;
 }
 
-.table-view .cell {
-    -fx-text-fill: white;
+.table-view .table-cell {
+    -fx-text-fill: #FFFFFF !important;
 }
 
-/* BOTÕES */
+/* COMBOBOX */
+.combo-box .label {
+    -fx-text-fill: #FFFFFF !important;
+}
 
+/* ==========================================
+   BOTÕES
+   ========================================== */
 .button {
-
     -fx-text-fill: white;
-
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-
     -fx-background-radius: 10;
     -fx-border-radius: 10;
-
     -fx-padding: 10 18;
-
     -fx-cursor: hand;
 }
 
-/* Atualizar */
+.primary-button { -fx-background-color: #D72638; }
+.primary-button:hover { -fx-background-color: #F44336; }
 
-.primary-button {
-    -fx-background-color: #D72638;
-}
+.secondary-button { -fx-background-color: #B71C1C; }
+.secondary-button:hover { -fx-background-color: #D32F2F; }
 
-.primary-button:hover {
-    -fx-background-color: #F44336;
-}
-
-/* Voltar */
-
-.secondary-button {
-    -fx-background-color: #B71C1C;
-}
-
-.secondary-button:hover {
-    -fx-background-color: #D32F2F;
-}
-
-/* Exportar */
-
-.export-button {
-    -fx-background-color: #8B0000;
-}
-
-.export-button:hover {
-    -fx-background-color: #A00000;
-}
+.export-button { -fx-background-color: #8B0000; }
+.export-button:hover { -fx-background-color: #A00000; }
 
 /* SCROLLBAR */
-
 .scroll-bar {
     -fx-background-color: #222222;
 }
