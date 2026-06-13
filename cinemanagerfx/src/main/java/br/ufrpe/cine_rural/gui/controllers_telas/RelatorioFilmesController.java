@@ -110,10 +110,10 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             DateTimeFormatter fmtExib =
                     DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-            pw.println("========================================");
-            pw.println("RELATORIO DE BILHETERIA - CINE RURAL");
-            pw.println("Gerado em: " + LocalDateTime.now().format(fmtExib));
-            pw.println("========================================");
+
+            pw.println("RELATORIO DE BILHETERIA CINEMANAGER");
+            pw.println( LocalDateTime.now().format(fmtExib));
+
             pw.println();
 
 
@@ -143,7 +143,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             pw.println();
 
 
-            pw.println("ALERTAS — BAIXA PROCURA (limiar: " + LIMIAR_BAIXA_PROCURA + " ingressos)");
+            pw.println("ALERTAS — BAIXA PROCURA ");
             pw.println("Filme;Total Historico de Ingressos");
             filmes.forEach(filme -> {
                 long total = vendas.stream()
@@ -169,11 +169,11 @@ public class RelatorioFilmesController extends RelatorioBaseController{
 
 
         StringBuilder corpo = new StringBuilder();
-        corpo.append("=== RELATÓRIO DIÁRIO – CINE RURAL ===\n");
+        corpo.append(" RELATÓRIO DIÁRIO – CINEMANAGER \n");
         corpo.append("Data: ").append(hoje).append("\n\n");
 
 
-        corpo.append("── BILHETERIA DO DIA ──\n");
+        corpo.append("FATURAMENTO DOS INGRESSOS \n");
         Map<String, List<VendaIngresso>> ingressosHoje = vendas.stream()
                 .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                 .collect(Collectors.groupingBy(v -> v.filme));
@@ -193,7 +193,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         }
 
 
-        corpo.append("\n── LOJINHA DO DIA ──\n");
+        corpo.append("\n FATURAMENTO DA LOJA \n");
         Map<String, int[]> produtosHoje = new LinkedHashMap<>();
         for (VendaLojinha vl : vendasLojinha) {
             if (!vl.dataVenda.toLocalDate().equals(hoje)) continue;
@@ -212,7 +212,7 @@ public class RelatorioFilmesController extends RelatorioBaseController{
                 corpo.append(String.format("  • %s – %d unidade(s) – R$ %.2f%n",
                         e.getKey(), e.getValue()[0], receita));
             }
-            corpo.append(String.format("  TOTAL LOJINHA: R$ %.2f%n", totalLojinha));
+            corpo.append(String.format("  TOTAL LOJA: R$ %.2f%n", totalLojinha));
         }
 
 
@@ -223,13 +223,13 @@ public class RelatorioFilmesController extends RelatorioBaseController{
                         .count() <= LIMIAR_BAIXA_PROCURA)
                 .count();
         if (baixaProcura > 0)
-            corpo.append("  ⚠ ").append(baixaProcura)
+            corpo.append("  ").append(baixaProcura)
                     .append(" filme(s) com baixa procura.\n");
 
         produtos.stream()
                 .filter(p -> p.estoque <= ESTOQUE_BAIXO)
                 .forEach(p -> corpo.append(String.format(
-                        "  🔴 Estoque baixo: %s – %d unidade(s)%n",
+                        "   Estoque baixo: %s – %d unidade(s)%n",
                         p.nome, p.estoque)));
 
         if (baixaProcura == 0 && produtos.stream().noneMatch(p -> p.estoque <= ESTOQUE_BAIXO))
@@ -252,7 +252,6 @@ public class RelatorioFilmesController extends RelatorioBaseController{
         enviarEmailSMTP(corpoFinal, hoje.toString());
     }
 
-    // ── Atualização da tela ──────────────────────────────────────────────
 
     private void atualizarTela() {
         String filme = cbFilmes.getValue();
@@ -315,13 +314,13 @@ public class RelatorioFilmesController extends RelatorioBaseController{
                     .filter(s -> s.tituloFilme.equalsIgnoreCase(filme))
                     .count();
             if (ingressos <= LIMIAR_BAIXA_PROCURA)
-                alertas.add("⚠ Baixa procura: \"" + filme
+                alertas.add(" Baixa procura: \"" + filme
                         + "\" — " + ingressos + " ingresso(s) em "
                         + sessoesCadastradas + " sessão(ões).");
         });
 
         if (alertas.isEmpty())
-            alertas.add("✅ Nenhum filme com baixa procura no momento.");
+            alertas.add("Nenhum filme com baixa procura no momento.");
 
         listaAlertasFilmes.setItems(alertas);
     }
