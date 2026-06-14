@@ -1,37 +1,114 @@
 .root {
-    -fx-background-color: white;
+    -fx-background-color: black;
 }
 
 .titulo {
-    -fx-font-size: 24px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
+    -fx-text-fill: white;
 }
 
 .text-field{
-    -fx-pref-width: 350;
-    -fx-font-size: 14px;
-    -fx-border-radius: 20;
-    -fx-background-radius: 20 ;
+
+    -fx-background-color: transparent;
+
+    -fx-border-color: #6c6c6c;
+    -fx-border-width: 1;
     -fx-border-color: gray;
-}
-.combo-box{
     -fx-pref-width: 350;
-    -fx-font-size: 14px;
+    -fx-pref-height: 42;
+
     -fx-border-radius: 20;
-    -fx-background-radius: 20 ;
-    -fx-background-color: white;
+    -fx-background-radius: 6;
+
+    -fx-text-fill: white;
+}
+
+.comboPagamento {
+    -fx-translate-x: -300;
+
+    -fx-background-color: black;
     -fx-border-color: gray;
 
+    -fx-pref-width: 350;
+    -fx-pref-height: 42;
+
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+
+    -fx-text-fill: white;
+}
+
+.comboPagamento .list-cell {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: black;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #d50000;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: #d50000;
+    -fx-text-fill: white;
+}
+
+.comboPagamento .arrow {
+    -fx-background-color: white;
+}
+
+.comboPagamento .arrow-button {
+    -fx-background-color: black;
+    -fx-background-radius: 20;
+}
+
+.resumoCompra {
+    -fx-text-fill: white;
+}
+
+.resumoCompra .content {
+    -fx-background-color: black;
+}
+
+.resumoCompra {
+    -fx-control-inner-background: black;
+    -fx-text-fill: white;
+    -fx-highlight-fill: red;
+    -fx-highlight-text-fill: white;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: gray;
 }
 
 .text-area {
-    -fx-pref-height: 180;
+    -fx-pref-width: 350;
+
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+
+
+    -fx-font-size: 14px;
 }
 
 .total {
-    -fx-font-size: 18px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-translate-y: 20;
+    -fx-text-fill: white;
+    -fx-translate-y: 25;
 }
 
 .botao-voltar {
@@ -66,4 +143,16 @@
 
     -fx-background-radius: 20;
     -fx-border-radius: 20;
+}
+
+.botao-voltar:hover {
+    -fx-opacity: 0.9;
+    -fx-background-color: red;
+}
+
+.botao-pagar:hover {
+    -fx-opacity: 0.9;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-color: black;
 }
