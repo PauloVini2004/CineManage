@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static br.ufrpe.cine_rural.util.EnviadorEmail.enviarConfirmacaoIngresso;
+
 public class PagamentoIngressoController {
 
     @FXML private TextField txtNome;
@@ -33,7 +35,6 @@ public class PagamentoIngressoController {
     private Map<String, Integer> idadesPorAssento;
     private double total;
 
-    /** Cena da tela de assentos, para o botão Voltar */
     public static Scene cenaAnterior;
 
     @FXML
@@ -55,15 +56,6 @@ public class PagamentoIngressoController {
         atualizarResumo();
         btnPagar.setDisable(ingressos == null || ingressos.isEmpty());
     }
-
-    /** Sobrecarga de compatibilidade sem mapa de idades. */
-    public void receberIngressos(ArrayList<Ingresso> ingressos) {
-        receberIngressos(ingressos, new java.util.HashMap<>());
-    }
-
-    // -----------------------------------------------------------------------
-    // Resumo
-    // -----------------------------------------------------------------------
 
     private void atualizarResumo() {
         if (ingressos == null || ingressos.isEmpty()) return;
@@ -184,18 +176,15 @@ public class PagamentoIngressoController {
             alert.setContentText("Ingresso emitido com sucesso.");
             alert.showAndWait();
 
-            // EMAIL (CORRIGIDO)
             try {
 
-                String mensagemEmail = gerarResumoEmail();
+                Cliente clienteEmail = ingressos.get(0).getCliente();
 
-                EnviadorEmail.enviarEmail(
-                        email,
-                        "Compra confirmada - Cine Rural",
-                        mensagemEmail
+                EnviadorEmail.enviarConfirmacaoIngresso(
+                        clienteEmail,
+                        ingressos,
+                        total
                 );
-
-                System.out.println("Email enviado com sucesso!");
 
             } catch (Exception e) {
                 System.out.println("Erro ao enviar e-mail: " + e.getMessage());
@@ -282,35 +271,4 @@ public class PagamentoIngressoController {
         total = 0;
     }
 
-    private String gerarResumoEmail() {
-
-        StringBuilder resumo = new StringBuilder();
-
-        resumo.append("Compra confirmada com sucesso!\n\n");
-
-        resumo.append("Resumo da compra:\n\n");
-
-        if (ingressos != null && !ingressos.isEmpty()) {
-
-            resumo.append("Filme: ")
-                    .append(ingressos.get(0).getSessao().getFilme().getTitulo())
-                    .append("\n\n");
-
-            for (Ingresso ingresso : ingressos) {
-
-                resumo.append("Assento: ")
-                        .append(ingresso.getAssento().getCodigo())
-                        .append(" - R$ ")
-                        .append(String.format("%.2f", ingresso.getPreco()))
-                        .append("\n");
-            }
-        }
-
-        resumo.append("\nTotal: R$ ")
-                .append(String.format("%.2f", total));
-
-        return resumo.toString();
-    }
 }
-// REQ19: Não permitir a venda de ingressos para menores de idade sem acompanhante
-//        caso a classificação seja restritiva. (Verificação feita no AssentoController)
