@@ -7,15 +7,29 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class RelatorioBomboniereController extends RelatorioBaseController{
@@ -169,23 +183,153 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
             }
 
 
-            pw.println("ALERTA de ESTOQUE BAIXO");
-            pw.println("Produto;Estoque Atual");
-            boolean algumAlerta = false;
-            for (Produto p : produtos) {
-                if (p.estoque <= ESTOQUE_BAIXO) {
-                    pw.printf("%s;%d%n", p.nome, p.estoque);
-                    algumAlerta = true;
-                }
-            }
-            if (!algumAlerta)
-                pw.println("Nenhum produto com estoque baixo.");
-
-            mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
+            mostrarInfo(String.format(
+                    "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
+                    destino.getAbsolutePath(),
+                    totalIngressosDia + totalLojinhaDia));
 
         } catch (IOException e) {
             alertaErro("Erro ao exportar CSV: " + e.getMessage());
         }
+    }
+
+
+    @FXML
+    private void onExportarCSVClientes() {
+        DirectoryChooser dc = new DirectoryChooser();
+        dc.setTitle("Selecionar pasta para exportar os relatórios de clientes");
+
+        File pasta = dc.showDialog(tbProdutos.getScene().getWindow());
+        if (pasta == null) return;
+
+        LocalDate inicio = dpInicio.getValue();
+        LocalDate fim    = dpFim.getValue();
+
+        List<VendaLojinha> vendasLojinhaFiltradas = vendasLojinha.stream()
+                .filter(vl -> noIntervalo(vl.dataVenda, inicio, fim))
+                .collect(Collectors.toList());
+
+        List<VendaIngresso> vendasIngressoFiltradas = vendas.stream()
+                .filter(v -> noIntervalo(v.dataVenda, inicio, fim))
+                .collect(Collectors.toList());
+
+        try {
+            exportarCSVProdutos(new File(pasta, "produtos.csv"), vendasLojinhaFiltradas);
+            exportarCSVFilmes(new File(pasta, "filmes.csv"), vendasIngressoFiltradas);
+            exportarCSVClientes(new File(pasta, "clientes.csv"),
+                    vendasLojinhaFiltradas, vendasIngressoFiltradas);
+
+            LocalDate hoje = LocalDate.now();
+
+            double totalIngressosDia = vendas.stream()
+                    .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                    .mapToDouble(v -> v.preco)
+                    .sum();
+
+            double totalLojinhaDia = vendasLojinha.stream()
+                    .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                    .mapToDouble(vl -> vl.subtotal)
+                    .sum();
+
+            mostrarInfo(String.format(
+                    "CSVs exportados com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
+                    pasta.getAbsolutePath(),
+                    totalIngressosDia + totalLojinhaDia));
+
+        } catch (IOException e) {
+            alertaErro("Erro ao exportar CSVs de clientes: " + e.getMessage());
+        }
+    }
+
+
+    private void exportarCSVProdutos(File destino, List<VendaLojinha> vendasFiltradas) throws IOException {
+        try (PrintWriter pw = new PrintWriter(
+                new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
+
+            pw.println("Produto(s);Quantidade Vendida;Faturamento por produto");
+
+            Map<String, int[]> acumulado = new LinkedHashMap<>();
+            for (VendaLojinha vl : vendasFiltradas) {
+                acumulado.computeIfAbsent(vl.produto, p -> new int[]{0, 0});
+                acumulado.get(vl.produto)[0] += vl.quantidade;
+                acumulado.get(vl.produto)[1]  =
+                        (int)(acumulado.get(vl.produto)[1] + vl.subtotal * 100);
+            }
+
+            new TreeMap<>(acumulado).forEach((produto, valores) ->
+                    pw.printf("%s;%d;%.2f%n", produto, valores[0], valores[1] / 100.0));
+        }
+    }
+
+
+    private void exportarCSVFilmes(File destino, List<VendaIngresso> vendasFiltradas) throws IOException {
+        try (PrintWriter pw = new PrintWriter(
+                new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
+
+            pw.println("Filme(s);Ingresso(s) Vendido(s);Faturamento por filme");
+
+            Map<String, Integer> qtdPorFilme      = new LinkedHashMap<>();
+            Map<String, Double>  receitaPorFilme  = new LinkedHashMap<>();
+
+            for (VendaIngresso v : vendasFiltradas) {
+                qtdPorFilme.merge(v.filme, 1, Integer::sum);
+                receitaPorFilme.merge(v.filme, v.preco, Double::sum);
+            }
+
+            new TreeMap<>(qtdPorFilme).forEach((filme, qtd) ->
+                    pw.printf("%s;%d;%.2f%n", filme, qtd, receitaPorFilme.getOrDefault(filme, 0.0)));
+        }
+    }
+
+
+    private void exportarCSVClientes(File destino,
+                                     List<VendaLojinha>  vendasLojinhaFiltradas,
+                                     List<VendaIngresso> vendasIngressoFiltradas) throws IOException {
+
+        try (PrintWriter pw = new PrintWriter(
+                new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
+
+            pw.println("Cliente(s);Produto(s) Comprado(s);Quantidade;Ingresso(s) Comprado(s);"
+                    + "Filme;Gasto por produto;Gasto por Filme;Gasto Total");
+
+            Map<String, ClienteResumo> resumos = new TreeMap<>();
+
+            for (VendaLojinha vl : vendasLojinhaFiltradas) {
+                if (vl.cliente == null || vl.cliente.isBlank()) continue;
+                ClienteResumo r = resumos.computeIfAbsent(vl.cliente, c -> new ClienteResumo());
+                r.produtos.add(vl.produto);
+                r.quantidadeProdutos += vl.quantidade;
+                r.gastoProduto       += vl.subtotal;
+            }
+
+            for (VendaIngresso v : vendasIngressoFiltradas) {
+                if (v.cliente == null || v.cliente.isBlank()) continue;
+                ClienteResumo r = resumos.computeIfAbsent(v.cliente, c -> new ClienteResumo());
+                r.filmes.add(v.filme);
+                r.ingressosComprados++;
+                r.gastoFilme += v.preco;
+            }
+
+            resumos.forEach((cliente, r) -> pw.printf("%s;%s;%d;%d;%s;%.2f;%.2f;%.2f%n",
+                    cliente,
+                    String.join(", ", r.produtos),
+                    r.quantidadeProdutos,
+                    r.ingressosComprados,
+                    String.join(", ", r.filmes),
+                    r.gastoProduto,
+                    r.gastoFilme,
+                    r.gastoProduto + r.gastoFilme));
+        }
+    }
+
+
+    private static class ClienteResumo {
+        Set<String> produtos = new TreeSet<>();
+        Set<String> filmes   = new TreeSet<>();
+        int    quantidadeProdutos = 0;
+        int    ingressosComprados = 0;
+        double gastoProduto       = 0;
+        double gastoFilme         = 0;
     }
 
 

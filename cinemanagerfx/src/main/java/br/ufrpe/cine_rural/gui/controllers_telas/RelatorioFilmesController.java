@@ -5,18 +5,43 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class RelatorioFilmesController extends RelatorioBaseController{
@@ -143,16 +168,6 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             pw.println();
 
 
-            pw.println("ALERTA de BAIXA PROCURA ");
-            pw.println("Filme;Total Historico de Ingressos");
-            filmes.forEach(filme -> {
-                long total = vendas.stream()
-                        .filter(v -> v.filme.equalsIgnoreCase(filme))
-                        .count();
-                if (total <= LIMIAR_BAIXA_PROCURA)
-                    pw.printf("%s;%d%n", filme, total);
-            });
-
             mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
 
         } catch (IOException e) {
@@ -178,14 +193,17 @@ public class RelatorioFilmesController extends RelatorioBaseController{
                 .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
                 .collect(Collectors.groupingBy(v -> v.filme));
 
+        double totalIngressos = vendas.stream()
+                .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(v -> v.preco)
+                .sum();
+
         if (ingressosHoje.isEmpty()) {
             corpo.append("  Nenhum ingresso vendido hoje.\n");
         } else {
-            double totalIngressos = 0;
             for (Map.Entry<String, List<VendaIngresso>> e :
                     new TreeMap<>(ingressosHoje).entrySet()) {
                 double receita = e.getValue().stream().mapToDouble(v -> v.preco).sum();
-                totalIngressos += receita;
                 corpo.append(String.format("  • %s – %d ingresso(s) – R$ %.2f%n",
                         e.getKey(), e.getValue().size(), receita));
             }
@@ -202,18 +220,26 @@ public class RelatorioFilmesController extends RelatorioBaseController{
             produtosHoje.get(vl.produto)[1]  =
                     (int)(produtosHoje.get(vl.produto)[1] + vl.subtotal * 100);
         }
+
+        double totalLojinha = vendasLojinha.stream()
+                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(vl -> vl.subtotal)
+                .sum();
+
         if (produtosHoje.isEmpty()) {
             corpo.append("  Nenhum produto vendido hoje.\n");
         } else {
-            double totalLojinha = 0;
             for (Map.Entry<String, int[]> e : new TreeMap<>(produtosHoje).entrySet()) {
                 double receita = e.getValue()[1] / 100.0;
-                totalLojinha += receita;
                 corpo.append(String.format("  • %s – %d unidade(s) – R$ %.2f%n",
                         e.getKey(), e.getValue()[0], receita));
             }
             corpo.append(String.format("  TOTAL LOJA: R$ %.2f%n", totalLojinha));
         }
+
+
+        corpo.append("\n FATURAMENTO DIARIO TOTAL (LOJA + INGRESSOS) \n");
+        corpo.append(String.format("  TOTAL GERAL: R$ %.2f%n", totalIngressos + totalLojinha));
 
 
         corpo.append("\n ALERTAS \n");

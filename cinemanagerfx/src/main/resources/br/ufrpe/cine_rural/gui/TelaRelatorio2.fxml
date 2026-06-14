@@ -105,6 +105,10 @@
             <Button text="Exportar CSV"
                     styleClass="primary-button"
                     onAction="#onExportarCSV"/>
+
+            <Button text="CSV Clientes"
+                    styleClass="primary-button"
+                    onAction="#onExportarCSVClientes"/>
         </HBox>
     </bottom>
 
