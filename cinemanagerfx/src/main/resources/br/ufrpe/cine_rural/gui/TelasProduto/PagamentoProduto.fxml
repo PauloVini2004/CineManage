@@ -21,11 +21,9 @@
 
             <TextField fx:id="txtCpf" promptText="CPF" />
 
-            <TextField fx:id="txtIdade" promptText="Idade" />
-
             <ComboBox fx:id="comboPagamento" promptText="Forma de Pagamento" styleClass="comboPagamento" />
 
-            <TextArea fx:id="txtResumoCompra" editable="false" prefHeight="180" />
+            <TextArea fx:id="txtResumoCompra"  styleClass="resumoCompra" prefHeight="180" />
 
             <Label fx:id="lblTotal" styleClass="total" text="TOTAL R$ 0,00" />
 
