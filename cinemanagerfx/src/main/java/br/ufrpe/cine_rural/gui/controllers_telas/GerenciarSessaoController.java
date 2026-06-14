@@ -144,7 +144,7 @@ public class GerenciarSessaoController {
                 mostrarInfo("Sessão atualizada com sucesso!");
                 cancelarEdicao();
             } else {
-                // ── MODO CADASTRO ──
+                // MODO CADASTRO
                 sessaoNegocios.cadastrarSessao(filme, sala, horario, idioma);
                 mostrarInfo("Sessão cadastrada com sucesso!");
                 limparCampos();

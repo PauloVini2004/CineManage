@@ -50,8 +50,7 @@ public class SessaoNegocios {
     }
 
 
-    //- Atualiza o status de uma sessão (ABERTA, EM_EXIBICAO, ENCERRADA).
-
+    // Atualiza o status de uma sessão (ABERTA, EM_EXIBICAO, ENCERRADA).
     public void atualizarStatus(LocalDateTime horario, StatusSessao novoStatus) {
         Sessao sessao = buscarSessao(horario);
         sessao.setStatus(novoStatus);
@@ -60,7 +59,6 @@ public class SessaoNegocios {
 
 
     // Impede alteração de filme em sessões com ingressos já vendidos
-
     public void atualizarFilme(LocalDateTime horario, Filme novoFilme) {
         Sessao sessao = buscarSessao(horario);
         if (!sessao.getIngressos().isEmpty()) {
@@ -82,7 +80,6 @@ public class SessaoNegocios {
 
 
     //Busca uma sessão pelo horário.
-
     public Sessao buscarSessao(LocalDateTime horario) {
         Sessao sessao = repositorioSessao.buscar(horario);
         if (sessao == null) {
@@ -91,24 +88,19 @@ public class SessaoNegocios {
         return sessao;
     }
 
-    /**
-     * Lista todas as sessões cadastradas.
-     */
+    //Lista todas as sessões cadastradas.
     public ArrayList<Sessao> listarSessoes() {
         return repositorioSessao.listar();
     }
 
-    /**
-     * Remove uma sessão pelo horário.
-     */
+    // Remove uma sessão pelo horário.
     public void removerSessao(LocalDateTime horario) {
         buscarSessao(horario); // garante existência
         repositorioSessao.remover(horario);
     }
 
-    /**
-     * Verifica se a sessão já iniciou (útil para REQ23).
-     */
+
+    // Verifica se a sessão já iniciou .
     public boolean sessaoJaIniciou(LocalDateTime horario) {
         Sessao sessao = buscarSessao(horario);
         return sessao.getStatus() == StatusSessao.EM_EXIBICAO
