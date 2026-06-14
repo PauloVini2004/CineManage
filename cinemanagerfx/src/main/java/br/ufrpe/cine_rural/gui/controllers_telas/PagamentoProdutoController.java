@@ -197,6 +197,8 @@ public class PagamentoProdutoController {
                             email
                     );
 
+
+
             if (comboPagamento.getValue() == null) {
 
                 mostrarErro(
