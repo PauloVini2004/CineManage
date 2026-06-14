@@ -48,21 +48,16 @@
             <ScrollPane
                     fitToWidth="true"
                     hbarPolicy="NEVER"
-                    vbarPolicy="AS_NEEDED"
-                    prefWidth="800"
-                    prefHeight="500"
-                    styleClass="scroll-pane">
+                    vbarPolicy="AS_NEEDED">
+
 
                 <content>
-
                     <TilePane
                             fx:id="tileProdutos"
-                            alignment="TOP_CENTER"
+                            alignment="TOP_LEFT"
                             prefColumns="5"
                             hgap="30"
-                            vgap="25"
-                            styleClass="area-produtos"/>
-
+                            vgap="25"/>
                 </content>
 
             </ScrollPane>
