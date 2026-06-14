@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: white;
+    -fx-background-color: black;
 }
 
 /* TÍTULO */
@@ -23,7 +23,8 @@
 
     -fx-pref-width: 100;
     -fx-pref-height: 35;
-    -fx-translate-x: -60;
+    -fx-translate-x: -40;
+    -fx-translate-y: -30;
     -fx-font-weight: bold;
 }
 .btn-voltar:hover{
@@ -41,8 +42,9 @@
     -fx-border-color: white;
     -fx-pref-width: 300;
     -fx-pref-height: 35;
-    -fx-translate-x: 120;
+    -fx-translate-x: 240;
     -fx-font-weight: bold;
+    -fx-translate-y: -30;
 
 }
 
@@ -58,8 +60,9 @@
 
     -fx-pref-width: 110;
     -fx-pref-height: 35;
-    -fx-translate-x: 60;
+    -fx-translate-x: 180;
     -fx-font-weight: bold;
+    -fx-translate-y: -30;
 }
 .btn-avancar:hover{
     -fx-background-color: white;
@@ -71,18 +74,18 @@
 /* SCROLL */
 
 .scroll-pane {
-    -fx-background-color: white;
-    -fx-border-color: transparent;
-    -fx-translate-x: 60;
+    -fx-background-color: black;
+    -fx-border-color: black;
+    -fx-translate-x: 125;
 }
 
 .scroll-pane > .viewport {
-    -fx-background-color: white;
+    -fx-background-color: black;
 }
 
 .area-produtos {
 
-    -fx-background-color: white;
+    -fx-background-color: black;
 
     -fx-padding: 20;
 }
@@ -104,7 +107,7 @@
 
 .nome-produto {
 
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 
     -fx-font-size: 12px;
 
@@ -115,7 +118,7 @@
 
 .imagem-produto {
 
-    -fx-border-color:white;
+    -fx-border-color:black;
 
     -fx-border-width: 2;
 }
@@ -135,7 +138,7 @@
 
 .preco {
 
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 
     -fx-font-size: 12px;
 
