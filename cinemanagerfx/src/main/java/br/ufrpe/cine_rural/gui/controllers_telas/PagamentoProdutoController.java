@@ -29,9 +29,6 @@ public class PagamentoProdutoController {
     private TextField txtCpf;
 
     @FXML
-    private TextField txtIdade;
-
-    @FXML
     private ComboBox<String> comboPagamento;
 
     @FXML
@@ -158,7 +155,6 @@ public class PagamentoProdutoController {
         String nome = txtNome.getText().trim();
         String email = txtEmail.getText().trim();
         String cpf = txtCpf.getText().trim();
-        String idadeTexto = txtIdade.getText().trim();
 
         if (nome.isEmpty()) {
             mostrarErro("Informe o nome do cliente.");
@@ -175,25 +171,13 @@ public class PagamentoProdutoController {
             return;
         }
 
-        if (!idadeTexto.matches("\\d+")) {
-            mostrarErro("Idade deve conter apenas números.");
-            return;
-        }
-
-        int idade = Integer.parseInt(idadeTexto);
-
-        if (idade < 0 || idade > 120) {
-            mostrarErro("Idade inválida.");
-            return;
-        }
-
         try {
 
             Cliente cliente =
                     new Cliente(
                             nome,
                             cpf,
-                            idade,
+                            0,
                             email
                     );
 
@@ -295,10 +279,10 @@ public class PagamentoProdutoController {
 
             limparCampos();
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
 
             mostrarErro(
-                    "Idade inválida."
+                    "Error"
             );
         }
 
@@ -344,7 +328,6 @@ public class PagamentoProdutoController {
         txtNome.clear();
         txtEmail.clear();
         txtCpf.clear();
-        txtIdade.clear();
 
         comboPagamento.getSelectionModel().clearSelection();
 
