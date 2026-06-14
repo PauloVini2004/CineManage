@@ -36,11 +36,13 @@
                        promptText="CPF"/>
 
             <ComboBox fx:id="comboPagamento"
-                      promptText="Forma de Pagamento"/>
+                      promptText="Forma de Pagamento"
+                      styleClass="comboPagamento"/>
 
             <TextArea fx:id="txtResumoCompra"
                       editable="false"
-                      prefHeight="180"/>
+                      prefHeight="180"
+                      styleClass="resumoCompra"/>
 
             <Label fx:id="lblTotal"
                    text="TOTAL R$ 0,00"
