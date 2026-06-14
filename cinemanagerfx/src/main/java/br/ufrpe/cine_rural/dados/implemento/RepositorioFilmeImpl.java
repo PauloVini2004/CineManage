@@ -45,7 +45,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
                 "/br/ufrpe/cine_rural/gui/Pulp_Fiction_cover.jpg",
                 "/br/ufrpe/cine_rural/gui/TodoMundoEmPanico.png",
                 "/br/ufrpe/cine_rural/gui/Zootopia_2.jpg",
-                "/br/ufrpe/cine_rural/gui/ImagensProduto/Odisseia.jpg"
+                "/br/ufrpe/cine_rural/gui/Odisseia.jpg"
         };
 
         for (String recurso : recursosPoster) {
