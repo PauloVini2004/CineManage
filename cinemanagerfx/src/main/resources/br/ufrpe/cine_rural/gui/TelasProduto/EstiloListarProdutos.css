@@ -1,27 +1,29 @@
 
 .root {
-    -fx-background-color: white;
+    -fx-background-color: black;
     -fx-font-family: Arial;
 }
 
 .scroll-pane {
-    -fx-background-color: transparent;
-    -fx-background: transparent;
+    -fx-background-color: black;
+    -fx-border-color: black;
+    -fx-fit-to-width: true;
 }
 
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
+
+.scroll-pane > .viewport {
+    -fx-background-color: black;
 }
 
 .btn-voltar {
 
     -fx-background-color: transparent;
 
-    -fx-border-color: black;
+    -fx-border-color: white;
     -fx-border-radius: 20;
     -fx-background-radius: 20;
 
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 
     -fx-pref-width: 95;
     -fx-pref-height: 32;
@@ -35,7 +37,7 @@
 
     -fx-background-radius: 20;
 
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 
     -fx-pref-width: 180;
     -fx-pref-height: 35;
@@ -48,7 +50,7 @@
 
 .nome-produto {
 
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 
     -fx-font-size: 12px;
     -fx-font-weight: bold;
@@ -63,7 +65,7 @@
 
 .preco {
 
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 
     -fx-font-size: 14px;
     -fx-font-weight: bold;

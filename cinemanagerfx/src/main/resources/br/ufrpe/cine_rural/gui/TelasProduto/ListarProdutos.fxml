@@ -31,11 +31,12 @@
 
     <center>
 
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="598.0" prefWidth="900.0" styleClass="scroll-pane">
+        <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER"
+                    prefHeight="600.0" prefWidth="440.0" styleClass="scroll-pane"  fitToWidth="false" style="-fx-translate-x: -20">
 
             <content>
 
-                <TilePane fx:id="tileProdutos" hgap="60" prefColumns="5" style="-fx-translate-x: 65 " styleClass="tile-pane" vgap="30" />
+                <TilePane fx:id="tileProdutos" hgap="60" prefColumns="5" style="-fx-translate-x: 65 " styleClass="tile-pane" vgap="60" />
 
             </content>
 
