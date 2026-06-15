@@ -56,7 +56,7 @@
                             </font>
                         </Text>
                         <Button fx:id="btnVoltar" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Voltar" />
-                        <Button fx:id="btnIngressos" layoutX="580.0" layoutY="80.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Ingressos" />
+                        <Button fx:id="btnIngressos" layoutX="580.0" layoutY="80.0" mnemonicParsing="false" styleClass="botao-vermelho" text="Pagamento" />
                     </children>
                 </AnchorPane>
             </items>
