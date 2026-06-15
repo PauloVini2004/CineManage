@@ -1,14 +1,11 @@
-package br.ufrpe.cine_rural.exeptions;
+package br.ufrpe.cine_rural.exceptions;
 
 import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.Sessao;
-import br.ufrpe.cine_rural.model.loja.Produto;
 import br.ufrpe.cine_rural.model.tiposala.Sala;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
-//AlreadyTakenRoom
 public class ATRException extends RuntimeException {
     private Sala sala;
     private Filme filme;

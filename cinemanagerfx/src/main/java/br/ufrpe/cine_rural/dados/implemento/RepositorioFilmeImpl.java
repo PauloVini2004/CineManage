@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class RepositorioFilmeImpl implements IRepositorioFilme {
 
-    // Pasta local onde os posters importados pelo usuário são copiados
     private static final String PASTA_POSTERS = "posters";
 
     private static RepositorioFilmeImpl instancia;
@@ -27,11 +26,6 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         }
     }
 
-    /*
-     * Cria a pasta "posters/" se não existir e copia para ela as imagens
-     * que já estão empacotadas nos resources do projeto, para que fiquem
-     * disponíveis pelo mesmo mecanismo das imagens importadas pelo usuário.
-     */
     private static void garantirPastaPosters() {
         File pasta = new File(PASTA_POSTERS);
         if (!pasta.exists()) pasta.mkdirs();
@@ -51,7 +45,7 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         for (String recurso : recursosPoster) {
             String nome = recurso.substring(recurso.lastIndexOf('/') + 1);
             File destino = new File(pasta, nome);
-            if (destino.exists()) continue; // já copiado antes
+            if (destino.exists()) continue;
             try (InputStream is = RepositorioFilmeImpl.class.getResourceAsStream(recurso)) {
                 if (is != null) {
                     java.nio.file.Files.copy(is, destino.toPath(),
@@ -61,23 +55,11 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         }
     }
 
-    // Carregamento de imagem portátil
-    /*
-     * Carrega uma imagem a partir de um nome de arquivo (ex: "Odisseia.jpg").
-     * Ordem de busca:
-     *   1. Pasta "posters/" relativa ao working directory (imagens importadas pelo usuário)
-     *   2. Resources do classpath (imagens empacotadas junto ao código)
-     *
-     * Aceita também caminhos absolutos legados (file:/C:/...) extraindo só o nome,
-     * para não quebrar dados já salvos no CSV antigo.
-     */
     public static Image carregarImagem(String nomeOuCaminho) {
         if (nomeOuCaminho == null || nomeOuCaminho.isBlank()) return null;
 
-        // Normaliza: se vier um caminho absoluto antigo, extrai só o nome do arquivo
         String nome = extrairNomeArquivo(nomeOuCaminho);
 
-        // 1. Pasta local "posters/"
         File filePoster = new File(PASTA_POSTERS, nome);
         if (filePoster.exists()) {
             try {
@@ -85,7 +67,6 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
             } catch (Exception ignored) {}
         }
 
-        // 2. Resources do classpath (imagens empacotadas)
         String[] prefixos = {
                 "/br/ufrpe/cine_rural/gui/",
                 "/br/ufrpe/cine_rural/gui/ImagensProduto/"
@@ -146,8 +127,6 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
         return filmes;
     }
 
-    // ── CSV ──────────────────────────────────────────────────────────────────
-
     private void carregarCSV() throws IOException {
         File arquivo = new File(
                 "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
@@ -164,7 +143,6 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
                         ? dados[5].trim()
                         : null;
 
-                // Normaliza: salva só o nome do arquivo, independente do que veio no CSV
                 String posterNome = (posterBruto != null) ? extrairNomeArquivo(posterBruto) : null;
 
                 Filme filme = new Filme(
@@ -185,7 +163,6 @@ public class RepositorioFilmeImpl implements IRepositorioFilme {
                 "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/filmes.csv"
         ))) {
             for (Filme filme : filmes) {
-                // Garante que só o nome do arquivo vai para o CSV
                 String poster = filme.getCaminhoPoster() != null
                         ? extrairNomeArquivo(filme.getCaminhoPoster())
                         : "";

@@ -161,7 +161,6 @@ public class FilmesController {
             );
 
             Stage stage = (Stage) containerFilmes.getScene().getWindow();
-            stage.setTitle("Escolha seu Assento");
             stage.setScene(scene);
 
         } catch (Exception e) {

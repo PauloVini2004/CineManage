@@ -57,7 +57,6 @@ public class GerenciarSessaoController {
         cbIdioma.getItems().setAll(Idioma.values());
         cbStatus.getItems().setAll(StatusSessao.values());
 
-        // Cell factory para Sala
         javafx.util.Callback<ListView<Sala>, ListCell<Sala>> salaFactory =
             lv -> new ListCell<>() {
                 @Override protected void updateItem(Sala item, boolean empty) {
@@ -68,7 +67,6 @@ public class GerenciarSessaoController {
         cbSala.setCellFactory(salaFactory);
         cbSala.setButtonCell(salaFactory.call(null));
 
-        // Cell factory para Filme
         javafx.util.Callback<ListView<Filme>, ListCell<Filme>> filmeFactory =
             lv -> new ListCell<>() {
                 @Override protected void updateItem(Filme item, boolean empty) {
@@ -95,7 +93,6 @@ public class GerenciarSessaoController {
 
         tabelaSessoes.setItems(sessoes);
 
-        // Habilita/desabilita Editar e Remover conforme seleção
         btnEditar.setDisable(true);
         btnRemover.setDisable(true);
         tabelaSessoes.getSelectionModel().selectedItemProperty().addListener(
@@ -133,10 +130,7 @@ public class GerenciarSessaoController {
             LocalDateTime horario = dpData.getValue().atTime(hora, minuto);
 
             if (sessaoEmEdicao != null) {
-                // MODO EDIÇÃO
-                // Remove a antiga e cadastra com os novos dados
                 sessaoNegocios.removerSessao(sessaoEmEdicao.getHorario());
-
                 StatusSessao novoStatus = (status != null) ? status : StatusSessao.ABERTA;
                 Sessao sessaoAtualizada = new Sessao(filme, sala, horario, idioma, novoStatus);
                 RepositorioSessaoImpl.getInstancia().cadastrar(sessaoAtualizada);
@@ -144,7 +138,6 @@ public class GerenciarSessaoController {
                 mostrarInfo("Sessão atualizada com sucesso!");
                 cancelarEdicao();
             } else {
-                // MODO CADASTRO
                 sessaoNegocios.cadastrarSessao(filme, sala, horario, idioma);
                 mostrarInfo("Sessão cadastrada com sucesso!");
                 limparCampos();
@@ -159,7 +152,6 @@ public class GerenciarSessaoController {
         }
     }
 
-    // Carrega a sessão selecionada no formulário para edição.
     @FXML
     public void editarSessao() {
         Sessao selecionada = tabelaSessoes.getSelectionModel().getSelectedItem();

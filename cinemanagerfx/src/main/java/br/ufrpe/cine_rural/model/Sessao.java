@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class Sessao {
 
-    // Atributos na ordem da tabela
     private Filme filme;
     private Sala sala;
     private LocalDateTime horario;
@@ -18,7 +17,6 @@ public class Sessao {
 
     private ArrayList<Ingresso> ingressos;
 
-    // Construtor na ordem da tabela
     public Sessao(Filme filme,
                   Sala sala,
                   LocalDateTime horario,
@@ -58,9 +56,7 @@ public class Sessao {
         this.ingressos = ingressos;
     }
 
-    // --- Getters e Setters na ordem da tabela ---
 
-    // Filme
     public Filme getFilme() {
         return filme;
     }
@@ -69,7 +65,6 @@ public class Sessao {
         this.filme = filme;
     }
 
-    // Sala
     public Sala getSala() {
         return sala;
     }
@@ -78,7 +73,6 @@ public class Sessao {
         this.sala = sala;
     }
 
-    // Horário
     public LocalDateTime getHorario() {
         return horario;
     }
@@ -87,7 +81,6 @@ public class Sessao {
         this.horario = horario;
     }
 
-    // Idioma
     public Idioma getIdioma() {
         return idioma;
     }
@@ -96,7 +89,6 @@ public class Sessao {
         this.idioma = idioma;
     }
 
-    // Status
     public StatusSessao getStatus() {
         return status;
     }

@@ -15,11 +15,9 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
     private static RepositorioVendaIngressoImpl instancia;
     private final ArrayList<VendaIngresso> vendas;
 
-    // Caminho relativo do CSV (igual ao padrão do projeto)
     private static final String CAMINHO_CSV =
             "cinemanagerfx/src/main/java/br/ufrpe/cine_rural/dados/arquivoscsv/vendas_ingresso.csv";
 
-    // Cabeçalho com a nova coluna HorarioSessao
     private static final String CABECALHO =
             "DataVenda;FormaPagamento;Filme;Assento;Categoria;Preco;Cliente;Idade;HorarioSessao";
 
@@ -45,14 +43,6 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
         return vendas;
     }
 
-    /*
-     * Retorna o conjunto de códigos de assento (ex: "E6", "F5") que já foram
-     * vendidos para a sessão identificada pelo {@code horarioSessao} informado.
-     * Lê diretamente o CSV para garantir persistência mesmo após reinicialização.
-     *
-     * horarioSessao horário exato da sessão (chave única em RepositorioSessaoImpl)
-     * @return conjunto imutável de códigos de assento ocupados
-     */
     public Set<String> carregarAssentosOcupados(LocalDateTime horarioSessao) {
         Set<String> ocupados = new HashSet<>();
         File arquivo = new File(CAMINHO_CSV);
@@ -68,8 +58,6 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
                 if (linha.isBlank()) continue;
 
                 String[] col = linha.split(";", -1);
-                // Formato novo: [0]DataVenda [1]FormaPagamento [2]Filme [3]Assento
-                //               [4]Categoria [5]Preco [6]Cliente [7]Idade [8]HorarioSessao
                 if (col.length >= 9) {
                     String horarioCsv = col[8].trim();
                     if (chave.equals(horarioCsv)) {
@@ -77,8 +65,6 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
                         if (!assento.isEmpty()) ocupados.add(assento);
                     }
                 }
-                // Retrocompatibilidade: linhas antigas (sem HorarioSessao) são ignoradas
-                // para ocupação — elas não têm sessão identificável.
             }
         } catch (IOException e) {
             System.err.println("Erro ao ler assentos ocupados do CSV: " + e.getMessage());
@@ -88,7 +74,6 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
     }
 
     // Persistência
-
     private void salvarVendaCSV(VendaIngresso venda) {
 
         System.out.println("ENTROU NO salvarVendaCSV");
@@ -147,4 +132,50 @@ public class RepositorioVendaIngressoImpl implements IRepositorioVendaIngresso {
             e.printStackTrace();
         }
     }
+
+    // Remove do CSV todas as linhas cujo assento e horário de sessão sejam iguais
+    public boolean cancelarVenda(String codigoAssento, String horarioSessao) {
+        File arquivo = new File(CAMINHO_CSV);
+        if (!arquivo.exists()) return false;
+
+        java.util.List<String> linhasRestantes = new java.util.ArrayList<>();
+        boolean removeu = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            boolean primeiraLinha = true;
+            while ((linha = br.readLine()) != null) {
+                if (primeiraLinha) {
+                    linhasRestantes.add(linha);
+                    primeiraLinha = false;
+                    continue;
+                }
+                if (linha.isBlank()) continue;
+                String[] col = linha.split(";", -1);
+                if (col.length >= 9) {
+                    String assentoCsv = col[3].trim();
+                    String horarioCsv = col[8].trim();
+                    if (assentoCsv.equals(codigoAssento) && horarioCsv.equals(horarioSessao)) {
+                        removeu = true;
+                        continue;
+                    }
+                }
+                linhasRestantes.add(linha);
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao ler CSV para cancelamento: " + e.getMessage());
+            return false;
+        }
+
+        if (!removeu) return false;
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivo, false))) {
+            for (String l : linhasRestantes) pw.println(l);
+        } catch (IOException e) {
+            System.err.println("Erro ao reescrever CSV apos cancelamento: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
 }

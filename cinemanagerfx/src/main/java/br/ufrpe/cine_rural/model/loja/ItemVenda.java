@@ -30,10 +30,10 @@ public class ItemVenda
 
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
-        this.subtotal = calcularSubtotal(); // Recalcula ao mudar a quantidade
+        this.subtotal = calcularSubtotal();
     }
     public void setProduto(Produto produto) {
         this.produto = produto;
-        this.subtotal = calcularSubtotal(); // Recalcula ao mudar a quantidade
+        this.subtotal = calcularSubtotal();
     }
 }

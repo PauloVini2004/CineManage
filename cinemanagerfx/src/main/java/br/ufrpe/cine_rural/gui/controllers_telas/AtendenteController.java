@@ -1,5 +1,7 @@
 package br.ufrpe.cine_rural.gui.controllers_telas;
 
+import br.ufrpe.cine_rural.dados.implemento.RepositorioSessaoImpl;
+import br.ufrpe.cine_rural.negocios.SessaoNegocios;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,11 +20,28 @@ public class AtendenteController {
     private Button btnEncCxa;
 
     @FXML
+    private Button btnCancelIngr;
+
+    @FXML
     private Button btnText;
+
+    private final SessaoNegocios sessaoNegocios =
+            new SessaoNegocios(RepositorioSessaoImpl.getInstancia());
+
+    @FXML
+    public void initialize() {
+        // Atualiza status das sessões ao abrir a tela do atendente
+        sessaoNegocios.atualizarStatusPorHorarioAtual();
+    }
 
     @FXML
     public void btnCprIngrAction() {
         ScreenManager.getInstance().showFilmesScreen();
+    }
+
+    @FXML
+    public void btnCancelIngrAction() {
+        ScreenManager.getInstance().showCancelarIngressoScreen();
     }
 
     @FXML

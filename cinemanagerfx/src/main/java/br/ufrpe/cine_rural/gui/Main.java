@@ -7,9 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-
-//Inicio da Main
 public class Main extends Application {
 
     @Override
@@ -25,7 +22,7 @@ public class Main extends Application {
         Scene scene = new Scene(loader.load());
 
         stage.resizableProperty().setValue(Boolean.FALSE);
-        stage.setTitle("Home");
+        stage.setTitle("Cine Manager");
 
         Image icon = new Image(getClass().getResourceAsStream(
                 "/br/ufrpe/cine_rural/gui/Icon.png"));
@@ -84,7 +81,7 @@ public class Main extends Application {
                         .toExternalForm()
         );;
 
-        primaryStage.setTitle("Cinema Rural — Filmes em Cartaz");
+        primaryStage.setTitle("Cine Manager");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -114,7 +111,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Dashboard");
+        stage.setTitle("Cine Manager");
         stage.setWidth(900);
         stage.setHeight(700);
         stage.setResizable(false);
@@ -149,7 +146,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/ufrpe/cine_rural/gui/TelasProduto/Produto.fxml"));
             Parent root = loader.load();
 
-            primaryStage.setTitle("Produto");
+            primaryStage.setTitle("Cine Manager");
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
 
@@ -183,7 +180,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Listar Produto");
+        stage.setTitle("Cine Manager");
         stage.setWidth(900);
         stage.setHeight(700);
         stage.setResizable(false);
@@ -217,7 +214,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Listar Produto");
+        stage.setTitle("Cine Manager");
         stage.setWidth(900);
         stage.setHeight(700);
         stage.setResizable(false);
@@ -260,7 +257,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Gerenciar Filmes");
+        stage.setTitle("Cine Manager");
         stage.setScene(scene);
         stage.show();
     }
@@ -317,7 +314,7 @@ public class Main extends Application {
                 salaNegocios
         );
 
-        stage.setTitle("Gerenciar Sessões");
+        stage.setTitle("Cine Manager");
         stage.setScene(scene);
         stage.show();
     }
@@ -347,7 +344,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("DashBoard");
+        stage.setTitle("Cine Manager");
         stage.setWidth(900);
         stage.setHeight(700);
 

@@ -34,6 +34,7 @@ public class ScreenManager {
     private Scene relatorioFilmesScene;
     private Scene relatorioBomboniereScene;
     private Scene assentosScene;
+    private Scene cancelarIngressoScene;
 
     public static ScreenManager getInstance() {
         if (instance == null) {
@@ -187,10 +188,23 @@ public class ScreenManager {
         this.mainStage.show();
     }
 
-    // ── Relatórios ────────────────────────────────────────────────────────
+    public void showCancelarIngressoScreen() {
+        try {
+            BorderPane pane = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource(
+                            "/br/ufrpe/cine_rural/gui/CancelarIngresso.fxml")));
+            this.cancelarIngressoScene = new Scene(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.mainStage.setScene(this.cancelarIngressoScene);
+        this.mainStage.show();
+    }
 
-    /**
-     * Tela 1 — Relatório de Bilheteria por Filme (REQ12 + REQ15 + REQ16).
+    // Relatórios
+
+    /*
+     * Tela 1 — Relatório de Bilheteria por Filme.
      * Recarrega sempre para refletir dados atualizados dos CSVs.
      */
     public void showRelatorioFilmesScreen() {
@@ -206,8 +220,8 @@ public class ScreenManager {
         this.mainStage.show();
     }
 
-    /**
-     * Tela 2 — Relatório da Bomboniere (REQ13 + REQ14 + REQ17).
+    /*
+     * Tela 2 — Relatório da Bomboniere.
      * Recarrega sempre para refletir dados atualizados dos CSVs.
      */
     public void showRelatorioBomboniereScreen() {

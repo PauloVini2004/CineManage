@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class RepositorioProdutoImpl implements IRepositorioProduto {
 
-    // Instância única global do repositório
     private static RepositorioProdutoImpl instancia;
     private ArrayList<Produto> produtos;
 
@@ -23,7 +22,6 @@ public class RepositorioProdutoImpl implements IRepositorioProduto {
         produtos = ProdutoArquivo.carregar();
     }
 
-    // recuperar instância
     public static RepositorioProdutoImpl getInstancia() {
         if (instancia == null) {
             instancia = new RepositorioProdutoImpl();

@@ -1,8 +1,7 @@
-package br.ufrpe.cine_rural.exeptions;
+package br.ufrpe.cine_rural.exceptions;
 
 import br.ufrpe.cine_rural.model.loja.Produto;
 
-//InvalidStockQuantity
 public class ISQException extends RuntimeException {
     private int quantidade;
     private int qtdEstoque;

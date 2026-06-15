@@ -67,7 +67,7 @@ public class ProdutoNegocios{
 
 
     public void removerProduto(int id) {
-        buscarProduto(id); // garante existência
+        buscarProduto(id);
         repositorioProduto.remover(id);
     }
 

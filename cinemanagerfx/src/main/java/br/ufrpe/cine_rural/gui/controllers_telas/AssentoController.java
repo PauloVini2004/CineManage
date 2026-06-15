@@ -33,10 +33,6 @@ import java.util.*;
 
 public class AssentoController {
 
-    // Cache em memória — chave: horário da sessão.
-    // Garante que dentro de uma mesma execução o layout não seja recriado.
-    // A persistência entre execuções é feita via CSV (veja carregarOcupadosDoCSV).
-
     private static final Map<LocalDateTime, int[][]> layoutsPorSessao = new HashMap<>();
 
     @FXML private AnchorPane painel;
@@ -124,10 +120,6 @@ public class AssentoController {
         configurarBotaoIngressos();
     }
 
-    // Persistência: lê o CSV e marca como ocupados (valor 2) os assentos
-    // que já foram vendidos para esta sessão.
-
-
     private void carregarOcupadosDoCSV(LocalDateTime horarioSessao) {
         Set<String> ocupados = RepositorioVendaIngressoImpl
                 .getInstancia()
@@ -151,7 +143,6 @@ public class AssentoController {
     }
 
     // Layouts
-
     private int[][] criarLayoutBase(int heranca) {
         return switch (heranca) {
             case 2  -> SalasMapas.copiar(SalasMapas.salaImax);
@@ -161,7 +152,6 @@ public class AssentoController {
     }
 
     // Poster
-
     private void exibirPoster() {
         if (posterPath == null || posterPath.isBlank()) return;
         Image imagem = RepositorioFilmeImpl.carregarImagem(posterPath);
@@ -175,7 +165,6 @@ public class AssentoController {
     }
 
     // Botões
-
     private void configurarBotaoVoltar() {
         Platform.runLater(() -> {
             Button btnVoltarReal = (Button) painel.lookup(".botao-vermelho");
@@ -192,7 +181,6 @@ public class AssentoController {
                         );
                         FilmesController fc = loader.getController();
                         Stage stageAtual = (Stage) painel.getScene().getWindow();
-                        stageAtual.setTitle("Filmes");
                         stageAtual.setScene(scene);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -206,7 +194,6 @@ public class AssentoController {
         btnIngressos.setOnAction(event -> {
             if (nomeAssentosSelecionados.isEmpty()) return;
 
-            // Verificação de menor desacompanhado
             int idadeLimite = getIdadeLimiteClassificacao(classificacao);
 
             if (idadeLimite > 0) {
@@ -273,7 +260,7 @@ public class AssentoController {
                 controller.receberIngressos(ingressos, new java.util.HashMap<>(idadesPorAssento));
 
                 Stage stageAtual = (Stage) painel.getScene().getWindow();
-                stageAtual.setTitle("Pagamento");
+                // title kept as "Cine Manager" by ScreenManager
                 stageAtual.setScene(scene);
 
             } catch (Exception e) {
@@ -493,6 +480,24 @@ public class AssentoController {
             } catch (NumberFormatException e) {
                 System.err.println("Código de assento inválido: " + nome);
             }
+        }
+    }
+
+
+    // Metodo pra liberar/cancelar o Assento
+    public static void liberarAssentoNoCache(LocalDateTime horarioSessao, String codigoAssento) {
+        int[][] layout = layoutsPorSessao.get(horarioSessao);
+        if (layout == null || codigoAssento == null || codigoAssento.length() < 2) return;
+        try {
+            int linha  = Character.toUpperCase(codigoAssento.charAt(0)) - 'A';
+            int coluna = Integer.parseInt(codigoAssento.substring(1)) - 1;
+
+            if (linha  >= 0 && linha  < layout.length &&
+                coluna >= 0 && coluna < layout[linha].length) {
+                layout[linha][coluna] = 1;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Código de assento inválido ao liberar cache: " + codigoAssento);
         }
     }
 }

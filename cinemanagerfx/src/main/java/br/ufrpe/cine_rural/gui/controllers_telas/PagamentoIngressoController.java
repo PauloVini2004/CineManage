@@ -208,7 +208,6 @@ public class PagamentoIngressoController {
         try {
             Stage stage = (Stage) btnVoltar.getScene().getWindow();
             stage.setScene(PagamentoIngressoController.cenaAnterior);
-            stage.setTitle("Assentos");
             stage.show();
         } catch (Exception e) {
             System.err.println("Erro ao voltar para assentos: " + e.getMessage());
@@ -241,7 +240,6 @@ public class PagamentoIngressoController {
             Parent root = loader.load();
             Stage stage = (Stage) btnPagar.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Atendente");
             stage.show();
         } catch (Exception ex) {
             System.err.println("Erro ao carregar tela do Atendente: " + ex.getMessage());

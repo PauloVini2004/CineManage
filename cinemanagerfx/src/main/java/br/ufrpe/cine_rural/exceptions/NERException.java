@@ -1,9 +1,7 @@
-package br.ufrpe.cine_rural.exeptions;
+package br.ufrpe.cine_rural.exceptions;
 
-import br.ufrpe.cine_rural.model.Filme;
 import br.ufrpe.cine_rural.model.tiposala.Sala;
 
-//NonExistingRoom
 public class NERException extends RuntimeException {
     private Sala sala;
 

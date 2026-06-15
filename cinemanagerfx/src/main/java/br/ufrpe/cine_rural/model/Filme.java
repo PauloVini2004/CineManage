@@ -27,7 +27,6 @@ public class Filme {
         this.caminhoPoster = caminhoPoster;
     }
 
-    // --- GETTERS ---
     public String getTitulo() {
         return titulo;
     }
@@ -52,8 +51,6 @@ public class Filme {
         return caminhoPoster;
     }
 
-
-    // --- SETTERS (Adicionados aqui para permitir alteração dos dados) ---
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }

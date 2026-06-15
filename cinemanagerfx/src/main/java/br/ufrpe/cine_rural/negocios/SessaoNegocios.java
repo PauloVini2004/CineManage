@@ -57,8 +57,6 @@ public class SessaoNegocios {
         repositorioSessao.atualizar(sessao);
     }
 
-
-    // Impede alteração de filme em sessões com ingressos já vendidos
     public void atualizarFilme(LocalDateTime horario, Filme novoFilme) {
         Sessao sessao = buscarSessao(horario);
         if (!sessao.getIngressos().isEmpty()) {
@@ -95,7 +93,7 @@ public class SessaoNegocios {
 
     // Remove uma sessão pelo horário.
     public void removerSessao(LocalDateTime horario) {
-        buscarSessao(horario); // garante existência
+        buscarSessao(horario);
         repositorioSessao.remover(horario);
     }
 
@@ -107,4 +105,19 @@ public class SessaoNegocios {
                 || sessao.getStatus() == StatusSessao.ENCERRADA
                 || LocalDateTime.now().isAfter(sessao.getHorario());
     }
+
+    // Atualizador do Status da Sessão, justamente pra tornar dinamico em função do horario do pc do usuario.
+    public void atualizarStatusPorHorarioAtual() {
+        LocalDateTime agora = LocalDateTime.now();
+        for (Sessao sessao : repositorioSessao.listar()) {
+            if (sessao.getStatus() == StatusSessao.ABERTA
+                    && !agora.isBefore(sessao.getHorario())) {
+                sessao.setStatus(StatusSessao.EM_EXIBICAO);
+                repositorioSessao.atualizar(sessao);
+                System.out.println("[SessaoNegocios] Sessao de " + sessao.getHorario()
+                        + " atualizada para EM_EXIBICAO.");
+            }
+        }
+    }
+
 }

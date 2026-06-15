@@ -1,8 +1,7 @@
-package br.ufrpe.cine_rural.exeptions;
+package br.ufrpe.cine_rural.exceptions;
 
 import br.ufrpe.cine_rural.model.Filme;
 
-//NonExistingFilm
 public class NEFException extends RuntimeException {
     private Filme filme;
     public NEFException(String message,  Filme filme) {
