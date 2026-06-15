@@ -20,8 +20,6 @@
    <center>
       <VBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
          <padding><Insets bottom="40.0" left="60.0" right="60.0" top="40.0" /></padding>
-
-         <!-- Título -->
          <Text fill="WHITE" textAlignment="CENTER">
             <font><Font name="System Bold" size="28.0" /></font>
             <text>CANCELAR</text>
@@ -30,14 +28,10 @@
             <font><Font name="System Bold" size="28.0" /></font>
             <text>INGRESSO</text>
          </Text>
-
-         <!-- Instruções -->
          <Label fx:id="lblInstrucao" text="Informe os dados do seu ingresso para cancelar a compra."
                 textFill="WHITE" wrapText="true" prefWidth="600.0" textAlignment="CENTER">
             <font><Font name="System Bold" size="14.0" /></font>
          </Label>
-
-         <!-- Campos -->
          <VBox spacing="16.0" alignment="CENTER_LEFT" maxWidth="500.0">
 
             <Label text="Nome do Cliente:" textFill="WHITE">
@@ -61,14 +55,10 @@
                        prefWidth="500.0"
                        style="-fx-background-color: #1a1a1a; -fx-text-fill: WHITE; -fx-font-weight: bold; -fx-border-color: #b90000; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;"/>
          </VBox>
-
-         <!-- Mensagem de feedback -->
          <Label fx:id="lblMensagem" text="" textFill="#b90000" wrapText="true"
                 prefWidth="600.0" textAlignment="CENTER">
             <font><Font name="System Bold" size="13.0" /></font>
          </Label>
-
-         <!-- Botões -->
          <HBox spacing="40.0" alignment="CENTER">
             <Button fx:id="btnVoltar" text="Voltar" mnemonicParsing="false"
                     onAction="#btnVoltarAction"

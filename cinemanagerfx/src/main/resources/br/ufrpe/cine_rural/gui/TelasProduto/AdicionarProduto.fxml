@@ -47,7 +47,6 @@
             </children>
         </VBox>
 
-        <!-- Salvar -->
         <Button fx:id="btnSalvar"  styleClass="btn-salvar" text="Salvar" />
 
     </children>
