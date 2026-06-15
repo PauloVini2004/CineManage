@@ -34,8 +34,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,55 +118,63 @@ public class RelatorioFilmesController extends RelatorioBaseController{
     @FXML
     private void onExportarCSV() {
         FileChooser fc = new FileChooser();
-        fc.setTitle("Salvar Faturamento de Filmes");
+        fc.setTitle("Salvar Relatório de Filmes");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
-        fc.setInitialFileName("faturamento_filmes.csv");
+        fc.setInitialFileName("filmes.csv");
 
         File destino = fc.showSaveDialog(tbAssentos.getScene().getWindow());
         if (destino == null) return;
 
+        String filme = cbFilmes.getValue();
+
+        List<VendaIngresso> vendasFiltradas = vendas.stream()
+                .filter(v -> filme == null || filme.isBlank()
+                        || v.filme.equalsIgnoreCase(filme))
+                .collect(Collectors.toList());
+
         LocalDate hoje = LocalDate.now();
+
+        double totalIngressosDia = vendas.stream()
+                .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(v -> v.preco)
+                .sum();
+
+        double totalLojinhaDia = vendasLojinha.stream()
+                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(vl -> vl.subtotal)
+                .sum();
+
+        double totalGeralDia = totalIngressosDia + totalLojinhaDia;
 
         try (PrintWriter pw = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
-            DateTimeFormatter fmtExib =
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            pw.println("Filme(s);Ingresso(s) Vendido(s);Faturamento por filme");
 
+            Map<String, Integer> qtdPorFilme     = new LinkedHashMap<>();
+            Map<String, Double>  receitaPorFilme = new LinkedHashMap<>();
 
-            pw.println("RELATORIO DE BILHETERIA CINEMANAGER");
-            pw.println( LocalDateTime.now().format(fmtExib));
+            for (VendaIngresso v : vendasFiltradas) {
+                qtdPorFilme.merge(v.filme, 1, Integer::sum);
+                receitaPorFilme.merge(v.filme, v.preco, Double::sum);
+            }
 
-            pw.println();
-
-
-            double totalDia = vendas.stream()
-                    .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
-                    .mapToDouble(v -> v.preco)
-                    .sum();
-            pw.println("FATURAMENTO DIARIO TOTAL");
-            pw.printf("Data;%s%n", hoje);
-            pw.printf("Faturamento Total (Ingressos);%.2f%n", totalDia);
-            pw.println();
-
-
-            pw.println("FATURAMENTO DIARIO POR FILME");
-            pw.println("Filme;Ingressos Vendidos;Faturamento");
-
-            Map<String, List<VendaIngresso>> porFilme = vendas.stream()
-                    .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
-                    .collect(Collectors.groupingBy(v -> v.filme));
-
-            new TreeMap<>(porFilme).forEach((filme, lista) ->
+            new TreeMap<>(qtdPorFilme).forEach((tituloFilme, qtd) ->
                     pw.printf("%s;%d;%.2f%n",
-                            filme,
-                            lista.size(),
-                            lista.stream().mapToDouble(v -> v.preco).sum()));
+                            tituloFilme, qtd, receitaPorFilme.getOrDefault(tituloFilme, 0.0)));
+
+            double totalFaturado = receitaPorFilme.values().stream()
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
 
             pw.println();
+            pw.println("Faturamento diário;Total faturado ;Faturamento diário total ( Loja + Filmes) ");
+            pw.printf("%.2f;%.2f;%.2f%n", totalIngressosDia, totalFaturado, totalGeralDia);
 
-
-            mostrarInfo("CSV exportado com sucesso para:\n" + destino.getAbsolutePath());
+            mostrarInfo(String.format(
+                    "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
+                    destino.getAbsolutePath(),
+                    totalGeralDia));
 
         } catch (IOException e) {
             alertaErro("Erro ao exportar CSV: " + e.getMessage());

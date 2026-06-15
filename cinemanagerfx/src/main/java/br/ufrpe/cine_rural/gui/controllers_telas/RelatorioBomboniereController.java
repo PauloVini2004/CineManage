@@ -11,7 +11,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -21,8 +20,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -99,7 +96,7 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
         FileChooser fc = new FileChooser();
         fc.setTitle("Salvar Faturamento de Produtos");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
-        fc.setInitialFileName("faturamento_produtos.csv");
+        fc.setInitialFileName("produtos.csv");
 
         File destino = fc.showSaveDialog(tbProdutos.getScene().getWindow());
         if (destino == null) return;
@@ -108,141 +105,22 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
         LocalDate inicio = dpInicio.getValue();
         LocalDate fim    = dpFim.getValue();
 
-
-        LocalDate periodoInicio = inicio != null ? inicio : hoje;
-        LocalDate periodoFim    = fim    != null ? fim    : hoje;
-
-        try (PrintWriter pw = new PrintWriter(
-                new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
-
-            DateTimeFormatter fmtExib =
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-
-            pw.println("RELATORIO DE PRODUTOS CINEMANAGER");
-            pw.println( LocalDateTime.now().format(fmtExib));
-
-            pw.println();
-
-
-            double totalIngressosDia = vendas.stream()
-                    .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
-                    .mapToDouble(v -> v.preco)
-                    .sum();
-
-            double totalLojinhaDia = vendasLojinha.stream()
-                    .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
-                    .mapToDouble(vl -> vl.subtotal)
-                    .sum();
-
-            pw.println("FATURAMENTO DIARIO TOTAL");
-            pw.printf("Data;%s%n", hoje);
-            pw.printf("Faturamento Ingressos;%.2f%n", totalIngressosDia);
-            pw.printf("Faturamento Loja;%.2f%n",   totalLojinhaDia);
-            pw.printf("Faturamento Total Geral;%.2f%n",
-                    totalIngressosDia + totalLojinhaDia);
-            pw.println();
-
-
-            pw.printf("FATURAMENTO POR PRODUTO (%s a %s)%n", periodoInicio, periodoFim);
-            pw.println("Produto;Quantidade Vendida;Valor Arrecadado");
-
-            Map<String, List<VendaLojinha>> porProduto = vendasLojinha.stream()
-                    .filter(vl -> noIntervalo(vl.dataVenda, periodoInicio, periodoFim))
-                    .collect(Collectors.groupingBy(vl -> vl.produto));
-
-            new TreeMap<>(porProduto).forEach((produto, lista) -> {
-                int    qtd     = lista.stream().mapToInt(vl -> vl.quantidade).sum();
-                double receita = lista.stream().mapToDouble(vl -> vl.subtotal).sum();
-                pw.printf("%s;%d;%.2f%n", produto, qtd, receita);
-            });
-
-            pw.println();
-
-
-            Set<String> clientesLojinha = new TreeSet<>();
-            vendasLojinha.stream()
-                    .filter(vl -> noIntervalo(vl.dataVenda, periodoInicio, periodoFim))
-                    .filter(vl -> !vl.cliente.isBlank())
-                    .map(vl -> vl.cliente)
-                    .forEach(clientesLojinha::add);
-
-            if (!clientesLojinha.isEmpty()) {
-                pw.printf("CLIENTES %n", periodoInicio, periodoFim);
-                pw.println("Cliente;Compras no Periodo;Gasto Total");
-                for (String cliente : clientesLojinha) {
-                    List<VendaLojinha> compras = vendasLojinha.stream()
-                            .filter(vl -> vl.cliente.equalsIgnoreCase(cliente))
-                            .filter(vl -> noIntervalo(vl.dataVenda, periodoInicio, periodoFim))
-                            .collect(Collectors.toList());
-                    int    qtdCompras = compras.size();
-                    double gasto      = compras.stream().mapToDouble(vl -> vl.subtotal).sum();
-                    pw.printf("%s;%d;%.2f%n", cliente, qtdCompras, gasto);
-                }
-                pw.println();
-            }
-
-
-            mostrarInfo(String.format(
-                    "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
-                    destino.getAbsolutePath(),
-                    totalIngressosDia + totalLojinhaDia));
-
-        } catch (IOException e) {
-            alertaErro("Erro ao exportar CSV: " + e.getMessage());
-        }
-    }
-
-
-    @FXML
-    private void onExportarCSVClientes() {
-        DirectoryChooser dc = new DirectoryChooser();
-        dc.setTitle("Selecionar pasta para exportar os relatórios de clientes");
-
-        File pasta = dc.showDialog(tbProdutos.getScene().getWindow());
-        if (pasta == null) return;
-
-        LocalDate inicio = dpInicio.getValue();
-        LocalDate fim    = dpFim.getValue();
-
-        List<VendaLojinha> vendasLojinhaFiltradas = vendasLojinha.stream()
+        List<VendaLojinha> vendasFiltradas = vendasLojinha.stream()
                 .filter(vl -> noIntervalo(vl.dataVenda, inicio, fim))
                 .collect(Collectors.toList());
 
-        List<VendaIngresso> vendasIngressoFiltradas = vendas.stream()
-                .filter(v -> noIntervalo(v.dataVenda, inicio, fim))
-                .collect(Collectors.toList());
+        double totalIngressosDia = vendas.stream()
+                .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(v -> v.preco)
+                .sum();
 
-        try {
-            exportarCSVProdutos(new File(pasta, "produtos.csv"), vendasLojinhaFiltradas);
-            exportarCSVFilmes(new File(pasta, "filmes.csv"), vendasIngressoFiltradas);
-            exportarCSVClientes(new File(pasta, "clientes.csv"),
-                    vendasLojinhaFiltradas, vendasIngressoFiltradas);
+        double totalLojinhaDia = vendasLojinha.stream()
+                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(vl -> vl.subtotal)
+                .sum();
 
-            LocalDate hoje = LocalDate.now();
+        double totalGeralDia = totalIngressosDia + totalLojinhaDia;
 
-            double totalIngressosDia = vendas.stream()
-                    .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
-                    .mapToDouble(v -> v.preco)
-                    .sum();
-
-            double totalLojinhaDia = vendasLojinha.stream()
-                    .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
-                    .mapToDouble(vl -> vl.subtotal)
-                    .sum();
-
-            mostrarInfo(String.format(
-                    "CSVs exportados com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
-                    pasta.getAbsolutePath(),
-                    totalIngressosDia + totalLojinhaDia));
-
-        } catch (IOException e) {
-            alertaErro("Erro ao exportar CSVs de clientes: " + e.getMessage());
-        }
-    }
-
-
-    private void exportarCSVProdutos(File destino, List<VendaLojinha> vendasFiltradas) throws IOException {
         try (PrintWriter pw = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
@@ -258,37 +136,84 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
 
             new TreeMap<>(acumulado).forEach((produto, valores) ->
                     pw.printf("%s;%d;%.2f%n", produto, valores[0], valores[1] / 100.0));
+
+            double totalFaturadoPeriodo = vendasFiltradas.stream()
+                    .mapToDouble(vl -> vl.subtotal)
+                    .sum();
+
+            pw.println();
+            pw.println("Faturamento diário;Total faturado;Faturamento diário total ( Loja + Filmes) ");
+            pw.printf("%.2f;%.2f;%.2f%n", totalLojinhaDia, totalFaturadoPeriodo, totalGeralDia);
+
+            mostrarInfo(String.format(
+                    "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
+                    destino.getAbsolutePath(),
+                    totalGeralDia));
+
+        } catch (IOException e) {
+            alertaErro("Erro ao exportar CSV: " + e.getMessage());
         }
     }
 
 
-    private void exportarCSVFilmes(File destino, List<VendaIngresso> vendasFiltradas) throws IOException {
-        try (PrintWriter pw = new PrintWriter(
-                new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
+    @FXML
+    private void onExportarCSVClientes() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Salvar Relatório de Clientes");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
+        fc.setInitialFileName("clientes.csv");
 
-            pw.println("Filme(s);Ingresso(s) Vendido(s);Faturamento por filme");
+        File destino = fc.showSaveDialog(tbProdutos.getScene().getWindow());
+        if (destino == null) return;
 
-            Map<String, Integer> qtdPorFilme      = new LinkedHashMap<>();
-            Map<String, Double>  receitaPorFilme  = new LinkedHashMap<>();
+        LocalDate inicio = dpInicio.getValue();
+        LocalDate fim    = dpFim.getValue();
 
-            for (VendaIngresso v : vendasFiltradas) {
-                qtdPorFilme.merge(v.filme, 1, Integer::sum);
-                receitaPorFilme.merge(v.filme, v.preco, Double::sum);
-            }
+        List<VendaLojinha> vendasLojinhaFiltradas = vendasLojinha.stream()
+                .filter(vl -> noIntervalo(vl.dataVenda, inicio, fim))
+                .collect(Collectors.toList());
 
-            new TreeMap<>(qtdPorFilme).forEach((filme, qtd) ->
-                    pw.printf("%s;%d;%.2f%n", filme, qtd, receitaPorFilme.getOrDefault(filme, 0.0)));
+        List<VendaIngresso> vendasIngressoFiltradas = vendas.stream()
+                .filter(v -> noIntervalo(v.dataVenda, inicio, fim))
+                .collect(Collectors.toList());
+
+        LocalDate hoje = LocalDate.now();
+
+        double totalIngressosDia = vendas.stream()
+                .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(v -> v.preco)
+                .sum();
+
+        double totalLojinhaDia = vendasLojinha.stream()
+                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                .mapToDouble(vl -> vl.subtotal)
+                .sum();
+
+        double totalGeralDia = totalIngressosDia + totalLojinhaDia;
+
+        try {
+            exportarCSVClientes(destino, vendasLojinhaFiltradas, vendasIngressoFiltradas, totalGeralDia);
+
+            mostrarInfo(String.format(
+                    "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
+                    destino.getAbsolutePath(),
+                    totalGeralDia));
+
+        } catch (IOException e) {
+            alertaErro("Erro ao exportar CSV de clientes: " + e.getMessage());
         }
     }
 
 
     private void exportarCSVClientes(File destino,
                                      List<VendaLojinha>  vendasLojinhaFiltradas,
-                                     List<VendaIngresso> vendasIngressoFiltradas) throws IOException {
+                                     List<VendaIngresso> vendasIngressoFiltradas,
+                                     double totalGeralDia) throws IOException {
 
         try (PrintWriter pw = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(destino), StandardCharsets.UTF_8))) {
 
+            pw.println("Faturamento Diário Lista de Clientes");
             pw.println("Cliente(s);Produto(s) Comprado(s);Quantidade;Ingresso(s) Comprado(s);"
                     + "Filme;Gasto por produto;Gasto por Filme;Gasto Total");
 
@@ -319,6 +244,14 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
                     r.gastoProduto,
                     r.gastoFilme,
                     r.gastoProduto + r.gastoFilme));
+
+            double totalGastoClientes = resumos.values().stream()
+                    .mapToDouble(r -> r.gastoProduto + r.gastoFilme)
+                    .sum();
+
+            pw.println();
+            pw.printf("Faturamento Diário;%.2f%n", totalGeralDia);
+            pw.printf("Total: ;%.2f%n", totalGastoClientes);
         }
     }
 
