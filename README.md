@@ -30,35 +30,35 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 
 ## Requisitos Funcionais
 
-### 1. Gestão de Catálogo e Salas
+### 1. Gestão de Catálogo e Salas ✅
 - **REQ01**: Cadastrar filmes com título, sinopse, duração e gênero.✅
 - **REQ02**: Gerenciar classificação indicativa de cada filme.✅
 - **REQ03**: Cadastrar salas com identificação e capacidade total de assentos.✅
 - **REQ04**: Implementar herança para salas: Comum, VIP e IMAX.✅
 
-### 2. Programação de Sessões
+### 2. Programação de Sessões ✅
 - **REQ05**: Criar sessões associando filme, sala, horário e idioma.✅
 - **REQ06**: Gerenciar o mapa de assentos (composição) específico para cada sessão.✅
 - **REQ07**: Atualizar status da sessão (aberta, em exibição, encerrada).✅
 
-### 3. Bilheteria e Bomboniere
+### 3. Bilheteria e Bomboniere ✅
 - **REQ08**: Registrar venda de ingressos com escolha de assentos no mapa.✅
 - **REQ09**: Aplicar regras de meia-entrada conforme categorias legais.✅
 - **REQ10**: Cadastrar produtos da bomboniere com controle de estoque.✅
 - **REQ11**: Registrar vendas de itens de consumo vinculados ou não ao ingresso.✅
 
-### 4. Relatórios e Estatísticas
+### 4. Relatórios e Estatísticas ✅
 - **REQ12**: Gerar relatório de bilheteria por filme com taxa de ocupação.✅
 - **REQ13**: Gerar relatório de vendas da bomboniere por período.✅
 - **REQ14**: Exportar faturamento diário em CSV.✅
 - **REQ15**: Listar assentos com maior frequência de ocupação.✅
 
-### 5. Alertas e Notificações
+### 5. Alertas e Notificações ✅
 - **REQ16**: Notificar o gerente sobre filmes com baixa procura histórica.✅
 - **REQ17**: Alertar sobre estoque baixo de itens da bomboniere (pipoca/xarope).✅
 - **REQ18**: Enviar confirmação de compra para o e-mail do cliente.✅
 
-### 6. Regras e Restrições
+### 6. Regras e Restrições ✅
 - **REQ19**: **Não permitir a venda** de ingressos para menores de idade sem acompanhante caso a classificação seja restritiva.✅
 - **REQ20**: **Bloquear a criação** de sessões com sobreposição de horário na mesma sala.✅
 - **REQ21**: **Impedir a venda** de assentos já marcados como ocupados.✅
