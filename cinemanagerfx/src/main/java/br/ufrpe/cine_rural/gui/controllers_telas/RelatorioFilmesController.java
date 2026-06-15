@@ -168,8 +168,8 @@ public class RelatorioFilmesController extends RelatorioBaseController{
                     .sum();
 
             pw.println();
-            pw.println("Faturamento diário;Total faturado ;Faturamento diário total ( Loja + Filmes) ");
-            pw.printf("%.2f;%.2f;%.2f%n", totalIngressosDia, totalFaturado, totalGeralDia);
+            pw.println("Faturamento diário;Total faturado");
+            pw.printf("%.2f;%.2f%n", totalIngressosDia, totalFaturado);
 
             mostrarInfo(String.format(
                     "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",

@@ -142,8 +142,8 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
                     .sum();
 
             pw.println();
-            pw.println("Faturamento diário;Total faturado;Faturamento diário total ( Loja + Filmes) ");
-            pw.printf("%.2f;%.2f;%.2f%n", totalLojinhaDia, totalFaturadoPeriodo, totalGeralDia);
+            pw.println("Faturamento diário;Total faturado");
+            pw.printf("%.2f;%.2f%n", totalLojinhaDia, totalFaturadoPeriodo);
 
             mostrarInfo(String.format(
                     "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
@@ -166,33 +166,28 @@ public class RelatorioBomboniereController extends RelatorioBaseController{
         File destino = fc.showSaveDialog(tbProdutos.getScene().getWindow());
         if (destino == null) return;
 
-        LocalDate inicio = dpInicio.getValue();
-        LocalDate fim    = dpFim.getValue();
-
-        List<VendaLojinha> vendasLojinhaFiltradas = vendasLojinha.stream()
-                .filter(vl -> noIntervalo(vl.dataVenda, inicio, fim))
-                .collect(Collectors.toList());
-
-        List<VendaIngresso> vendasIngressoFiltradas = vendas.stream()
-                .filter(v -> noIntervalo(v.dataVenda, inicio, fim))
-                .collect(Collectors.toList());
-
         LocalDate hoje = LocalDate.now();
 
-        double totalIngressosDia = vendas.stream()
+        List<VendaLojinha> vendasLojinhaHoje = vendasLojinha.stream()
+                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+                .collect(Collectors.toList());
+
+        List<VendaIngresso> vendasIngressoHoje = vendas.stream()
                 .filter(v -> v.dataVenda.toLocalDate().equals(hoje))
+                .collect(Collectors.toList());
+
+        double totalIngressosDia = vendasIngressoHoje.stream()
                 .mapToDouble(v -> v.preco)
                 .sum();
 
-        double totalLojinhaDia = vendasLojinha.stream()
-                .filter(vl -> vl.dataVenda.toLocalDate().equals(hoje))
+        double totalLojinhaDia = vendasLojinhaHoje.stream()
                 .mapToDouble(vl -> vl.subtotal)
                 .sum();
 
         double totalGeralDia = totalIngressosDia + totalLojinhaDia;
 
         try {
-            exportarCSVClientes(destino, vendasLojinhaFiltradas, vendasIngressoFiltradas, totalGeralDia);
+            exportarCSVClientes(destino, vendasLojinhaHoje, vendasIngressoHoje, totalGeralDia);
 
             mostrarInfo(String.format(
                     "CSV exportado com sucesso para:%n%s%n%nFaturamento Diário Total (Loja + Ingressos): R$ %.2f",
